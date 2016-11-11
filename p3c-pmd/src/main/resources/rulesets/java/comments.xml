@@ -6,9 +6,9 @@
     xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
     
     
-    <rule name="CommentsMustBeJavadocFormat"
+    <rule name="CommentsMustBeJavadocFormatRule"
           message="【强制】类、类属性、类方法的注释必须使用javadoc规范，使用/**内容*/格式，不得使用//xxx方式。"
-          class="com.alibaba.p3c.pmd.lang.java.rule.comments.CommentsMustBeJavadocFormat">
+          class="com.alibaba.p3c.pmd.lang.java.rule.comments.CommentsMustBeJavadocFormatRule">
       <description>
       【强制】类、类属性、类方法的注释必须使用javadoc规范，使用/**内容*/格式，不得使用//xxx方式。
 说明：在IDE编辑窗口中，javadoc方式会提示相关注释，生成javadoc可以正确输出相应注释；在IDE中，工程调用方法时，不进入方法即可悬浮提示方法、参数、返回值的意义，提高阅读效率。
@@ -23,9 +23,9 @@
       </example>
     </rule>
     
-    <rule name="AbstractMethodOrInterfaceMethodMustUseJavadoc"
+    <rule name="AbstractMethodOrInterfaceMethodMustUseJavadocRule"
           message="【强制】所有的抽象方法（包括接口中的方法）必须要用javadoc注释、除了返回值、参数、异常说明外，还必须指出该方法做什么事情，实现什么功能。"
-          class="com.alibaba.p3c.pmd.lang.java.rule.comments.AbstractMethodOrInterfaceMethodMustUseJavadoc">
+          class="com.alibaba.p3c.pmd.lang.java.rule.comments.AbstractMethodOrInterfaceMethodMustUseJavadocRule">
       <description>
 【强制】所有的抽象方法（包括接口中的方法）必须要用javadoc注释、除了返回值、参数、异常说明外，还必须指出该方法做什么事情，实现什么功能。
 说明：如有实现和调用注意事项，请一并说明。
