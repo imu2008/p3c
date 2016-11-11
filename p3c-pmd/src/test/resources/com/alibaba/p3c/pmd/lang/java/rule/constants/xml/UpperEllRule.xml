@@ -2,13 +2,10 @@
 <test-data>
 
 	<code-fragment id="constants-uppercase-L"><![CDATA[
-	  public class Foo {  
-            private static final String notWarn = "666l"; //ok
-        
-            private static final Long notWarn = 666L; //ok
-            
+	    public class Foo { 
+	        private final static  String notWarn = "666l";    
             private void processUpperEll(long aLong) {
-                   long good = (4+5*7^66L/7+890) & (88L + 78 * 4); //ok
+                   long good = (4+5*7^66L/7+890) & (88L + 78 * 4);  
              } 
         } 
     ]]>
@@ -22,25 +19,20 @@
  
 	<code-fragment id="constants-lowercase-l"><![CDATA[
   	  public class Foo { 
-            private static final long IGNORE = 666l + 666L; //warn
-        
-            private static final String notWarn = "666l"; //ok
-        
-            private static final Long notWarn = 666L; //ok
-            
+            private static final long IGNORE = 666l + 666L;   
+            private static final Long notWarn = 666L;   
             private void processUpperEll(long aLong) {
-                long bad = (4+5*7^66l/7+890) //warn
-                    & (88l + 78 * 4); //warn
-                long good = (4+5*7^66L/7+890) & (88L + 78 * 4); //ok
+                long bad = (4+5*7^66l/7+890)  
+                    & (88l + 78 * 4);  
+                long good = (4+5*7^66L/7+890) & (88L + 78 * 4);  
              } 
-        }
-   
+        } 
     ]]>
 	</code-fragment>
 
 	<test-code>
 		<description>constants with lowercase l.</description>
-		<expected-problems>2</expected-problems>
+		<expected-problems>3</expected-problems>
 		<code-ref id="constants-lowercase-l" />
 	</test-code>
 
