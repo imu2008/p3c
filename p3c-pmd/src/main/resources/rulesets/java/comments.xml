@@ -1,38 +1,37 @@
 <?xml version="1.0"?>
 
-<ruleset name="Comments"
-    xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
-    
-    
-    <rule name="CommentsMustBeJavadocFormatRule"
-          message="【强制】类、类属性、类方法的注释必须使用javadoc规范，使用/**内容*/格式，不得使用//xxx方式。"
-          class="com.alibaba.p3c.pmd.lang.java.rule.comments.CommentsMustBeJavadocFormatRule">
-      <description>
+<ruleset name="Comments" xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
+
+
+	<rule name="CommentsMustBeJavadocFormatRule"
+		message="【强制】类、类属性、类方法的注释必须使用javadoc规范，使用/**内容*/格式，不得使用//xxx方式。"
+		class="com.alibaba.p3c.pmd.lang.java.rule.comments.CommentsMustBeJavadocFormatRule">
+		<description>
       【强制】类、类属性、类方法的注释必须使用javadoc规范，使用/**内容*/格式，不得使用//xxx方式。
 说明：在IDE编辑窗口中，javadoc方式会提示相关注释，生成javadoc可以正确输出相应注释；在IDE中，工程调用方法时，不进入方法即可悬浮提示方法、参数、返回值的意义，提高阅读效率。
       </description>
-        <priority>3</priority>
- 
-      <example>
+		<priority>3</priority>
+
+		<example>
 <![CDATA[
     // 这是一个class，但注释必须是java doc的格式
 	public class CommentsMustUseJavaDocFormat {}
 ]]>
       </example>
-    </rule>
-    
-    <rule name="AbstractMethodOrInterfaceMethodMustUseJavadocRule"
-          message="【强制】所有的抽象方法（包括接口中的方法）必须要用javadoc注释、除了返回值、参数、异常说明外，还必须指出该方法做什么事情，实现什么功能。"
-          class="com.alibaba.p3c.pmd.lang.java.rule.comments.AbstractMethodOrInterfaceMethodMustUseJavadocRule">
-      <description>
+	</rule>
+
+	<rule name="AbstractMethodOrInterfaceMethodMustUseJavadocRule"
+		message="【强制】所有的抽象方法（包括接口中的方法）必须要用javadoc注释、除了返回值、参数、异常说明外，还必须指出该方法做什么事情，实现什么功能。"
+		class="com.alibaba.p3c.pmd.lang.java.rule.comments.AbstractMethodOrInterfaceMethodMustUseJavadocRule">
+		<description>
 【强制】所有的抽象方法（包括接口中的方法）必须要用javadoc注释、除了返回值、参数、异常说明外，还必须指出该方法做什么事情，实现什么功能。
 说明：如有实现和调用注意事项，请一并说明。
       </description>
-        <priority>3</priority>
- 
-      <example>
+		<priority>3</priority>
+
+		<example>
 <![CDATA[
 	public abstract class CommentsMustUseJavaDocFormat {
 	    // 抽象方法必须要有javadoc注释
@@ -40,5 +39,22 @@
 	}
 ]]>
       </example>
-    </rule>
+	</rule>
+
+	<rule name="ClassMustHaveAuthorRule" message="【强制】所有的类都必须添加创建者信息。"
+		class="com.alibaba.p3c.pmd.lang.java.rule.comments.ClassMustHaveAuthorRule">
+		<description>
+【强制】所有的类都必须添加创建者信息。
+      </description>
+		<priority>3</priority>
+
+		<example>
+<![CDATA[
+    // should have @author javadoc
+	public class ClassMustHaveAuthorRule {
+	    public abstract String getName(String firstName, String secondName);
+	}
+]]>
+      </example>
+	</rule>
 </ruleset>

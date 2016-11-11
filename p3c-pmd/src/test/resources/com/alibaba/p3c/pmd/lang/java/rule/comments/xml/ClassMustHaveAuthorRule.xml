@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test-data>
+
+	<code-fragment id="class-without-author"><![CDATA[
+public class ClassMustHaveAuthorRule {}
+    ]]>
+	</code-fragment>
+
+	<test-code>
+		<description>Class without author.</description>
+		<expected-problems>1</expected-problems>
+		<code-ref id="class-without-author" />
+	</test-code>
+
+
+	<code-fragment id="class-with-author"><![CDATA[
+/**
+ * @author keriezhang
+ */
+public class ClassMustHaveAuthorRule {}
+    ]]>
+	</code-fragment>
+	<test-code>
+		<description>Class with author.</description>
+		<expected-problems>0</expected-problems>
+		<code-ref id="class-with-author" />
+	</test-code>
+
+</test-data>
