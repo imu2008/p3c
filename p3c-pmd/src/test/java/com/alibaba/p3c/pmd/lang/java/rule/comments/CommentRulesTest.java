@@ -9,6 +9,6 @@ public class CommentRulesTest extends SimpleAggregatorTst {
     @Override
     public void setUp() {
         addRule(RULESET, "CommentsMustBeJavadocFormat");
-        addRule(RULESET, "AbstractClassOrInterfaceMethodMustUseJavadoc");
+        addRule(RULESET, "AbstractMethodOrInterfaceMethodMustUseJavadoc");
     }
 }

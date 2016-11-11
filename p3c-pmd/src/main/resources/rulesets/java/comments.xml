@@ -23,9 +23,9 @@
       </example>
     </rule>
     
-    <rule name="AbstractClassOrInterfaceMethodMustUseJavadoc"
+    <rule name="AbstractMethodOrInterfaceMethodMustUseJavadoc"
           message="【强制】所有的抽象方法（包括接口中的方法）必须要用javadoc注释、除了返回值、参数、异常说明外，还必须指出该方法做什么事情，实现什么功能。"
-          class="com.alibaba.p3c.pmd.lang.java.rule.comments.AbstractClassOrInterfaceMethodMustUseJavadoc">
+          class="com.alibaba.p3c.pmd.lang.java.rule.comments.AbstractMethodOrInterfaceMethodMustUseJavadoc">
       <description>
 【强制】所有的抽象方法（包括接口中的方法）必须要用javadoc注释、除了返回值、参数、异常说明外，还必须指出该方法做什么事情，实现什么功能。
 说明：如有实现和调用注意事项，请一并说明。

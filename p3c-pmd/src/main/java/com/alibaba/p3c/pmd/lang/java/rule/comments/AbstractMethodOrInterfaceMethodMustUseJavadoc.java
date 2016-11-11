@@ -19,7 +19,7 @@ import net.sourceforge.pmd.lang.java.rule.comments.AbstractCommentRule;
  * @author keriezhang
  *
  */
-public class AbstractClassOrInterfaceMethodMustUseJavadoc extends AbstractCommentRule {
+public class AbstractMethodOrInterfaceMethodMustUseJavadoc extends AbstractCommentRule {
 
     @Override
     public Object visit(ASTClassOrInterfaceDeclaration decl, Object data) {
