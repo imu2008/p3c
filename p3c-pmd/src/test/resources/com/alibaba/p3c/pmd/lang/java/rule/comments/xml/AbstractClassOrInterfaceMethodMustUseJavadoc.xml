@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test-data>
+	<code-fragment id="non-abstract-method-in-abstract-class"><![CDATA[
+public abstract class AbstractClassOrInterfaceMethodMustUseJavadoc {
+    public String getName(String firstName, String secondName) throws XPathException, IOException {
+        return "lalalala";
+    }
+}
+    ]]>
+	</code-fragment>
+	<test-code>
+		<description>Non abstract method in abstract class may have no
+			comment.
+		</description>
+		<expected-problems>0</expected-problems>
+		<code-ref id="non-abstract-method-in-abstract-class" />
+	</test-code>
+
+	<code-fragment id="abstract-method-without-comment-in-abstract-class"><![CDATA[
+public abstract class AbstractClassOrInterfaceMethodMustUseJavadoc {
+    public abstract String getName(String firstName, String secondName) throws XPathException, IOException;
+}
+    ]]>
+	</code-fragment>
+	<test-code>
+		<description>Abstract method in abstract class should have javadoc
+			comment.
+		</description>
+		<expected-problems>1</expected-problems>
+		<expected-linenumbers>2</expected-linenumbers>
+		<code-ref id="abstract-method-without-comment-in-abstract-class" />
+	</test-code>
+
+	<code-fragment id="abstract-method-with-part-of-comment-in-abstract-class"><![CDATA[
+public abstract class AbstractClassOrInterfaceMethodMustUseJavadoc {
+    /**
+     */
+    public abstract String getName(String firstName, String secondName) throws XPathException, IOException;
+}
+    ]]>
+	</code-fragment>
+	<test-code>
+		<description>Abstract method in abstract class should have javadoc
+			comment about function, return, parameters and exceptions.
+		</description>
+		<expected-problems>6</expected-problems>
+		<expected-linenumbers>4</expected-linenumbers>
+		<code-ref id="abstract-method-with-part-of-comment-in-abstract-class" />
+	</test-code>
+
+	<code-fragment id="abstract-method-with-comment-in-abstract-class"><![CDATA[
+public abstract class AbstractClassOrInterfaceMethodMustUseJavadoc {
+    /**
+     * only function comment.
+     */
+    public abstract void getFistName();
+    
+    /**
+     * function comment
+     * 
+     * @param firstName first name
+     * @param secondName second name
+     * @return full name
+     * @throws XPathException xpath exception
+     * @throws IOException IO exceptioin
+     */
+    public abstract String getName(String firstName, String secondName) throws XPathException, IOException;
+}
+    ]]>
+	</code-fragment>
+	<test-code>
+		<description>Abstract method in abstract class already have javadoc
+			comment about function, return, parameters and exceptions.
+		</description>
+		<expected-problems>0</expected-problems>
+		<code-ref id="abstract-method-with-comment-in-abstract-class" />
+	</test-code>
+</test-data>

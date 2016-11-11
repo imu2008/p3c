@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test-data>
+
+	<code-fragment id="class-without-comments"><![CDATA[
+public class CommentsMustBeJavadocFormat {
+    private String name;
+    public void getName() {}
+}
+    ]]>
+	</code-fragment>
+
+	<test-code>
+		<description>Don't add violation when class have no comment.
+		</description>
+		<expected-problems>0</expected-problems>
+		<code-ref id="class-without-comments" />
+	</test-code>
+
+
+	<code-fragment id="class-with-non-javadoc-comments"><![CDATA[
+// a comment
+// a comment
+public class CommentsMustBeJavadocFormat {
+    // a comment
+    private String name;
+    // a comment
+    public void getName() {}
+}
+    ]]>
+	</code-fragment>
+
+	<test-code>
+		<description>Add violation when class have non-javadoc comments.
+		</description>
+		<expected-problems>3</expected-problems>
+		<expected-linenumbers>3,5,7</expected-linenumbers>
+		<code-ref id="class-with-non-javadoc-comments" />
+	</test-code>
+
+
+	<code-fragment id="class-with-javadoc-comments"><![CDATA[
+/**
+ * test
+ */
+public class CommentsMustBeJavadocFormat {
+    /**
+     * name
+     */
+    private String name;
+    
+    /**
+     * return name
+     */
+    public void getName() {}
+}
+    ]]>
+	</code-fragment>
+	<test-code>
+		<description>Don't add violation when class have javadoc comments.
+		</description>
+		<expected-problems>0</expected-problems>
+		<code-ref id="class-with-javadoc-comments" />
+	</test-code>
+
+</test-data>
