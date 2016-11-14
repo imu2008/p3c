@@ -3,7 +3,7 @@ package com.alibaba.p3c.pmd.lang.java.rule.others;
 import net.sourceforge.pmd.testframework.SimpleAggregatorTst;
 
 /**
- * ÆäËûÀà¹æ·¶²âÊÔÀà
+ * å…¶ä»–è§„èŒƒæµ‹è¯•ç±»
  * 
  * @author keriezhang
  *
