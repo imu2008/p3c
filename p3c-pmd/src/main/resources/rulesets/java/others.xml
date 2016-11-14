@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+
+<ruleset name="Others" xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
+
+	<rule name="AvoidApacheBeanUtilsCopyRule" language="java"
+		message="【强制】避免用Apache Beanutils进行属性的copy。" class="net.sourceforge.pmd.lang.rule.XPathRule">
+		<description>
+【强制】避免用Apache Beanutils进行属性的copy。
+说明：Apache BeanUtils性能较差，可以使用其他方案比如Spring BeanUtils, Cglib BeanCopier。
+      </description>
+		<priority>3</priority>
+		<properties>
+			<property name="xpath">
+				<value>
+ <![CDATA[
+//PrimaryPrefix/Name[@Image='BeanUtils.copyProperties' and //ImportDeclaration[@ImportedName='org.apache.commons.beanutils.BeanUtils']]
+ ]]>
+             </value>
+			</property>
+		</properties>
+		<example>
+<![CDATA[
+import java.lang.reflect.InvocationTargetException;
+import org.apache.commons.beanutils.BeanUtils;
+public class MyTest {
+    public void test(Object a, Object b) throws IllegalAccessException, InvocationTargetException {
+        BeanUtils.copyProperties(a, b); // 避免使用apache BeanUtils的cotpy
+    }
+}
+]]>
+      </example>
+	</rule>
+
+</ruleset>
