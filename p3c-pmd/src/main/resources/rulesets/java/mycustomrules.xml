@@ -1,29 +1,23 @@
 <?xml version="1.0"?>
-<ruleset name="My custom rules" xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
-	<description>
-      Example
-    </description>
-
-	<rule name="WhileLoopsMustUseBracesRule" 
-	      message="Avoid using 'while' statements without curly braces"
-		  class="com.alibaba.p3c.pmd.rule.example.WhileLoopsMustUseBracesRule">
+<ruleset name="My custom rules"
+		 xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
+	<rule name="WhileLoopsMustUseBracesRule"
+		  message="Avoid using 'while' statements without curly braces"
+		  class="com.alibaba.p3c.pmd.lang.java.rule.example.WhileLoopsMustUseBracesRule">
 		<description>
-      Avoid using 'while' statements without using curly braces
-      </description>
+			Avoid using 'while' statements without using curly braces
+		</description>
 		<priority>3</priority>
 
 		<example>
-<![CDATA[
-public class Test {	
-    public static void main(String[] args) {
-    	int x = 0;
-        while (true)
-            x++;
+			<![CDATA[
+    public void doSomething() {
+      while (true)
+          x++;
     }
-}
 ]]>
-      </example>
+		</example>
 	</rule>
 </ruleset>

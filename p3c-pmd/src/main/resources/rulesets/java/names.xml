@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+
+<ruleset name="Constants" xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
+
+
+    <rule name="CamelClassNameRule"
+          language="java"
+          since="1.6"
+          message="类名使用UpperCamelCase。 不能以下划线或美元符号打头，必须遵从驼峰形式，但以下情形例外：（领域模型的相关命名）DO / DTO / VO / DAO等。
+
+正例：MarcoPolo / UserDO / HtmlDTO / XmlService / TcpUdpDeal / TaPromotion
+
+反例：macroPolo / UserDo / HTMLDto / XMLService / TCPUDPDeal / TAPromotion"
+          class="net.sourceforge.pmd.lang.rule.XPathRule">
+        <description>
+            <![CDATA[
+类名使用UpperCamelCase。 不能以下划线或美元符号打头，必须遵从驼峰形式，但以下情形例外：（领域模型的相关命名）DO / DTO / VO / DAO等。
+            正例：MarcoPolo / UserDO / HtmlDTO / XmlService / TcpUdpDeal / TaPromotion
+            反例：macroPolo / UserDo / HTMLDto / XMLService / TCPUDPDeal / TAPromotion
+                    ]]>
+        </description>
+        <priority>1</priority>
+        <properties>
+            <property name="xpath">
+                <value>
+                    <![CDATA[
+//ClassOrInterfaceDeclaration
+[not (matches(@Image,"^([A-Z][a-z0-9]+)+(DO|DTO|VO|DAO)?$"))]
+                    ]]>
+                </value>
+            </property>
+        </properties>
+        <example>
+            <![CDATA[
+正例：MarcoPolo / UserDO / HtmlDTO / XmlService / TcpUdpDeal / TaPromotion
+            反例：macroPolo / UserDo / HTMLDto / XMLService / TCPUDPDeal / TAPromotion
+]]>
+        </example>
+    </rule>
+</ruleset>
