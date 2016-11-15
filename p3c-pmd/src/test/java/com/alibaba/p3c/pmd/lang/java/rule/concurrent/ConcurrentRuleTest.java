@@ -13,8 +13,9 @@ public class ConcurrentRuleTest extends SimpleAggregatorTst {
     private static final String RULE_NAME = "java-concurrent";
 
     @Override
-    public void setUp(){
-        addRule(RULE_NAME,"ThreadPoolCreationRule");
+    public void setUp() {
+        addRule(RULE_NAME, "ThreadPoolCreationRule");
+        addRule(RULE_NAME, "AvoidUseTimerRule");
     }
 
 }
