@@ -2,7 +2,6 @@ package com.alibaba.p3c.pmd.lang.java.rule.concurrent;
 
 import net.sourceforge.pmd.lang.java.ast.ASTImportDeclaration;
 import net.sourceforge.pmd.lang.java.ast.ASTName;
-import net.sourceforge.pmd.lang.java.ast.ASTPackageDeclaration;
 import net.sourceforge.pmd.lang.java.ast.ASTPrimaryExpression;
 import net.sourceforge.pmd.lang.java.ast.Token;
 import net.sourceforge.pmd.lang.java.rule.AbstractJavaRule;
@@ -88,11 +87,6 @@ public class ThreadPoolCreationRule extends AbstractJavaRule {
         if (name.getImage().startsWith(Executors.class.getName() + DOT)) {
             importedExecutorsMethods.add(name.getImage());
         }
-        return super.visit(node, data);
-    }
-
-    @Override
-    public Object visit(ASTPackageDeclaration node, Object data) {
         return super.visit(node, data);
     }
 }
