@@ -22,8 +22,13 @@ import java.util.concurrent.Executors;
  */
 public class ThreadPoolCreationRule extends AbstractJavaRule {
 
+    private static final String DOT = ".";
+    private static final String COLON = ";";
+    private static final String NEW = "new";
+    private static final String EXECUTORS_NEW = Executors.class.getSimpleName() + DOT + NEW;
+    private static final String FULL_EXECUTORS_NEW = Executors.class.getName() + DOT + NEW;
+    private static final String BRACKETS = "()";
     private boolean executorsUsed;
-
     private Set<String> importedExecutorsMethods = new HashSet<>();
 
     @Override
@@ -41,11 +46,14 @@ public class ThreadPoolCreationRule extends AbstractJavaRule {
 
     private boolean checkInitStatement(Token token) {
         String fullAssignStatement = getFullAssignStatement(token);
-        if (fullAssignStatement.startsWith("Executors.new")) {
+        if (fullAssignStatement.startsWith(EXECUTORS_NEW)) {
             return false;
         }
+        if (!fullAssignStatement.startsWith(NEW) && !fullAssignStatement.startsWith(FULL_EXECUTORS_NEW)) {
+            return true;
+        }
         //有lambda表达式的情况
-        int index = fullAssignStatement.indexOf("()");
+        int index = fullAssignStatement.indexOf(BRACKETS);
         if (index == -1) {
             return true;
         }
@@ -56,7 +64,7 @@ public class ThreadPoolCreationRule extends AbstractJavaRule {
             return false;
         }
         //静态引入
-        return !importedExecutorsMethods.contains(Executors.class.getName() + "." + fullAssignStatement);
+        return !importedExecutorsMethods.contains(Executors.class.getName() + DOT + fullAssignStatement);
     }
 
     private String getFullAssignStatement(final Token token) {
@@ -65,7 +73,7 @@ public class ThreadPoolCreationRule extends AbstractJavaRule {
         }
         StringBuilder sb = new StringBuilder(48);
         Token next = token;
-        while (next.next != null && !";".equals(next.image)) {
+        while (next.next != null && !COLON.equals(next.image)) {
             sb.append(next.image);
             next = next.next;
         }
@@ -77,7 +85,7 @@ public class ThreadPoolCreationRule extends AbstractJavaRule {
         ASTName name = node.getFirstChildOfType(ASTName.class);
         //考虑到有同学要静态引入方法的情况
         executorsUsed = executorsUsed || name.getType() == Executors.class;
-        if (name.getImage().startsWith(Executors.class.getName() + ".")) {
+        if (name.getImage().startsWith(Executors.class.getName() + DOT)) {
             importedExecutorsMethods.add(name.getImage());
         }
         return super.visit(node, data);
