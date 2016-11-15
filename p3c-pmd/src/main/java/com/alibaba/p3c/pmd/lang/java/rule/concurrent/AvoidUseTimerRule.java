@@ -5,7 +5,6 @@ import net.sourceforge.pmd.lang.java.ast.ASTVariableDeclarator;
 import net.sourceforge.pmd.lang.java.ast.AbstractJavaTypeNode;
 import net.sourceforge.pmd.lang.java.rule.AbstractJavaRule;
 
-import java.sql.Time;
 import java.util.Timer;
 
 /**
@@ -21,23 +20,23 @@ import java.util.Timer;
 public class AvoidUseTimerRule extends AbstractJavaRule {
     @Override
     public Object visit(ASTVariableDeclarator node, Object data) {
-        checkType(node,data);
+        checkType(node, data);
         return super.visit(node, data);
     }
 
     @Override
     public Object visit(ASTPrimaryExpression node, Object data) {
-        ASTVariableDeclarator variableDeclarator =node.getFirstParentOfType(ASTVariableDeclarator.class);
-        if(variableDeclarator != null && variableDeclarator.getType() == Timer.class){
-            return super.visit(node,data);
+        ASTVariableDeclarator variableDeclarator = node.getFirstParentOfType(ASTVariableDeclarator.class);
+        if (variableDeclarator != null && variableDeclarator.getType() == Timer.class) {
+            return super.visit(node, data);
         }
-        checkType(node,data);
+        checkType(node, data);
         return super.visit(node, data);
     }
 
-    private void checkType(AbstractJavaTypeNode node,Object data){
-        if(node.getType() == Timer.class){
-            addViolation(data,node);
+    private void checkType(AbstractJavaTypeNode node, Object data) {
+        if (node.getType() == Timer.class) {
+            addViolation(data, node);
         }
     }
 }
