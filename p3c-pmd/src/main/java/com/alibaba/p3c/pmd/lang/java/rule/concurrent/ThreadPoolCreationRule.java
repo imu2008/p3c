@@ -1,6 +1,5 @@
 package com.alibaba.p3c.pmd.lang.java.rule.concurrent;
 
-import net.sourceforge.pmd.lang.java.ast.ASTExtendsList;
 import net.sourceforge.pmd.lang.java.ast.ASTImportDeclaration;
 import net.sourceforge.pmd.lang.java.ast.ASTName;
 import net.sourceforge.pmd.lang.java.ast.ASTPackageDeclaration;
@@ -47,13 +46,13 @@ public class ThreadPoolCreationRule extends AbstractJavaRule {
         }
         //有lambda表达式的情况
         int index = fullAssignStatement.indexOf("()");
-        if(index == -1){
+        if (index == -1) {
             return true;
         }
-        fullAssignStatement = fullAssignStatement.substring(0,index);
+        fullAssignStatement = fullAssignStatement.substring(0, index);
 
         //考虑有人 犯二 java.util.concurrent.Executors.newxxxx
-        if(importedExecutorsMethods.contains(fullAssignStatement)){
+        if (importedExecutorsMethods.contains(fullAssignStatement)) {
             return false;
         }
         //静态引入
