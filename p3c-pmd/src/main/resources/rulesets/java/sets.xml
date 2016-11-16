@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+
+<ruleset name="Sets" xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
+
+
+	<rule name="ClassCastExceptionWithToArrayRule"
+		message="【强制】使用集合转数组的方法，必须使用集合的toArray(T[] array)，传入的是类型完全一样的数组，大小就是list.size()"
+		class="com.alibaba.p3c.pmd.lang.java.rule.sets.ClassCastExceptionWithToArrayRule">
+		<description>
+            【强制】使用集合转数组的方法，必须使用集合的toArray(T[] array)，传入的是类型完全一样的数组，大小就是list.size()。
+        </description>
+		<priority>3</priority>
+
+		<example>
+      <![CDATA[
+      //【强制】使用集合转数组的方法，必须使用集合的toArray(T[] array)，传入的是类型完全一样的数组，大小就是list.size()。
+	   public class Foo {   
+            private void processUpperEll(long aLong) {
+              // this would trigger the rule (and throw a ClassCastException if executed)
+              Integer[] a = (Integer [])c.toArray();
+
+              // this is fine and will not trigger the rule
+              Integer[] b = (Integer [])c.toArray(new Integer[c.size()]);
+             } 
+        }
+       ]]>
+      </example>
+	</rule>
+
+</ruleset>
