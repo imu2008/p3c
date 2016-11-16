@@ -18,10 +18,10 @@ public class AliPMD {
         List<String> list = new ArrayList<>();
 
         list.add("-d");
-        list.add("/Users/lq/project/gitrepos/p3c/p3c-pmd/src/main/java/com/alibaba/p3c/pmd/lang/java/rule/example");
+        list.add("/Users/lq/project/gitrepos/p3c/p3c-pmd/src/test/java/com/alibaba/p3c/pmd/lang/java/rule/names/VariableNameTest.java");
 
         list.add("-R");
-        list.add("/Users/lq/project/gitrepos/p3c/p3c-pmd/src/main/resources/rulesets/java/mycustomrules.xml");
+        list.add("/Users/lq/project/gitrepos/p3c/p3c-pmd/src/main/resources/rulesets/java/names.xml");
 
 
         String[] myArgs = list.toArray(new String[list.size()]);

@@ -39,4 +39,99 @@
 ]]>
         </example>
     </rule>
+
+    <rule name="AbstractNaming"
+          language="java"
+          since="1.4"
+          message="抽象类命名使用Abstract或Base开头"
+          class="net.sourceforge.pmd.lang.rule.XPathRule">
+        <description>
+            抽象类命名使用Abstract或Base开头
+        </description>
+        <priority>1</priority>
+        <properties>
+            <property name="xpath">
+                <value>
+                    <![CDATA[
+//ClassOrInterfaceDeclaration
+ [@Abstract='true' and @Interface='false']
+ [not (matches(@Image,'^(Abstract|Base).*'))]
+                    ]]>
+                </value>
+            </property>
+        </properties>
+        <example>
+            <![CDATA[
+public abstract class Foo { // should be AbstractFoo
+}
+]]>
+        </example>
+    </rule>
+
+    <rule name="ExceptionNaming"
+          language="java"
+          since="1.6"
+          message="异常类命名使用Exception结尾"
+          class="net.sourceforge.pmd.lang.rule.XPathRule">
+        <description>
+            异常类命名使用Exception结尾
+        </description>
+        <priority>1</priority>
+        <properties>
+            <property name="xpath">
+                <value>
+                    <![CDATA[
+//ClassOrInterfaceDeclaration
+[//ClassOrInterfaceType[pmd-java:typeof(@Image, 'Exception')]]
+[not (ends-with(@Image, 'Exception'))]
+                    ]]>
+                </value>
+            </property>
+        </properties>
+    </rule>
+
+
+    <rule name="TestClassNaming"
+          language="java"
+          since="1.6"
+          message="测试类命名使用Test结尾"
+          class="com.alibaba.p3c.pmd.lang.java.rule.names.TestClassNameEndWithTestRule">
+        <description>
+            测试类命名使用Test结尾
+        </description>
+        <priority>1</priority>
+        <example>
+            <![CDATA[
+        public class TestClassName {
+        @Test
+        public void testCase() {
+
+        }
+    }
+]]>
+        </example>
+    </rule>
+
+    <rule name="VariableNaming"
+          language="java"
+          since="1.6"
+          message="方法名、参数名、成员变量、局部变量都统一使用lowerCamelCase"
+          class="net.sourceforge.pmd.lang.rule.XPathRule">
+        <description>
+            方法名、参数名、成员变量、局部变量都统一使用lowerCamelCase
+        </description>
+        <priority>2</priority>
+        <properties>
+            <property name="xpath">
+                <value>
+                    <![CDATA[
+//VariableDeclaratorId
+[not (matches(@Image, '^[a-z][a-z0-9]+([A-Z][a-z0-9]+)*(DO|DTO|VO|DAO)?$'))]
+                    ]]>
+                </value>
+            </property>
+        </properties>
+    </rule>
+
+
 </ruleset>
