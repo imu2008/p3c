@@ -3,8 +3,7 @@
 <ruleset name="Sets" xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
-
-
+ 
 	<rule name="ClassCastExceptionWithToArrayRule"
 		message="【强制】使用集合转数组的方法，必须使用集合的toArray(T[] array)，传入的是类型完全一样的数组，大小就是list.size()"
 		class="com.alibaba.p3c.pmd.lang.java.rule.sets.ClassCastExceptionWithToArrayRule">
@@ -15,15 +14,40 @@
 
 		<example>
       <![CDATA[
-      //【强制】使用集合转数组的方法，必须使用集合的toArray(T[] array)，传入的是类型完全一样的数组，大小就是list.size()。
+       //【强制】使用集合转数组的方法，必须使用集合的toArray(T[] array)，传入的是类型完全一样的数组，大小就是list.size()。
 	   public class Foo {   
             private void processUpperEll(long aLong) {
-              // this would trigger the rule (and throw a ClassCastException if executed)
+              // warn
               Integer[] a = (Integer [])c.toArray();
 
-              // this is fine and will not trigger the rule
+              // ok
               Integer[] b = (Integer [])c.toArray(new Integer[c.size()]);
              } 
+        }
+       ]]>
+      </example>
+	</rule>
+
+	<rule name="UnsupportedExceptionWithModifyAsListRule"
+		message="【强制】使用工具类Arrays.asList()把数组转换成集合时，不能使用其修改集合相关的方法，它的add/remove/clear方法会抛出UnsupportedOperationException异常。"
+		class="com.alibaba.p3c.pmd.lang.java.rule.sets.UnsupportedExceptionWithModifyAsListRule">
+		<description>
+            【强制】使用工具类Arrays.asList()把数组转换成集合时，不能使用其修改集合相关的方法，它的add/remove/clear方法会抛出UnsupportedOperationException异常。
+        </description>
+		<priority>3</priority>
+
+		<example>
+      <![CDATA[
+       public class Foo {   
+            private void method(){
+			    List<String> t   = Arrays.asList("a","b","c"); 
+			    //warn
+			    t.add("22");
+			    //warn
+			    t.remove("22");
+			    //warn
+			    t.clear();
+			}
         }
        ]]>
       </example>
