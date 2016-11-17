@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test-data>
+
+	<code-fragment id="sets-UnsupportedExceptionWithModifyAsListRule-ok"><![CDATA[
+	    public class Foo {   
+            private void method(long aLong) {  
+               List<String> t   = Arrays.asList("a","b","c"); 
+            } 
+        }
+    ]]>
+	</code-fragment>
+
+	<test-code>
+		<description>sets-UnsupportedExceptionWithModifyAsListRule-ok.</description>
+		<expected-problems>0</expected-problems>
+		<code-ref id="sets-UnsupportedExceptionWithModifyAsListRule-ok" />
+	</test-code>
+ 
+	<code-fragment id="sets-UnsupportedExceptionWithModifyAsListRule-warn"><![CDATA[
+  	  public class Foo {   
+            private void method(long aLong) { 
+               List<String> t   = Arrays.asList("a","b","c");
+               t.add("22");
+               t.remove("22");
+               t.clear();
+             } 
+        }
+    ]]>
+	</code-fragment>
+
+	<test-code>
+		<description>sets-UnsupportedExceptionWithModifyAsListRule-warn.</description>
+		<expected-problems>3</expected-problems>
+		<code-ref id="sets-UnsupportedExceptionWithModifyAsListRule-warn" />
+	</test-code>
+
+</test-data>
