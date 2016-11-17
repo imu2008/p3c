@@ -8,7 +8,7 @@ import net.sourceforge.pmd.lang.java.rule.AbstractJavaRule;
 import java.util.Timer;
 
 /**
- * 多线程并行处理定时任务时，Timer运行多个TimeTask时，只要其中之一没有捕获抛出的异常，其它任务便会自动终止运行，使用ScheduledExecutorService则没有这个问题。
+ * 【强制】多线程并行处理定时任务时，Timer运行多个TimeTask时，只要其中之一没有捕获抛出的异常，其它任务便会自动终止运行，使用ScheduledExecutorService则没有这个问题。
  * 反例：阿里云平台产品技术部，域名更新具体产品信息保存到tair，Timer产生了RunTimeExcetion异常后，定时任务不再执行，通过检查日志发现原因，改为ScheduledExecutorService方式。
  *
  * @author caikang.ck(骏烈)
@@ -26,7 +26,8 @@ public class AvoidUseTimerRule extends AbstractJavaRule {
 
     @Override
     public Object visit(ASTPrimaryExpression node, Object data) {
-        ASTVariableDeclarator variableDeclarator = node.getFirstParentOfType(ASTVariableDeclarator.class);
+        ASTVariableDeclarator variableDeclarator =
+                node.getFirstParentOfType(ASTVariableDeclarator.class);
         if (variableDeclarator != null && variableDeclarator.getType() == Timer.class) {
             return super.visit(node, data);
         }
