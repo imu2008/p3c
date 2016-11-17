@@ -40,16 +40,4 @@
         </description>
         <priority>1</priority>
     </rule>
-    <rule name="ThreadShouldSetNameRule"
-          language="java"
-          since="1.6"
-          message="【强制】创建线程或线程池时请指定有意义的线程名称，方便出错时回溯。"
-          class="com.alibaba.p3c.pmd.lang.java.rule.concurrent.ThreadShouldSetNameRule">
-        <description>
-            <![CDATA[
-            【强制】创建线程或线程池时请指定有意义的线程名称，方便出错时回溯。
-       ]]>
-        </description>
-        <priority>1</priority>
-    </rule>
 </ruleset>
