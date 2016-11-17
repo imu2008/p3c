@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test-data>
+	<code-fragment id="switch-no-default">
+<![CDATA[
+	public class Example {
+	    public void fn() {
+	    	int i;
+	    	switch (i) {
+	    	    case 0:
+	    	    	break;
+	    	    case 1:
+	    	    	break;
+	    	    // 缺少default语句
+	    	}
+	    }
+	}
+]]>
+	</code-fragment>
+	<test-code>
+		<description>switch语句没有default分支</description>
+		<expected-problems>1</expected-problems>
+		<code-ref id="switch-no-default" />
+	</test-code>
+
+
+	<code-fragment id="switch-case-no-break">
+<![CDATA[
+	public class Example {
+	    public void fn() {
+	    	int i;
+	    	switch (i) {
+	    	    case 0:
+	    	    	// 缺少break,return,continue
+	    	    case 1:
+	    	    	break;
+	    	    case 2:
+	    	    	continue;
+	    	    default:
+	    	    	return;
+	    	}
+	    }
+	}
+]]>
+	</code-fragment>
+	<test-code>
+		<description>case语句没有break</description>
+		<expected-problems>1</expected-problems>
+		<code-ref id="switch-case-no-break" />
+	</test-code>
+</test-data>
