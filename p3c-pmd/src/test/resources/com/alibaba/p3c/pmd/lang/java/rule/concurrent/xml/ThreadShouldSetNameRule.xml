@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test-data>
+    <test-code>
+        <description>ThreadShouldSetNameRule</description>
+        <expected-problems>1</expected-problems>
+        <code><![CDATA[
+
+package com.alibaba.idea.pmd.test.thread;
+
+import java.util.concurrent.Executors;
+import java.util.concurrent.RejectedExecutionHandler;
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
+/**
+ * @author caikang.ck(骏烈)
+ * @date 2016/11/17 下午4:40
+ * @email caikang.ck@alibaba-inc.com
+ * @phone 15010667215
+ * @since 2016/11/17
+ */
+public class ThreadNameTest {
+    private void test(){
+        new ThreadPoolExecutor(10,10,100,TimeUnit.MILLISECONDS,new SynchronousQueue<>(),
+                Executors.defaultThreadFactory());
+       ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(10, 10, 100, TimeUnit.MILLISECONDS, new SynchronousQueue<Runnable>(),
+                new ThreadFactory() {
+                    @Override
+                    public Thread newThread(Runnable r) {
+                        return new Thread();
+                    }
+                }, (r, executor) -> {
+
+                });
+        new ThreadPoolExecutor(10, 10, 100, TimeUnit.MILLISECONDS, new SynchronousQueue<Runnable>(),
+                r -> {
+                    Thread thread1 = new Thread();
+                    thread1.setName("xxx");
+                    return thread1;
+                }, new RejectedExecutionHandler() {
+            @Override
+            public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
+
+            }
+        });
+        new ThreadPoolExecutor(10, 10, 100, TimeUnit.MILLISECONDS, new SynchronousQueue<Runnable>());
+    }
+}
+
+
+
+        ]]></code>
+    </test-code>
+</test-data>
