@@ -10,12 +10,8 @@ import org.jaxen.JaxenException;
 
 import net.sourceforge.pmd.lang.ast.Node;
 import net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceDeclaration;
-import net.sourceforge.pmd.lang.java.ast.ASTCompilationUnit;
 import net.sourceforge.pmd.lang.java.ast.ASTMethodDeclaration;
 import net.sourceforge.pmd.lang.java.ast.ASTName;
-import net.sourceforge.pmd.lang.java.ast.ASTPrimaryExpression;
-import net.sourceforge.pmd.lang.java.ast.ASTPrimaryPrefix;
-import net.sourceforge.pmd.lang.java.ast.ASTPrimarySuffix;
 import net.sourceforge.pmd.lang.java.ast.ASTVariableDeclarator;
 import net.sourceforge.pmd.lang.java.ast.ASTVariableDeclaratorId;
 import net.sourceforge.pmd.lang.java.rule.AbstractJavaRule;
@@ -29,6 +25,8 @@ import net.sourceforge.pmd.lang.java.rule.AbstractJavaRule;
  *
  */
 public class UnsupportedExceptionWithModifyAsListRule extends AbstractJavaRule {
+
+    // 存储当前方法内所有subList返回的变量名
     private List<String> volatileFields;
 
     private final static String ADD = ".add";
@@ -52,7 +50,7 @@ public class UnsupportedExceptionWithModifyAsListRule extends AbstractJavaRule {
             this.volatileFields.clear();
         }
         try {
-            // 找Array.asList的变量，然后判断变量.add .removed 等不能操作。
+            // 找Array.asList的变量，然后判断方法内，变量.add .removed 等不能操作。
             List<Node> nodes = node.findChildNodesWithXPath(
                     "//VariableDeclarator[../Type/ReferenceType/ClassOrInterfaceType[@Image='List']]/VariableInitializer/Expression/PrimaryExpression/PrimaryPrefix/Name[@Image='Arrays.asList']");
             for (Node item : nodes) {
@@ -93,7 +91,7 @@ public class UnsupportedExceptionWithModifyAsListRule extends AbstractJavaRule {
      * @param volatileFields2
      * @return
      */
-    private boolean judgeName(String name, List<String> volatileFields) { 
+    private boolean judgeName(String name, List<String> volatileFields) {
         for (String item : volatileFields) {
             if (name.equals(item + ADD)) {
                 return true;
