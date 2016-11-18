@@ -16,6 +16,7 @@ public class ConcurrentRuleTest extends SimpleAggregatorTst {
     public void setUp() {
         addRule(RULE_NAME, "ThreadPoolCreationRule");
         addRule(RULE_NAME, "AvoidUseTimerRule");
+        addRule(RULE_NAME, "AvoidManuallyCreateThreadRule");
+        addRule(RULE_NAME, "ThreadShouldSetNameRule");
     }
-
 }
