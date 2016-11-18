@@ -9,6 +9,7 @@ import java.util.List;
 import org.jaxen.JaxenException;
 
 import net.sourceforge.pmd.lang.ast.Node;
+import net.sourceforge.pmd.lang.java.ast.ASTBlock;
 import net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceDeclaration;
 import net.sourceforge.pmd.lang.java.ast.ASTMethodDeclaration;
 import net.sourceforge.pmd.lang.java.ast.ASTName;
@@ -28,6 +29,7 @@ public class UnsupportedExceptionWithModifyAsListRule extends AbstractJavaRule {
 
     // 存储当前方法内所有subList返回的变量名
     private List<String> volatileFields;
+
 
     private final static String ADD = ".add";
     private final static String REMOVE = ".remove";
@@ -54,34 +56,54 @@ public class UnsupportedExceptionWithModifyAsListRule extends AbstractJavaRule {
             List<Node> nodes = node.findChildNodesWithXPath(
                     "//VariableDeclarator[../Type/ReferenceType/ClassOrInterfaceType[@Image='List']]/VariableInitializer/Expression/PrimaryExpression/PrimaryPrefix/Name[@Image='Arrays.asList']");
             for (Node item : nodes) {
-                if (item instanceof ASTName) {
-                    List<ASTVariableDeclarator> parents =
-                            item.getParentsOfType(ASTVariableDeclarator.class);
-                    if (parents != null && parents.size() == 1) {
-                        ASTVariableDeclarator declarator = parents.get(0);
-                        ASTVariableDeclaratorId variableName =
-                                declarator.getFirstChildOfType(ASTVariableDeclaratorId.class);
-                        // 存储变量名
-                        this.volatileFields.add(variableName.getImage());
-                    }
+                if (!(item instanceof ASTName)) {
+                    continue;
                 }
-            }
-            // 或者直接xpath写到具体的 名字加add 操作
-            List<Node> blockNodes = node.findChildNodesWithXPath(
-                    "//BlockStatement/Statement/StatementExpression/PrimaryExpression/PrimaryPrefix/Name");
-            for (Node item : blockNodes) {
-                if (item instanceof ASTName) {
-                    String name = item.getImage();
-                    if (judgeName(name, volatileFields)) {
+                List<ASTVariableDeclarator> parents =
+                        item.getParentsOfType(ASTVariableDeclarator.class);
+                if (parents == null || parents.size() == 0 || parents.size() > 1) {
+                    continue;
+                }
+                ASTVariableDeclarator declarator = parents.get(0);
+                ASTVariableDeclaratorId variableName =
+                        declarator.getFirstChildOfType(ASTVariableDeclaratorId.class);
+
+                String valName = variableName.getImage(); 
+                ASTBlock blockNode = variableName.getFirstParentOfType(ASTBlock.class); 
+                if(blockNode == null){
+                    continue;
+                } 
+                List<Node> blockNodes = blockNode.findChildNodesWithXPath(
+                        "BlockStatement/Statement/StatementExpression/PrimaryExpression/PrimaryPrefix/Name");
+                for (Node blockItem : blockNodes) {
+                    if (checkBlockNodesValid(valName, blockItem)) {
                         addViolation(data, node);
                     }
                 }
+               
             }
-
         } catch (JaxenException e) {
             e.printStackTrace();
         }
         return super.visit(node, data);
+    }
+
+    /**
+     * 仅找对应方法作用域内是否有违规操作
+     * 
+     * @param name
+     * @param blockNode
+     * @return
+     * @throws JaxenException
+     */
+    private boolean checkBlockNodesValid(String variableName, Node item){ 
+        if (item instanceof ASTName) {
+            String name = item.getImage();
+            if (judgeName(name, variableName)) {
+                return true;
+            }
+        } 
+        return false;
     }
 
     /**
@@ -91,17 +113,15 @@ public class UnsupportedExceptionWithModifyAsListRule extends AbstractJavaRule {
      * @param volatileFields2
      * @return
      */
-    private boolean judgeName(String name, List<String> volatileFields) {
-        for (String item : volatileFields) {
-            if (name.equals(item + ADD)) {
-                return true;
-            }
-            if (name.equals(item + REMOVE)) {
-                return true;
-            }
-            if (name.equals(item + CLEAR)) {
-                return true;
-            }
+    private boolean judgeName(String name, String variableName) {
+        if (name.equals(variableName + ADD)) {
+            return true;
+        }
+        if (name.equals(variableName + REMOVE)) {
+            return true;
+        }
+        if (name.equals(variableName + CLEAR)) {
+            return true;
         }
         return false;
     }

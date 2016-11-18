@@ -18,13 +18,18 @@
  
 	<code-fragment id="sets-UnsupportedExceptionWithModifyAsListRule-warn"><![CDATA[
   	  public class Foo {   
-            private void method(long aLong) { 
-               List<String> t   = Arrays.asList("a","b","c");
-               t.add("22");
-               t.remove("22");
-               t.clear();
-             } 
-        }
+            private void method(long aLong) {  
+		      if(true){
+		            List<String> list = Arrays.asList("a","b","c");
+		            list.add("c"); 
+		            list.remove("22");
+		            list.clear();
+		      }
+		      List<String> list = new ArrayList<String>();
+		      list.add("b");
+		      list.remove("b");
+           } 
+      }
     ]]>
 	</code-fragment>
 
