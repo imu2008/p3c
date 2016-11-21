@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test-data>
+
+	<code-fragment id="comments-before-code"><![CDATA[
+public class AvoidCommentBehindStatement {
+    private String name;
+    public String getName() {
+        // 上一行注释1
+        return this.name; 
+    }
+    public void setName(String name) {
+        // 上一行注释2
+        this.name = name; 
+    }
+}
+    ]]>
+	</code-fragment>
+
+	<test-code>
+		<description>Comment before code</description>
+		<expected-problems>0</expected-problems>
+		<code-ref id="comments-before-code" />
+	</test-code>
+
+
+	<code-fragment id="comments-behind-code"><![CDATA[
+public class AvoidCommentBehindStatement {
+    private String name;
+    public String getName() {
+        return this.name; // 同行注释1
+    }
+    public void setName(String name) {
+        this.name = name; // 同行注释2
+    }
+}
+    ]]>
+	</code-fragment>
+	<test-code>
+		<description>Comments behind code</description>
+		<expected-problems>2</expected-problems>
+		<expected-linenumbers>4,7</expected-linenumbers>
+		<code-ref id="comments-behind-code" />
+	</test-code>
+
+</test-data>

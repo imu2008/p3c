@@ -17,5 +17,7 @@ public class CommentRulesTest extends SimpleAggregatorTst {
         addRule(RULESET, "CommentsMustBeJavadocFormatRule");
         addRule(RULESET, "AbstractMethodOrInterfaceMethodMustUseJavadocRule");
         addRule(RULESET, "ClassMustHaveAuthorRule");
+        addRule(RULESET, "EnumConstantsMustHaveCommentRule");
+        addRule(RULESET, "AvoidCommentBehindStatement");
     }
 }
