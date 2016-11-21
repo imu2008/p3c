@@ -30,7 +30,7 @@ public class ClassCastExceptionWithSubListToArrayListRule extends AbstractJavaRu
         } 
         try {
             List<Node> nodes = node.findChildNodesWithXPath(
-                    "//CastExpression[Type/ReferenceType/ClassOrInterfaceType[@Image = \"ArrayList\"]]/PrimaryExpression/PrimaryPrefix/Name[ends-with(@Image,'subList')]");
+                    "//CastExpression[Type/ReferenceType/ClassOrInterfaceType[@Image = \"ArrayList\"]]/PrimaryExpression/PrimaryPrefix/Name[ends-with(@Image,'.subList')]");
             for (Node item : nodes) {
                 if (!(item instanceof ASTName)) {
                     continue;
