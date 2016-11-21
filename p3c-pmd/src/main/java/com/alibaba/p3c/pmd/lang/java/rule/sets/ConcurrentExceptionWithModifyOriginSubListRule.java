@@ -11,19 +11,16 @@ import net.sourceforge.pmd.lang.ast.Node;
 import net.sourceforge.pmd.lang.java.ast.ASTBlock;
 import net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceDeclaration;
 import net.sourceforge.pmd.lang.java.ast.ASTName;
-import net.sourceforge.pmd.lang.java.ast.ASTVariableDeclarator;
-import net.sourceforge.pmd.lang.java.ast.ASTVariableDeclaratorId;
 import net.sourceforge.pmd.lang.java.rule.AbstractJavaRule;
 
 /**
- * 【强制】使用工具类Arrays.asList()把数组转换成集合时，不能使用其修改集合相关的方法，它的add/remove/
- * clear方法会抛出UnsupportedOperationException异常。
+ * 【强制】在subList场景中，高度注意对原列表的修改，会导致子列表的遍历、增加、删除均产生ConcurrentModificationException 异常。
  * 
  * @author shengfang.gsf
  * 
  *
  */
-public class UnsupportedExceptionWithModifyAsListRule extends AbstractJavaRule {
+public class ConcurrentExceptionWithModifyOriginSubListRule extends AbstractJavaRule {
 
     private final static String ADD = ".add";
     private final static String REMOVE = ".remove";
@@ -35,33 +32,23 @@ public class UnsupportedExceptionWithModifyAsListRule extends AbstractJavaRule {
             return data;
         }
         try {
-            // 找Array.asList的变量
             List<Node> nodes = node.findChildNodesWithXPath(
-                    "//VariableDeclarator[../Type/ReferenceType/ClassOrInterfaceType[@Image='List']]/VariableInitializer/Expression/PrimaryExpression/PrimaryPrefix/Name[@Image='Arrays.asList']");
+                    "//VariableDeclarator[../Type/ReferenceType/ClassOrInterfaceType[@Image='List']]/VariableInitializer/Expression/PrimaryExpression/PrimaryPrefix/Name[ends-with(@Image,'.subList')]");
             for (Node item : nodes) {
                 if (!(item instanceof ASTName)) {
                     continue;
                 }
-                List<ASTVariableDeclarator> parents =
-                        item.getParentsOfType(ASTVariableDeclarator.class);
-                if (parents == null || parents.size() == 0 || parents.size() > 1) {
-                    continue;
-                }
-                ASTVariableDeclarator declarator = parents.get(0);
-                ASTVariableDeclaratorId variableName =
-                        declarator.getFirstChildOfType(ASTVariableDeclaratorId.class);
-
-                String valName = variableName.getImage();
-                // 取变量作用域代码块
-                ASTBlock blockNode = variableName.getFirstParentOfType(ASTBlock.class);
+                String valName = getBeforeSubListVal(item.getImage());
+                ASTBlock blockNode = item.getFirstParentOfType(ASTBlock.class);
                 if (blockNode == null || valName == null) {
                     continue;
                 }
                 List<Node> blockNodes = blockNode.findChildNodesWithXPath(
                         "BlockStatement/Statement/StatementExpression/PrimaryExpression/PrimaryPrefix/Name");
-                // 代码块内，变量.add .removed 等不能操作。
+
                 for (Node blockItem : blockNodes) {
-                    if(blockItem.getBeginLine() < item.getBeginLine()){
+                    // 在subList指定位置之后，原list不允许add,removed,clear
+                    if (blockItem.getBeginLine() < item.getBeginLine()) {
                         continue;
                     }
                     if (checkBlockNodesValid(valName, blockItem)) {
@@ -74,6 +61,20 @@ public class UnsupportedExceptionWithModifyAsListRule extends AbstractJavaRule {
             e.printStackTrace();
         }
         return super.visit(node, data);
+    }
+
+
+    /**
+     * 找subList原变量名
+     * 
+     * @param image
+     * @return
+     */
+    private String getBeforeSubListVal(String image) {
+        if (image == null) {
+            return null;
+        }
+        return image.substring(0, image.indexOf("."));
     }
 
     /**
@@ -95,7 +96,7 @@ public class UnsupportedExceptionWithModifyAsListRule extends AbstractJavaRule {
     }
 
     /**
-     * 判断name 等于 t.add t.remove t.clear开始
+     * 判断name 等于 t.add t.remove t.clear
      * 
      * @param name
      * @param volatileFields2

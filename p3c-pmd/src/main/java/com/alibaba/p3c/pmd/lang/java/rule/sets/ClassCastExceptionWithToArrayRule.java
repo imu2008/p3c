@@ -9,7 +9,6 @@ import org.jaxen.JaxenException;
 
 import net.sourceforge.pmd.lang.ast.Node;
 import net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceDeclaration;
-import net.sourceforge.pmd.lang.java.ast.ASTMethodDeclaration;
 import net.sourceforge.pmd.lang.java.ast.ASTPrimaryExpression;
 import net.sourceforge.pmd.lang.java.ast.ASTPrimaryPrefix;
 import net.sourceforge.pmd.lang.java.ast.ASTPrimarySuffix;
@@ -24,16 +23,12 @@ import net.sourceforge.pmd.lang.java.rule.AbstractJavaRule;
  */
 public class ClassCastExceptionWithToArrayRule extends AbstractJavaRule {
 
+
     @Override
     public Object visit(ASTClassOrInterfaceDeclaration node, Object data) {
         if (node.isInterface()) {
             return data;
         }
-        return super.visit(node, data);
-    }
-
-    @Override
-    public Object visit(ASTMethodDeclaration node, Object data) {
         try {
             List<Node> nodes = node.findChildNodesWithXPath(
                     "//CastExpression[Type/ReferenceType/ClassOrInterfaceType[@Image !=\"Object\"]]/PrimaryExpression");
@@ -50,21 +45,21 @@ public class ClassCastExceptionWithToArrayRule extends AbstractJavaRule {
                     }
                     ASTPrimaryPrefix prefix = primaryPrefixs.get(0);
                     ASTPrimarySuffix suffix = primarySuffixs.get(0);
- 
+
                     String childName = prefix.jjtGetChild(0).getImage();
-                    if(childName == null){
+                    if (childName == null) {
                         continue;
-                    } 
+                    }
                     if (childName.endsWith(".toArray") && suffix.getArgumentCount() == 0
                             && primarySuffixs.size() == 1) {
-                        addViolation(data, node);
+                        addViolation(data, item);
                     }
                 }
             }
 
         } catch (JaxenException e) {
             e.printStackTrace();
-        } 
+        }
         return super.visit(node, data);
     }
 
