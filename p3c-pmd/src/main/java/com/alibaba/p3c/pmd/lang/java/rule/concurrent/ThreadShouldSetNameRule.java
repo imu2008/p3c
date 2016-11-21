@@ -1,12 +1,21 @@
 package com.alibaba.p3c.pmd.lang.java.rule.concurrent;
 
+import com.alibaba.p3c.pmd.lang.java.rule.AbstractAliRule;
+
 import net.sourceforge.pmd.lang.java.ast.ASTAllocationExpression;
 import net.sourceforge.pmd.lang.java.ast.ASTArgumentList;
-import net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceType;
-import net.sourceforge.pmd.lang.java.rule.AbstractJavaRule;
+import net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceDeclaration;
+import net.sourceforge.pmd.lang.java.ast.ASTExpression;
+import net.sourceforge.pmd.lang.java.ast.ASTLambdaExpression;
+import net.sourceforge.pmd.lang.java.ast.ASTName;
+import net.sourceforge.pmd.lang.java.ast.ASTVariableDeclaratorId;
 
+import java.util.List;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.RejectedExecutionHandler;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
@@ -24,25 +33,31 @@ import java.util.concurrent.ThreadPoolExecutor;
  * @see AvoidManuallyCreateThreadRule
  * @since 2016/11/16
  */
-public class ThreadShouldSetNameRule extends AbstractJavaRule {
+public class ThreadShouldSetNameRule extends AbstractAliRule {
     private static final int ARGUMENT_LENGTH_2 = 2;
     private static final int ARGUMENT_LENGTH_6 = 6;
 
     @Override
     public Object visit(ASTAllocationExpression node, Object data) {
-        ASTClassOrInterfaceType classOrInterfaceType =
-                node.getFirstDescendantOfType(ASTClassOrInterfaceType.class);
-        if (node.getType() == null || !ExecutorService.class.isAssignableFrom(node.getType())) {
-            if (!ThreadPoolExecutor.class.getSimpleName().equals(classOrInterfaceType.getImage())
-                    && !ScheduledThreadPoolExecutor.class.getSimpleName()
-                    .equals(classOrInterfaceType.getImage())) {
-                return super.visit(node, data);
-            }
+        //用户自定义类
+        if (node.getType() == null) {
+            return super.visit(node, data);
         }
-        if (ThreadPoolExecutor.class.getSimpleName().equals(classOrInterfaceType.getImage())) {
+        if (!ExecutorService.class.isAssignableFrom(node.getType())) {
+            return super.visit(node, data);
+        }
+        if (ThreadPoolExecutor.class == node.getType()) {
             return checkThreadPoolExecutor(node, data);
         }
-        return checkSchedulePoolExecutor(node, data);
+        if (ScheduledExecutorService.class == node.getType()) {
+            return checkSchedulePoolExecutor(node, data);
+        }
+        return super.visit(node, data);
+    }
+
+    @Override
+    public Object visit(ASTClassOrInterfaceDeclaration node, Object data) {
+        return super.visit(node, data);
     }
 
 
@@ -52,7 +67,11 @@ public class ThreadShouldSetNameRule extends AbstractJavaRule {
             addViolation(data, node);
             return super.visit(node, data);
         }
-        return super.visit(node,data);
+        if (!checkThreadFactoryArgument(
+                (ASTExpression) argumentList.jjtGetChild(ARGUMENT_LENGTH_6 - 1))) {
+            addViolation(data, node);
+        }
+        return super.visit(node, data);
     }
 
     private Object checkSchedulePoolExecutor(ASTAllocationExpression node, Object data) {
@@ -61,6 +80,34 @@ public class ThreadShouldSetNameRule extends AbstractJavaRule {
             addViolation(data, node);
             return super.visit(node, data);
         }
-        return super.visit(node,data);
+        if (!checkThreadFactoryArgument(
+                (ASTExpression) argumentList.jjtGetChild(ARGUMENT_LENGTH_2 - 1))) {
+            addViolation(data, node);
+        }
+        return super.visit(node, data);
+    }
+
+    private boolean checkThreadFactoryArgument(ASTExpression expression) {
+        if (expression.getType() != null && ThreadFactory.class
+                .isAssignableFrom(expression.getType())) {
+            return true;
+        }
+        ASTName name = expression.getFirstDescendantOfType(ASTName.class);
+        if (name != null && name.getType() == Executors.class) {
+            return false;
+        }
+        ASTLambdaExpression lambdaExpression =
+                expression.getFirstDescendantOfType(ASTLambdaExpression.class);
+        if (lambdaExpression != null) {
+            List<ASTVariableDeclaratorId> variableDeclaratorIds =
+                    lambdaExpression.findChildrenOfType(ASTVariableDeclaratorId.class);
+            if (variableDeclaratorIds == null || variableDeclaratorIds.size() != 1) {
+                return false;
+            }
+        } else if (expression.getType() != null && RejectedExecutionHandler.class
+                .isAssignableFrom(expression.getType())) {
+            return false;
+        }
+        return true;
     }
 }

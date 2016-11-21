@@ -1,5 +1,7 @@
 package com.alibaba.p3c.pmd.lang.java.rule.concurrent;
 
+import com.alibaba.p3c.pmd.lang.java.rule.AbstractAliRule;
+
 import net.sourceforge.pmd.lang.java.ast.ASTAllocationExpression;
 import net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceDeclaration;
 import net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceType;
@@ -12,7 +14,6 @@ import net.sourceforge.pmd.lang.java.ast.ASTMethodDeclaration;
 import net.sourceforge.pmd.lang.java.ast.ASTResultType;
 import net.sourceforge.pmd.lang.java.ast.ASTType;
 import net.sourceforge.pmd.lang.java.ast.ASTVariableDeclarator;
-import net.sourceforge.pmd.lang.java.rule.AbstractJavaRule;
 
 import java.util.List;
 import java.util.concurrent.ThreadFactory;
@@ -31,7 +32,8 @@ import java.util.concurrent.ThreadFactory;
  * @see ThreadShouldSetNameRule
  * @since 2016/11/15
  */
-public class AvoidManuallyCreateThreadRule extends AbstractJavaRule {
+public class AvoidManuallyCreateThreadRule extends AbstractAliRule {
+
     @Override
     public Object visit(ASTAllocationExpression node, Object data) {
         if (node.getType() != Thread.class) {

@@ -2,9 +2,8 @@
 <test-data>
     <test-code>
         <description>ThreadShouldSetNameRule</description>
-        <expected-problems>1</expected-problems>
+        <expected-problems>3</expected-problems>
         <code><![CDATA[
-
 package com.alibaba.idea.pmd.test.thread;
 
 import java.util.concurrent.Executors;
@@ -21,8 +20,15 @@ import java.util.concurrent.TimeUnit;
  * @phone 15010667215
  * @since 2016/11/17
  */
-public class ThreadNameTest {
+public class ThreadNameTest implements ThreadFactory{
+
     private void test(){
+        new ThreadPoolExecutor(10, 10, 100, TimeUnit.MILLISECONDS, new SynchronousQueue<Runnable>(),r -> {
+            Thread thread1 = new Thread();
+            thread1.setName("xxx");
+            return thread1;
+        });
+        new ThreadPoolExecutor(10, 10, 100, TimeUnit.MILLISECONDS, new SynchronousQueue<Runnable>(),new ThreadNameTest());
         new ThreadPoolExecutor(10,10,100,TimeUnit.MILLISECONDS,new SynchronousQueue<>(),
                 Executors.defaultThreadFactory());
        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(10, 10, 100, TimeUnit.MILLISECONDS, new SynchronousQueue<Runnable>(),
@@ -33,6 +39,15 @@ public class ThreadNameTest {
                     }
                 }, (r, executor) -> {
 
+                });
+        new ThreadPoolExecutor(10, 10, 100, TimeUnit.MILLISECONDS, new SynchronousQueue<Runnable>()
+               , (r, executor) -> System.out.println("xxx"));
+        new ThreadPoolExecutor(10, 10, 100, TimeUnit.MILLISECONDS, new SynchronousQueue<Runnable>(),
+                new RejectedExecutionHandler() {
+                    @Override
+                    public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
+
+                    }
                 });
         new ThreadPoolExecutor(10, 10, 100, TimeUnit.MILLISECONDS, new SynchronousQueue<Runnable>(),
                 r -> {
@@ -45,12 +60,19 @@ public class ThreadNameTest {
 
             }
         });
-        new ThreadPoolExecutor(10, 10, 100, TimeUnit.MILLISECONDS, new SynchronousQueue<Runnable>());
+        new ThreadPoolExecutor(10, 10, 100, TimeUnit.MILLISECONDS, new SynchronousQueue<Runnable>(),
+                r -> {
+                    Thread thread1 = new Thread();
+                    thread1.setName("xxx");
+                    return thread1;
+                });
+    }
+
+    @Override
+    public Thread newThread(Runnable r) {
+        return null;
     }
 }
-
-
-
         ]]></code>
     </test-code>
 </test-data>
