@@ -126,7 +126,50 @@ public abstract class Foo { // should be AbstractFoo
                 <value>
                     <![CDATA[
 //VariableDeclaratorId
+[not(ancestor::ForInit)]
+[(../..[@Final='false'] and ../..[@Static = 'false'] )]
 [not (matches(@Image, '^[a-z][a-z0-9]+([A-Z][a-z0-9]+)*(DO|DTO|VO|DAO)?$'))]
+                    ]]>
+                </value>
+            </property>
+        </properties>
+    </rule>
+
+    <rule name="AvoidStartWithDollarAndUnderLineNamingRule"
+          language="java"
+          since="1.6"
+          message="所有编程相关的命名均不能以下划线或美元符号开始"
+          class="com.alibaba.p3c.pmd.lang.java.rule.names.AvoidStartWithDollarAndUnderLineNamingRule">
+        <description>
+            所有编程相关的命名均不能以下划线或美元符号开始
+        </description>
+        <priority>1</priority>
+        <example>
+            <![CDATA[
+        public class AvoidStartWithDollarAndUnderLineNamingRule {
+        private String $1;
+    }
+]]>
+        </example>
+    </rule>
+
+    <rule name="ConstantFieldNameRule"
+          language="java"
+          since="1.6"
+          message="常量命名应该全部大写，单词间用下划线隔开，力求语义表达完整清楚，不要嫌名字长"
+          class="net.sourceforge.pmd.lang.rule.XPathRule">
+        <description>
+            常量命名应该全部大写，单词间用下划线隔开，力求语义表达完整清楚，不要嫌名字长
+        </description>
+        <priority>2</priority>
+        <properties>
+            <property name="xpath">
+                <value>
+                    <![CDATA[
+//VariableDeclaratorId
+[(ancestor::ClassOrInterfaceDeclaration)[@Interface='false']]
+[(../..[@Final='true'] and ../..[@Static = 'true'] )]
+[not (matches(@Image, '^[A-Z][A-Z0-9]+(_[A-Z0-9]+)*[A-Z0-9]$'))]
                     ]]>
                 </value>
             </property>

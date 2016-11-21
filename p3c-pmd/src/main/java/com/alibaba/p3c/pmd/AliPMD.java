@@ -18,7 +18,7 @@ public class AliPMD {
         List<String> list = new ArrayList<>();
 
         list.add("-d");
-        list.add("/Users/lq/project/gitrepos/p3c/p3c-pmd/src/test/java/com/alibaba/p3c/pmd/lang/java/rule/names/VariableNameTest.java");
+        list.add("/Users/lq/project/gitrepos/p3c/p3c-pmd/src/test/java/com/alibaba/p3c/pmd/lang/java/rule/names/ConstantFieldNameRuleTest.java");
 
         list.add("-R");
         list.add("/Users/lq/project/gitrepos/p3c/p3c-pmd/src/main/resources/rulesets/java/names.xml");
