@@ -67,8 +67,7 @@ public class ThreadShouldSetNameRule extends AbstractAliRule {
             addViolation(data, node);
             return super.visit(node, data);
         }
-        if (!checkThreadFactoryArgument(
-                (ASTExpression) argumentList.jjtGetChild(ARGUMENT_LENGTH_6 - 1))) {
+        if (!checkThreadFactoryArgument((ASTExpression) argumentList.jjtGetChild(ARGUMENT_LENGTH_6 - 1))) {
             addViolation(data, node);
         }
         return super.visit(node, data);
@@ -80,24 +79,21 @@ public class ThreadShouldSetNameRule extends AbstractAliRule {
             addViolation(data, node);
             return super.visit(node, data);
         }
-        if (!checkThreadFactoryArgument(
-                (ASTExpression) argumentList.jjtGetChild(ARGUMENT_LENGTH_2 - 1))) {
+        if (!checkThreadFactoryArgument((ASTExpression) argumentList.jjtGetChild(ARGUMENT_LENGTH_2 - 1))) {
             addViolation(data, node);
         }
         return super.visit(node, data);
     }
 
     private boolean checkThreadFactoryArgument(ASTExpression expression) {
-        if (expression.getType() != null && ThreadFactory.class
-                .isAssignableFrom(expression.getType())) {
+        if (expression.getType() != null && ThreadFactory.class.isAssignableFrom(expression.getType())) {
             return true;
         }
         ASTName name = expression.getFirstDescendantOfType(ASTName.class);
         if (name != null && name.getType() == Executors.class) {
             return false;
         }
-        ASTLambdaExpression lambdaExpression =
-                expression.getFirstDescendantOfType(ASTLambdaExpression.class);
+        ASTLambdaExpression lambdaExpression = expression.getFirstDescendantOfType(ASTLambdaExpression.class);
         if (lambdaExpression != null) {
             List<ASTVariableDeclaratorId> variableDeclaratorIds =
                     lambdaExpression.findChildrenOfType(ASTVariableDeclaratorId.class);

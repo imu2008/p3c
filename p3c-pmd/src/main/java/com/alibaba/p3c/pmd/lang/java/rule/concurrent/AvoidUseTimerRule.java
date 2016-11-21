@@ -26,8 +26,7 @@ public class AvoidUseTimerRule extends AbstractJavaRule {
 
     @Override
     public Object visit(ASTPrimaryExpression node, Object data) {
-        ASTVariableDeclarator variableDeclarator =
-                node.getFirstParentOfType(ASTVariableDeclarator.class);
+        ASTVariableDeclarator variableDeclarator = node.getFirstParentOfType(ASTVariableDeclarator.class);
         if (variableDeclarator != null && variableDeclarator.getType() == Timer.class) {
             return super.visit(node, data);
         }
