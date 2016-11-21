@@ -60,8 +60,11 @@ configuration/**
 *.log
 *.log.*
 
-#win Thumbs.db
+# Windows Thumbs.db
 *.db
+
+# OSX
+.DS_Store
 
 # sass gitignore#
 .sass-cache
