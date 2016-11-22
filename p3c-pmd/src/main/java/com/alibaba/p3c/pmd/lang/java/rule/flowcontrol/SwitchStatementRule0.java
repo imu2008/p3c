@@ -13,12 +13,13 @@ import java.util.List;
  * @author zenghou.fw
  */
 public class SwitchStatementRule0 extends XPathRule {
-    private static final String XPATH = "//SwitchStatement[(count(.//BreakStatement)\n" +
-            " + count(BlockStatement//Statement/ReturnStatement)\n" +
-            " + count(BlockStatement//Statement/ThrowStatement)\n" +
-            " + count(BlockStatement//Statement/IfStatement[@Else='true' and Statement[2][ReturnStatement|ThrowStatement]]/Statement[1][ReturnStatement|ThrowStatement])\n" +
-            " + count(SwitchLabel[name(following-sibling::node()) = 'SwitchLabel'])\n" +
-            " + count(SwitchLabel[count(following-sibling::node()) = 0])\n" +
+
+    private static final String XPATH = "//SwitchStatement[(count(.//BreakStatement)" +
+            " + count(BlockStatement//Statement/ReturnStatement)" +
+            " + count(BlockStatement//Statement/ThrowStatement)" +
+            " + count(BlockStatement//Statement/IfStatement[@Else='true' and Statement[2][ReturnStatement|ThrowStatement]]/Statement[1][ReturnStatement|ThrowStatement])" +
+            " + count(SwitchLabel[name(following-sibling::node()) = 'SwitchLabel'])" +
+            " + count(SwitchLabel[count(following-sibling::node()) = 0])" +
             "  < count (SwitchLabel))]";
 
     public SwitchStatementRule0() {
