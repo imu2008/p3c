@@ -1,23 +1,46 @@
 <?xml version="1.0"?>
 
 <ruleset name="FlowControl" xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
 
 
-	<rule name="SwitchStatementRule"
-		  language="java"
-		  message="【强制】在一个switch块内，每个case要么通过break/return来终止，要么注释说明程序将继续执行到哪一个case为止；在一个switch块内，都必须包含一个default语句并且放在最后，即使它什么代码也没有。"
-		  class="com.alibaba.p3c.pmd.lang.java.rule.flowcontrol.SwitchStatementRule">
-		<description>
-          【强制】在一个switch块内，每个case要么通过break/return来终止，要么注释说明程序将继续执行到哪一个case为止；在一个switch块内，都必须包含一个default语句并且放在最后，即使它什么代码也没有。
+    <rule name="SwitchStatementRule"
+          language="java"
+          message="【强制】在一个switch块内，每个case要么通过break/return来终止，
+		  要么注释说明程序将继续执行到哪一个case为止；在一个switch块内，都必须包含一
+		  个default语句并且放在最后，即使它什么代码也没有。"
+          class="com.alibaba.p3c.pmd.lang.java.rule.flowcontrol.SwitchStatementRule">
+        <description>
+            【强制】在一个switch块内，每个case要么通过break/return来终止，要么注释
+            说明程序将继续执行到哪一个case为止；在一个switch块内，都必须包含一个
+            default语句并且放在最后，即使它什么代码也没有。
         </description>
-		<priority>1</priority>
+        <priority>3</priority>
 
-		<example>
-<![CDATA[
-    // TODO
-]]>
-      </example>
-	</rule>
+        <example>
+            <![CDATA[
+				// TODO
+			]]>
+        </example>
+    </rule>
+
+    <rule name="NeedBraceRule"
+          language="java"
+          message="【强制】在if/else/for/while/do语句中必须使用大括号，即使只有
+          一行代码，避免使用下面的形式：if (condition) statements;"
+          class="com.alibaba.p3c.pmd.lang.java.rule.flowcontrol.NeedBraceRule">
+        <description>
+            【强制】在if/else/for/while/do语句中必须使用大括号，即使只有一行代码，
+            避免使用下面的形式：if (condition) statements;
+        </description>
+        <priority>3</priority>
+
+        <example>
+            <![CDATA[
+				// TODO
+			]]>
+        </example>
+    </rule>
+
 </ruleset>

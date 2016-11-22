@@ -22,7 +22,6 @@
 		<code-ref id="switch-no-default" />
 	</test-code>
 
-
 	<code-fragment id="switch-case-no-break">
 <![CDATA[
 	public class Example {

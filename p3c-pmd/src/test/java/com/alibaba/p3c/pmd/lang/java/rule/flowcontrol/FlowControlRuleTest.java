@@ -13,5 +13,6 @@ public class FlowControlRuleTest extends SimpleAggregatorTst {
     @Override
     public void setUp() {
         addRule(RULESET, "SwitchStatementRule");
+        addRule(RULESET, "NeedBraceRule");
     }
 }

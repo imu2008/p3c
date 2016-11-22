@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test-data>
+	<code-fragment id="if-no-brace">
+<![CDATA[
+	public class Example {
+	    public void fn() {
+	    	int a;
+	    	int b;
+	    	if (a > 0) b++;
+	    }
+	}
+]]>
+	</code-fragment>
+	<test-code>
+		<description>if语句未使用{}</description>
+		<expected-problems>1</expected-problems>
+		<code-ref id="if-no-brace" />
+	</test-code>
+
+
+	<code-fragment id="else-no-brace">
+		<![CDATA[
+	public class Example {
+	    public void fn() {
+	    	int a;
+	    	int b;
+	    	if (a > 0) {
+	    		b++;
+	    	} else
+	    		b--;
+	    }
+	}
+]]>
+	</code-fragment>
+	<test-code>
+		<description>else语句未使用{}</description>
+		<expected-problems>1</expected-problems>
+		<code-ref id="else-no-brace" />
+	</test-code>
+</test-data>
