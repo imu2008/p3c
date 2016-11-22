@@ -13,17 +13,16 @@ import java.util.List;
  * @author zenghou.fw
  */
 public class SwitchStatementRule0 extends XPathRule {
+    private static final String XPATH = "//SwitchStatement[(count(.//BreakStatement)\n" +
+            " + count(BlockStatement//Statement/ReturnStatement)\n" +
+            " + count(BlockStatement//Statement/ThrowStatement)\n" +
+            " + count(BlockStatement//Statement/IfStatement[@Else='true' and Statement[2][ReturnStatement|ThrowStatement]]/Statement[1][ReturnStatement|ThrowStatement])\n" +
+            " + count(SwitchLabel[name(following-sibling::node()) = 'SwitchLabel'])\n" +
+            " + count(SwitchLabel[count(following-sibling::node()) = 0])\n" +
+            "  < count (SwitchLabel))]";
 
-    @Override
-    public void apply(List<? extends Node> nodes, RuleContext ctx) {
-        final String xpathString = "//SwitchStatement[(count(.//BreakStatement)\n" +
-                " + count(BlockStatement//Statement/ReturnStatement)\n" +
-                " + count(BlockStatement//Statement/ThrowStatement)\n" +
-                " + count(BlockStatement//Statement/IfStatement[@Else='true' and Statement[2][ReturnStatement|ThrowStatement]]/Statement[1][ReturnStatement|ThrowStatement])\n" +
-                " + count(SwitchLabel[name(following-sibling::node()) = 'SwitchLabel'])\n" +
-                " + count(SwitchLabel[count(following-sibling::node()) = 0])\n" +
-                "  < count (SwitchLabel))]";
-        setXPath(xpathString);
-        super.apply(nodes, ctx);
+    public SwitchStatementRule0() {
+        super(XPATH);
     }
+
 }
