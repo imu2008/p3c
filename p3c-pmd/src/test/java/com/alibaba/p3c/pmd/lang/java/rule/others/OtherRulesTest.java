@@ -15,5 +15,6 @@ public class OtherRulesTest extends SimpleAggregatorTst {
     @Override
     public void setUp() {
         addRule(RULESET, "AvoidApacheBeanUtilsCopyRule");
+        addRule(RULESET, "AvoidNewDateGetTimeRule");
     }
 }
