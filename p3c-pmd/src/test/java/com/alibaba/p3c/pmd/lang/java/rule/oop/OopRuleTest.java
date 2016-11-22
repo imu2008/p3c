@@ -13,5 +13,6 @@ public class OopRuleTest extends SimpleAggregatorTst {
     @Override
     public void setUp() {
         addRule(RULESET, "WrapTypeEqualityRule");
+        addRule(RULESET, "PojoNoDefaultValueRule");
     }
 }

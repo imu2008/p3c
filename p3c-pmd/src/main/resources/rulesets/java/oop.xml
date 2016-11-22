@@ -9,7 +9,24 @@
           message="【强制】所有的包装类对象之间值的比较，全部使用equals方法比较。"
           class="com.alibaba.p3c.pmd.lang.java.rule.oop.WrapTypeEqualityRule">
         <description>
-            【强制】【强制】所有的包装类对象之间值的比较，全部使用equals方法比较。
+            【强制】所有的包装类对象之间值的比较，全部使用equals方法比较。
+        </description>
+        <priority>3</priority>
+
+        <example>
+            <![CDATA[
+				// TODO
+			]]>
+        </example>
+    </rule>
+
+
+    <rule name="PojoNoDefaultValueRule"
+          language="java"
+          message="【强制】定义DO/DTO/VO等POJO类时，不要加任何属性默认值。"
+          class="com.alibaba.p3c.pmd.lang.java.rule.oop.PojoNoDefaultValueRule">
+        <description>
+            【强制】定义DO/DTO/VO等POJO类时，不要加任何属性默认值。
         </description>
         <priority>3</priority>
 

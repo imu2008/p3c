@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test-data>
+
+	<code-fragment id="pojo-field-has-default-value">
+		<![CDATA[
+	public class Foo {
+		private String tom = ""; 	// BAD, 有默认值
+		private String jerry;		// OK
+		private int pageSize = 20;	// BAD
+	}
+		]]>
+	</code-fragment>
+	<test-code>
+		<description>POJO属性包含默认值</description>
+		<expected-problems>2</expected-problems>
+		<code-ref id="pojo-field-has-default-value" />
+	</test-code>
+</test-data>
