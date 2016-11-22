@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+
+<ruleset name="FlowControl" xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
+
+    <rule name="WrapTypeEqualityRule"
+          language="java"
+          message="【强制】所有的包装类对象之间值的比较，全部使用equals方法比较。"
+          class="com.alibaba.p3c.pmd.lang.java.rule.oop.WrapTypeEqualityRule">
+        <description>
+            【强制】【强制】所有的包装类对象之间值的比较，全部使用equals方法比较。
+        </description>
+        <priority>3</priority>
+
+        <example>
+            <![CDATA[
+				// TODO
+			]]>
+        </example>
+    </rule>
+
+</ruleset>
