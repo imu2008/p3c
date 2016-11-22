@@ -19,7 +19,7 @@ import net.sourceforge.pmd.lang.java.ast.SingleLineComment;
 import net.sourceforge.pmd.lang.java.rule.comments.AbstractCommentRule;
 
 /**
- * 类、类属性、类方法的注释必须使用javadoc规范
+ * 【强制】类、类属性、类方法的注释必须使用javadoc规范，不得使用//xxx方式。
  * 
  * @author keriezhang
  *
@@ -31,7 +31,7 @@ public class CommentsMustBeJavadocFormatRule extends AbstractCommentRule {
         checkComment(decl, data);
         return super.visit(decl, data);
     }
-    
+
     @Override
     public Object visit(ASTConstructorDeclaration decl, Object data) {
         checkComment(decl, data);
@@ -43,13 +43,13 @@ public class CommentsMustBeJavadocFormatRule extends AbstractCommentRule {
         checkComment(decl, data);
         return super.visit(decl, data);
     }
-    
+
     @Override
     public Object visit(ASTFieldDeclaration decl, Object data) {
         checkComment(decl, data);
         return super.visit(decl, data);
     }
-    
+
     @Override
     public Object visit(ASTEnumDeclaration decl, Object data) {
         checkComment(decl, data);
@@ -62,7 +62,7 @@ public class CommentsMustBeJavadocFormatRule extends AbstractCommentRule {
 
         return super.visit(cUnit, data);
     }
-    
+
     private void checkComment(AbstractJavaAccessNode decl, Object data) {
         Comment comment = decl.comment();
         if (comment instanceof SingleLineComment || comment instanceof MultiLineComment) {

@@ -85,3 +85,5 @@ hsf.configuration/
 
 #hsf test
 *.instance
+
+.DS_Store

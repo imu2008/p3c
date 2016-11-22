@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test-data>
+	<test-code>
+		<description>Executors.new</description>
+		<expected-problems>5</expected-problems>
+		<code><![CDATA[
+
+package com.alibaba.idea.pmd.test;
+
+import java.util.concurrent.ExecutorService;
+import static java.util.concurrent.Executors.newSingleThreadExecutor;
+
+
+import java.util.concurrent.Executors;
+public class Executors2Test {
+    private ExecutorService executorService = newSingleThreadExecutor();
+
+    private ExecutorService executorService1 = Executors.newSingleThreadExecutor();
+
+    private ExecutorService executorServic2 = executorService;
+
+    public SimpleDateFormatRule2Test(){
+        executorService1 = newSingleThreadExecutor();
+        newSingleThreadExecutor().submit(() -> System.out.println("xxx"));
+        java.util.concurrent.Executors.newSingleThreadExecutor().submit(() -> {
+
+        });
+    }
+}
+        ]]></code>
+	</test-code>
+	<test-code>
+		<description>no Executors</description>
+		<expected-problems>0</expected-problems>
+		<code><![CDATA[
+
+package com.alibaba.idea.pmd.test;
+
+
+import java.util.concurrent.Executors;
+public class Executors2Test {
+    public SimpleDateFormatRule2Test(){
+    newSingleThreadExecutor();
+    }
+
+    private void newSingleThreadExecutor(){
+    }
+}
+        ]]></code>
+	</test-code>
+</test-data>

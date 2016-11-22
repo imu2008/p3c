@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test-data>
+	<test-code>
+		<description>AvoidUseTimer</description>
+		<expected-problems>3</expected-problems>
+		<code><![CDATA[
+
+package com.alibaba.idea.pmd.test.concurrent;
+
+import java.util.Timer;
+
+/**
+ * @author caikang.ck(骏烈)
+ * @date 2016/11/15 下午5:43
+ * @email caikang.ck@alibaba-inc.com
+ * @phone 15010667215
+ * @since 2016/11/15
+ */
+public class TimerTest {
+    private Timer timer = new Timer();
+
+    public void test(){
+        Timer t = new Timer();
+        new Timer();
+    }
+}
+
+        ]]></code>
+	</test-code>
+</test-data>
