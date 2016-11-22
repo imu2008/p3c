@@ -47,15 +47,6 @@
 
 
 	<build>
-		<resources>
-			<resource>
-				<directory>${basedir}/src/main/findbugs</directory>
-				<excludes>
-					<exclude>*.xsd</exclude>
-					<exclude>*.xsl</exclude>
-				</excludes>
-			</resource>
-		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
