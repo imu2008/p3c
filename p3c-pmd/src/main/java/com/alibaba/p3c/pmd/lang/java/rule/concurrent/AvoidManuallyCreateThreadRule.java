@@ -3,6 +3,7 @@ package com.alibaba.p3c.pmd.lang.java.rule.concurrent;
 import com.alibaba.p3c.pmd.lang.java.rule.AbstractAliRule;
 
 import net.sourceforge.pmd.lang.java.ast.ASTAllocationExpression;
+import net.sourceforge.pmd.lang.java.ast.ASTBlockStatement;
 import net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceDeclaration;
 import net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceType;
 import net.sourceforge.pmd.lang.java.ast.ASTFieldDeclaration;
@@ -14,6 +15,7 @@ import net.sourceforge.pmd.lang.java.ast.ASTMethodDeclaration;
 import net.sourceforge.pmd.lang.java.ast.ASTResultType;
 import net.sourceforge.pmd.lang.java.ast.ASTType;
 import net.sourceforge.pmd.lang.java.ast.ASTVariableDeclarator;
+import net.sourceforge.pmd.lang.java.ast.Token;
 
 import java.util.List;
 import java.util.concurrent.ThreadFactory;
@@ -37,6 +39,9 @@ public class AvoidManuallyCreateThreadRule extends AbstractAliRule {
     @Override
     public Object visit(ASTAllocationExpression node, Object data) {
         if (node.getType() != Thread.class) {
+            return super.visit(node, data);
+        }
+        if (isAddShutdownHook(node)) {
             return super.visit(node, data);
         }
         //lambda 表达式直接过了
@@ -65,6 +70,15 @@ public class AvoidManuallyCreateThreadRule extends AbstractAliRule {
             return super.visit(node, data);
         }
         return addViolationAndReturn(node, data);
+    }
+
+    private boolean isAddShutdownHook(ASTAllocationExpression node) {
+        ASTBlockStatement blockStatement = node.getFirstParentOfType(ASTBlockStatement.class);
+        if (blockStatement == null) {
+            return false;
+        }
+        Token token = (Token) blockStatement.jjtGetFirstToken();
+        return Runtime.class.getSimpleName().equals(token.image);
     }
 
     private boolean threadFactoryVariable(ASTAllocationExpression node) {

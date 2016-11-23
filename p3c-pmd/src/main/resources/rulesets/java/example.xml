@@ -8,7 +8,7 @@
 
 	<rule name="WhileLoopsMustUseBracesRule" 
 	      message="Avoid using 'while' statements without curly braces"
-		  class="com.alibaba.p3c.pmd.rule.example.WhileLoopsMustUseBracesRule">
+		  class="com.alibaba.p3c.pmd.lang.java.rule.example.WhileLoopsMustUseBracesRule">
 		<description>
       Avoid using 'while' statements without using curly braces
       </description>

@@ -10,7 +10,7 @@ import net.sourceforge.pmd.testframework.SimpleAggregatorTst;
  * @since 2016/11/14
  */
 public class ConcurrentRuleTest extends SimpleAggregatorTst {
-    private static final String RULE_NAME = "java-concurrent";
+    private static final String RULE_NAME = "java-ali-concurrent";
 
     @Override
     public void setUp() {
