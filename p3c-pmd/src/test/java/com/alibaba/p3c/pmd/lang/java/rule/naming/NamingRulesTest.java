@@ -12,5 +12,14 @@ public class NamingRulesTest extends SimpleAggregatorTst {
     public void setUp() {
         addRule(RULESET, "BooleanPropertyNamingRule");
         addRule(RULESET, "ArrayTypeStyleNamingRule");
+        addRule(RULESET, "AvoidStartWithDollarAndUnderLineNamingRule");
+        addRule(RULESET, "TestClassNamingRule");
+        addRule(RULESET, "CamelClassNamingRule");
+        addRule(RULESET, "AbstractNamingRule");
+        addRule(RULESET, "ExceptionNamingRule");
+        addRule(RULESET, "LowerCamelCaseVariableNamingRule");
+        addRule(RULESET, "ConstantFieldNamingRule");
+        addRule(RULESET, "ServiceClassNamingRule");
+        addRule(RULESET, "PackageNamingRule");
     }
 }

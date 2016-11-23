@@ -1,0 +1,16 @@
+<test-data>
+    <code-fragment id="PackageNamingRule">
+        <![CDATA[
+        // should be lowercase name
+        package com.MyCompany;
+        public class SomeClass {
+        }
+    ]]>
+    </code-fragment>
+    <test-code>
+        <description>Service Class Name should be end with Impl</description>
+        <expected-problems>1</expected-problems>
+        <code-ref id="PackageNamingRule" />
+        <expected-linenumbers>2</expected-linenumbers>
+    </test-code>
+</test-data>

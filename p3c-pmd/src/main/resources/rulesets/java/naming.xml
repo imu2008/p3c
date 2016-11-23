@@ -5,7 +5,7 @@
          xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
 
 
-    <rule name="CamelClassNameRule"
+    <rule name="CamelClassNamingRule"
           language="java"
           since="1.6"
           message="类名使用UpperCamelCase。 不能以下划线或美元符号打头，必须遵从驼峰形式，但以下情形例外：（领域模型的相关命名）DO / DTO / VO / DAO等。
@@ -13,7 +13,7 @@
 正例：MarcoPolo / UserDO / HtmlDTO / XmlService / TcpUdpDeal / TaPromotion
 
 反例：macroPolo / UserDo / HTMLDto / XMLService / TCPUDPDeal / TAPromotion"
-          class="net.sourceforge.pmd.lang.rule.XPathRule">
+          class="com.alibaba.p3c.pmd.lang.java.rule.naming.CamelClassNamingRule">
         <description>
             <![CDATA[
 类名使用UpperCamelCase。 不能以下划线或美元符号打头，必须遵从驼峰形式，但以下情形例外：（领域模型的相关命名）DO / DTO / VO / DAO等。
@@ -22,16 +22,6 @@
                     ]]>
         </description>
         <priority>1</priority>
-        <properties>
-            <property name="xpath">
-                <value>
-                    <![CDATA[
-//ClassOrInterfaceDeclaration
-[not (matches(@Image,"^([A-Z][a-z0-9]+)+(DO|DTO|VO|DAO)?$"))]
-                    ]]>
-                </value>
-            </property>
-        </properties>
         <example>
             <![CDATA[
 正例：MarcoPolo / UserDO / HtmlDTO / XmlService / TcpUdpDeal / TaPromotion
@@ -40,62 +30,48 @@
         </example>
     </rule>
 
-    <rule name="AbstractNaming"
+    <rule name="AbstractNamingRule"
           language="java"
           since="1.4"
           message="抽象类命名使用Abstract或Base开头"
-          class="net.sourceforge.pmd.lang.rule.XPathRule">
+          class="com.alibaba.p3c.pmd.lang.java.rule.naming.AbstractNamingRule">
         <description>
             抽象类命名使用Abstract或Base开头
         </description>
         <priority>1</priority>
-        <properties>
-            <property name="xpath">
-                <value>
-                    <![CDATA[
-//ClassOrInterfaceDeclaration
- [@Abstract='true' and @Interface='false']
- [not (matches(@Image,'^(Abstract|Base).*'))]
-                    ]]>
-                </value>
-            </property>
-        </properties>
         <example>
             <![CDATA[
-public abstract class Foo { // should be AbstractFoo
+            // should be AbstractFoo
+public abstract class Foo {
 }
 ]]>
         </example>
     </rule>
 
-    <rule name="ExceptionNaming"
+    <rule name="ExceptionNamingRule"
           language="java"
           since="1.6"
           message="异常类命名使用Exception结尾"
-          class="net.sourceforge.pmd.lang.rule.XPathRule">
+          class="com.alibaba.p3c.pmd.lang.java.rule.naming.ExceptionNamingRule">
         <description>
             异常类命名使用Exception结尾
         </description>
         <priority>1</priority>
-        <properties>
-            <property name="xpath">
-                <value>
-                    <![CDATA[
-//ClassOrInterfaceDeclaration
-[//ClassOrInterfaceType[pmd-java:typeof(@Image, 'Exception')]]
-[not (ends-with(@Image, 'Exception'))]
-                    ]]>
-                </value>
-            </property>
-        </properties>
+        <example>
+            <![CDATA[
+            //异常类需要以Exception结尾
+            public class EndWithExceptionRuleTest extends Exception {
+            }
+            ]]>
+        </example>
     </rule>
 
 
-    <rule name="TestClassNaming"
+    <rule name="TestClassNamingRule"
           language="java"
           since="1.6"
           message="测试类命名使用Test结尾"
-          class="com.alibaba.p3c.pmd.lang.java.rule.naming.TestClassNameEndWithTestNamingRule">
+          class="com.alibaba.p3c.pmd.lang.java.rule.naming.TestClassNamingRule">
         <description>
             测试类命名使用Test结尾
         </description>
@@ -112,27 +88,23 @@ public abstract class Foo { // should be AbstractFoo
         </example>
     </rule>
 
-    <rule name="VariableNaming"
+    <rule name="LowerCamelCaseVariableNamingRule"
           language="java"
           since="1.6"
           message="方法名、参数名、成员变量、局部变量都统一使用lowerCamelCase"
-          class="net.sourceforge.pmd.lang.rule.XPathRule">
+          class="com.alibaba.p3c.pmd.lang.java.rule.naming.LowerCamelCaseVariableNamingRule">
         <description>
             方法名、参数名、成员变量、局部变量都统一使用lowerCamelCase
         </description>
         <priority>2</priority>
-        <properties>
-            <property name="xpath">
-                <value>
-                    <![CDATA[
-//VariableDeclaratorId
-[not(ancestor::ForInit)]
-[(../..[@Final='false'] and ../..[@Static = 'false'] )]
-[not (matches(@Image, '^[a-z][a-z0-9]+([A-Z][a-z0-9]+)*(DO|DTO|VO|DAO)?$'))]
-                    ]]>
-                </value>
-            </property>
-        </properties>
+        <example>
+            <![CDATA[
+            public class VariableNameRuleTest {
+            //命名应当遵守lowerCamelCase
+    private String AbC;
+}
+            ]]>
+        </example>
     </rule>
 
     <rule name="AvoidStartWithDollarAndUnderLineNamingRule"
@@ -147,77 +119,74 @@ public abstract class Foo { // should be AbstractFoo
         <example>
             <![CDATA[
         public class AvoidStartWithDollarAndUnderLineNamingRule {
+        //命名不能以下划线或美元符号开始
         private String $1;
     }
 ]]>
         </example>
     </rule>
 
-    <rule name="ConstantFieldNameRule"
+    <rule name="ConstantFieldNamingRule"
           language="java"
           since="1.6"
           message="常量命名应该全部大写，单词间用下划线隔开，力求语义表达完整清楚，不要嫌名字长, Log除外"
-          class="net.sourceforge.pmd.lang.rule.XPathRule">
+          class="com.alibaba.p3c.pmd.lang.java.rule.naming.ConstantFieldNamingRule">
         <description>
             常量命名应该全部大写，单词间用下划线隔开，力求语义表达完整清楚，不要嫌名字长, Log除外
         </description>
         <priority>2</priority>
-        <properties>
-            <property name="xpath">
-                <value>
-                    <![CDATA[
-//VariableDeclaratorId
-[(ancestor::ClassOrInterfaceDeclaration)[@Interface='false']]
-[../../Type/ReferenceType/ClassOrInterfaceType[@Image != 'Logger']]
-[(../..[@Final='true'] and ../..[@Static = 'true'] )]
-[not (matches(@Image, '^[A-Z][A-Z0-9]+(_[A-Z0-9]+)*[A-Z0-9]$'))]
-                    ]]>
-                </value>
-            </property>
-        </properties>
+        <example>
+            <![CDATA[
+            public class ConstantFieldNameRuleTest {
+    private   static final int MAX = 5;
+    //Log除外
+    private static final Logger logger = new Logger();
+    //常量命名需要全部大写，单词间用下划线隔开
+    private static final boolean success = true;
+       public void f() {
+         int il = 0;
+       }
+}
+            ]]>
+        </example>
     </rule>
 
-    <rule name="ServiceClassNameRule"
+    <rule name="ServiceClassNamingRule"
           language="java"
           since="1.6"
           message="对于Service和DAO类，基于SOA的理念，暴露出来的服务一定是接口，内部的实现类用Impl的后缀与接口区别"
-          class="net.sourceforge.pmd.lang.rule.XPathRule">
+          class="com.alibaba.p3c.pmd.lang.java.rule.naming.ServiceClassNamingRule">
         <description>
             对于Service和DAO类，基于SOA的理念，暴露出来的服务一定是接口，内部的实现类用Impl的后缀与接口区别
         </description>
         <priority>2</priority>
-        <properties>
-            <property name="xpath">
-                <value>
-                    <![CDATA[
-//ClassOrInterfaceDeclaration
-[ .[@Interface='false'] and ./ImplementsList/ClassOrInterfaceType[ ends-with(@Image, 'Service') or ends-with(@Image, 'DAO')]]
-[not(.[ ends-with(@Image, 'Impl')])]
-                    ]]>
-                </value>
-            </property>
-        </properties>
+        <example>
+            <![CDATA[
+            //接口以Service和DAO结尾，实现类必须以Impl作为后缀
+public class ServiceNameRuleTest implements TestDAO{
+
+}
+            ]]>
+        </example>
     </rule>
 
-    <rule name="PackageNameRule"
+    <rule name="PackageNamingRule"
           language="java"
           since="1.6"
           message="包名统一使用小写，点分隔符之间有且仅有一个自然语义的英语单词。包名统一使用单数形式，但是类名如果有复数含义，类名可以使用复数形式。"
-          class="net.sourceforge.pmd.lang.rule.XPathRule">
+          class="com.alibaba.p3c.pmd.lang.java.rule.naming.PackageNamingRule">
         <description>
             包名统一使用小写，点分隔符之间有且仅有一个自然语义的英语单词。包名统一使用单数形式，但是类名如果有复数含义，类名可以使用复数形式。
         </description>
         <priority>2</priority>
-        <properties>
-            <property name="xpath">
-                <value>
-                    <![CDATA[
-//PackageDeclaration/Name
-[not (matches(@Image, '^[a-z]+(\.[a-z][a-z0-9]*)*$'))]
-                    ]]>
-                </value>
-            </property>
-        </properties>
+        <example>
+            <![CDATA[
+             // should be lowercase name
+            package com.MyCompany;
+            public class SomeClass {
+            }
+]]>
+        </example>
     </rule>
 
     <rule name="BooleanPropertyNamingRule"

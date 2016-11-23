@@ -1,0 +1,17 @@
+<test-data>
+    <code-fragment id="LowerCamelCaseVariableNamingRuleTest">
+        <![CDATA[
+        public class VariableNameRuleTest {
+    private String abC;
+    private String AbC;
+    private String abCd;
+}
+    ]]>
+    </code-fragment>
+    <test-code>
+        <description>Variable name should be lowerCamelCase</description>
+        <expected-problems>1</expected-problems>
+        <code-ref id="LowerCamelCaseVariableNamingRuleTest" />
+        <expected-linenumbers>3</expected-linenumbers>
+    </test-code>
+</test-data>
