@@ -4,6 +4,30 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
 
+	<rule name="AvoidPatternCompileInMethodRule" language="java"
+		message="【强制】在使用正则表达式时，利用好其预编译功能，可以有效加快正则匹配速度。"
+		class="com.alibaba.p3c.pmd.lang.java.rule.others.AvoidPatternCompileInMethodRule">
+		<description>
+【强制】在使用正则表达式时，利用好其预编译功能，可以有效加快正则匹配速度。
+说明：不要在方法体内定义：Pattern pattern = Pattern.compile(规则);
+      </description>
+		<priority>3</priority>
+		<example>
+<![CDATA[
+import java.util.regex.Pattern;
+public class PatternCompile {
+    // 利用正则表达式的预编译功能
+    private static Pattern NUMBER_PATTERN = Pattern.compile("[0-9]+");
+    public Pattern getNumberPattern() {
+        // 避免在方法内定义
+        Pattern localPattern = Pattern.compile("[0-9]+");
+        return localPattern;
+    }
+}
+]]>
+      </example>
+	</rule>
+
 	<rule name="AvoidApacheBeanUtilsCopyRule" language="java"
 		message="【强制】避免用Apache Beanutils进行属性的copy。" class="net.sourceforge.pmd.lang.rule.XPathRule">
 		<description>

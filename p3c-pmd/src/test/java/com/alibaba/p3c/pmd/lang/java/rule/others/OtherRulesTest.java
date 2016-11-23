@@ -10,11 +10,12 @@ import net.sourceforge.pmd.testframework.SimpleAggregatorTst;
  */
 public class OtherRulesTest extends SimpleAggregatorTst {
 
-    private static final String RULESET = "java-others";
+    private static final String RULESET = "java-ali-others";
 
     @Override
     public void setUp() {
         addRule(RULESET, "AvoidApacheBeanUtilsCopyRule");
         addRule(RULESET, "AvoidNewDateGetTimeRule");
+        addRule(RULESET, "AvoidPatternCompileInMethodRule");
     }
 }
