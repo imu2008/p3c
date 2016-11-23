@@ -1,6 +1,5 @@
 package com.alibaba.p3c.pmd.lang.java.rule.flowcontrol;
 
-import net.sourceforge.pmd.lang.ast.Node;
 import net.sourceforge.pmd.lang.java.ast.*;
 import net.sourceforge.pmd.lang.java.rule.AbstractJavaRule;
 
@@ -13,21 +12,29 @@ import net.sourceforge.pmd.lang.java.rule.AbstractJavaRule;
  * @author zenghou.fw
  */
 public class NeedBraceRule extends AbstractJavaRule {
+    // switch语句没有{}编译不通过,因此不作检查
 
     @Override
     public Object visit(ASTIfStatement node, Object data) {
-        Node firstStmt = node.jjtGetChild(1);
-        // TODO else
-        if (!hasBlockAsFirstChild(firstStmt)) {
-            addViolation(data, node);
+        if (node.hasElse()) {
+            // 带else的IfStatement一定包含两个Statement分支
+            ASTStatement elseStms = node.findChildrenOfType(ASTStatement.class).get(1);
+
+            if (!elseStms.hasDecendantOfAnyType(ASTBlock.class, ASTIfStatement.class)) {
+                addViolation(data, node);
+            }
+        } else {
+            if (!node.hasDescendantMatchingXPath("Statement/Block")) {
+                addViolation(data, node);
+            }
         }
+
         return super.visit(node, data);
     }
 
     @Override
     public Object visit(ASTForStatement node, Object data) {
-        Node firstStmt = node.jjtGetChild(1);
-        if (!hasBlockAsFirstChild(firstStmt)) {
+        if (!node.hasDescendantMatchingXPath("Statement/Block")) {
             addViolation(data, node);
         }
         return super.visit(node, data);
@@ -35,24 +42,9 @@ public class NeedBraceRule extends AbstractJavaRule {
 
     @Override
     public Object visit(ASTWhileStatement node, Object data) {
-        Node firstStmt = node.jjtGetChild(1);
-        if (!hasBlockAsFirstChild(firstStmt)) {
+        if (!node.hasDescendantMatchingXPath("Statement/Block")) {
             addViolation(data, node);
         }
         return super.visit(node, data);
     }
-
-    @Override
-    public Object visit(ASTSwitchStatement node, Object data) {
-        Node firstStmt = node.jjtGetChild(1);
-        if (!hasBlockAsFirstChild(firstStmt)) {
-            addViolation(data, node);
-        }
-        return super.visit(node, data);
-    }
-
-    private boolean hasBlockAsFirstChild(Node node) {
-        return (node.jjtGetNumChildren() != 0 && (node.jjtGetChild(0) instanceof ASTBlock));
-    }
-
 }

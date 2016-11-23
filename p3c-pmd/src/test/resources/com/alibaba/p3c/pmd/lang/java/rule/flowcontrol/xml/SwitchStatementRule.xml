@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <test-data>
-	<code-fragment id="switch-no-default">
-<![CDATA[
+	<code-fragment id="switch-no-default-1">
+		<![CDATA[
 	public class Example {
 	    public void fn() {
 	    	int i;
@@ -9,37 +9,75 @@
 	    	    case 0:
 	    	    	break;
 	    	    case 1:
+	    	    	int j;
+	    	    	switch (j) {
+	    	    		case 0:
+	    	    			break;
+	    	    		default:	// 嵌套的switch包含了default分支
+	    	    			return;
+	    	    	}
 	    	    	break;
 	    	    // 缺少default语句
 	    	}
 	    }
 	}
-]]>
+		]]>
 	</code-fragment>
 	<test-code>
-		<description>switch语句没有default分支</description>
+		<description>外层switch语句没有default分支</description>
 		<expected-problems>1</expected-problems>
-		<code-ref id="switch-no-default" />
+		<code-ref id="switch-no-default-1" />
 	</test-code>
 
-	<code-fragment id="switch-case-no-break">
-<![CDATA[
-	public class Example {
-	    public void fn() {
+	<code-fragment id="switch-no-default-2">
+		<![CDATA[
+	public class Foo {
+	    public void bar() {
 	    	int i;
 	    	switch (i) {
 	    	    case 0:
-	    	    	// 缺少break,return,continue
-	    	    case 1:
 	    	    	break;
-	    	    case 2:
-	    	    	continue;
+	    	    case 1:
+	    	    	int j;
+	    	    	switch (j) {
+	    	    		case 0:
+	    	    			break;
+	    	    		// 嵌套的switch缺少default分支
+	    	    	}
+	    	    	break;
 	    	    default:
 	    	    	return;
 	    	}
 	    }
 	}
-]]>
+		]]>
+	</code-fragment>
+	<test-code>
+		<description>嵌套的switch语句没有default分支</description>
+		<expected-problems>1</expected-problems>
+		<code-ref id="switch-no-default-1" />
+	</test-code>
+
+	<code-fragment id="switch-case-no-break">
+		<![CDATA[
+	public class Foo {
+	    public void bar() {
+	    	int i;
+	    	switch (i) {
+	    	    case 0:
+	    	    	int j =1;
+	    	    	// 缺少break,return,continue
+	    	    case 1:
+	    	    	break;
+	    	    case 2:
+	    	    	continue;
+	    	    case 3:		// OK,空语句忽略break检查
+	    	    default:
+	    	    	return;
+	    	}
+	    }
+	}
+		]]>
 	</code-fragment>
 	<test-code>
 		<description>case语句没有break</description>
