@@ -95,7 +95,7 @@ public abstract class Foo { // should be AbstractFoo
           language="java"
           since="1.6"
           message="测试类命名使用Test结尾"
-          class="com.alibaba.p3c.pmd.lang.java.rule.names.TestClassNameEndWithTestRule">
+          class="com.alibaba.p3c.pmd.lang.java.rule.naming.TestClassNameEndWithTestNamingRule">
         <description>
             测试类命名使用Test结尾
         </description>
@@ -139,7 +139,7 @@ public abstract class Foo { // should be AbstractFoo
           language="java"
           since="1.6"
           message="所有编程相关的命名均不能以下划线或美元符号开始"
-          class="com.alibaba.p3c.pmd.lang.java.rule.names.AvoidStartWithDollarAndUnderLineNamingRule">
+          class="com.alibaba.p3c.pmd.lang.java.rule.naming.AvoidStartWithDollarAndUnderLineNamingRule">
         <description>
             所有编程相关的命名均不能以下划线或美元符号开始
         </description>
@@ -156,10 +156,10 @@ public abstract class Foo { // should be AbstractFoo
     <rule name="ConstantFieldNameRule"
           language="java"
           since="1.6"
-          message="常量命名应该全部大写，单词间用下划线隔开，力求语义表达完整清楚，不要嫌名字长"
+          message="常量命名应该全部大写，单词间用下划线隔开，力求语义表达完整清楚，不要嫌名字长, Log除外"
           class="net.sourceforge.pmd.lang.rule.XPathRule">
         <description>
-            常量命名应该全部大写，单词间用下划线隔开，力求语义表达完整清楚，不要嫌名字长
+            常量命名应该全部大写，单词间用下划线隔开，力求语义表达完整清楚，不要嫌名字长, Log除外
         </description>
         <priority>2</priority>
         <properties>
@@ -168,6 +168,7 @@ public abstract class Foo { // should be AbstractFoo
                     <![CDATA[
 //VariableDeclaratorId
 [(ancestor::ClassOrInterfaceDeclaration)[@Interface='false']]
+[../../Type/ReferenceType/ClassOrInterfaceType[@Image != 'Logger']]
 [(../..[@Final='true'] and ../..[@Static = 'true'] )]
 [not (matches(@Image, '^[A-Z][A-Z0-9]+(_[A-Z0-9]+)*[A-Z0-9]$'))]
                     ]]>
@@ -176,5 +177,70 @@ public abstract class Foo { // should be AbstractFoo
         </properties>
     </rule>
 
+    <rule name="ServiceClassNameRule"
+          language="java"
+          since="1.6"
+          message="对于Service和DAO类，基于SOA的理念，暴露出来的服务一定是接口，内部的实现类用Impl的后缀与接口区别"
+          class="net.sourceforge.pmd.lang.rule.XPathRule">
+        <description>
+            对于Service和DAO类，基于SOA的理念，暴露出来的服务一定是接口，内部的实现类用Impl的后缀与接口区别
+        </description>
+        <priority>2</priority>
+        <properties>
+            <property name="xpath">
+                <value>
+                    <![CDATA[
+//ClassOrInterfaceDeclaration
+[ .[@Interface='false'] and ./ImplementsList/ClassOrInterfaceType[ ends-with(@Image, 'Service') or ends-with(@Image, 'DAO')]]
+[not(.[ ends-with(@Image, 'Impl')])]
+                    ]]>
+                </value>
+            </property>
+        </properties>
+    </rule>
+
+    <rule name="PackageNameRule"
+          language="java"
+          since="1.6"
+          message="包名统一使用小写，点分隔符之间有且仅有一个自然语义的英语单词。包名统一使用单数形式，但是类名如果有复数含义，类名可以使用复数形式。"
+          class="net.sourceforge.pmd.lang.rule.XPathRule">
+        <description>
+            包名统一使用小写，点分隔符之间有且仅有一个自然语义的英语单词。包名统一使用单数形式，但是类名如果有复数含义，类名可以使用复数形式。
+        </description>
+        <priority>2</priority>
+        <properties>
+            <property name="xpath">
+                <value>
+                    <![CDATA[
+//PackageDeclaration/Name
+[not (matches(@Image, '^[a-z]+(\.[a-z][a-z0-9]*)*$'))]
+                    ]]>
+                </value>
+            </property>
+        </properties>
+    </rule>
+
+    <rule name="BooleanPropertyNamingRule"
+          language="java"
+          since="1.6"
+          message="POJO类中的任何布尔类型的变量，都不要加is，否则部分框架解析会引起序列化错误"
+          class="com.alibaba.p3c.pmd.lang.java.rule.naming.BooleanPropertyNamingRule">
+        <description>
+            POJO类中的任何布尔类型的变量，都不要加is，否则部分框架解析会引起序列化错误
+        </description>
+        <priority>2</priority>
+        <example>
+            <![CDATA[
+    public class FooDAO{
+    private boolean issuccess;
+    private boolean success;
+    public void sayHello (int i) {
+     boolean issuccess1;
+     boolean success1;
+    }
+}
+]]>
+        </example>
+    </rule>
 
 </ruleset>

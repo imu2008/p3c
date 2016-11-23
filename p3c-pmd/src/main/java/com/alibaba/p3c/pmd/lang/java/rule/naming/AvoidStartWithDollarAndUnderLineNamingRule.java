@@ -1,4 +1,4 @@
-package com.alibaba.p3c.pmd.lang.java.rule.names;
+package com.alibaba.p3c.pmd.lang.java.rule.naming;
 
 import net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceDeclaration;
 import net.sourceforge.pmd.lang.java.ast.ASTMethodDeclarator;

@@ -1,4 +1,4 @@
-package com.alibaba.p3c.pmd.lang.java.rule.names;
+package com.alibaba.p3c.pmd.lang.java.rule.naming;
 
 import org.junit.Test;
 
