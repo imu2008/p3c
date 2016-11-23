@@ -11,5 +11,6 @@ public class NamingRulesTest extends SimpleAggregatorTst {
     @Override
     public void setUp() {
         addRule(RULESET, "BooleanPropertyNamingRule");
+        addRule(RULESET, "ArrayTypeStyleNamingRule");
     }
 }

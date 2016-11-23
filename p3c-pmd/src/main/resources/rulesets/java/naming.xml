@@ -232,11 +232,32 @@ public abstract class Foo { // should be AbstractFoo
         <example>
             <![CDATA[
     public class FooDAO{
+    //POJO类的boolean属性不要加is
     private boolean issuccess;
-    private boolean success;
-    public void sayHello (int i) {
-     boolean issuccess1;
-     boolean success1;
+}
+]]>
+        </example>
+    </rule>
+
+    <rule name="ArrayTypeStyleNamingRule"
+          language="java"
+          since="1.6"
+          message="中括号是数组类型的一部分，数组定义如下：String[] args;"
+          class="com.alibaba.p3c.pmd.lang.java.rule.naming.ArrayTypeStyleNamingRule">
+        <description>
+            中括号是数组类型的一部分，数组定义如下：String[] args;
+        </description>
+        <priority>2</priority>
+        <example>
+            <![CDATA[
+  public class ArrayNamingTest{
+    private String[] array1;
+    //中括号应当是数组的一部分
+    private String array2[];
+    public void f(){
+      String[] array3;
+      //中括号应当是数组的一部分
+      String array4[];
     }
 }
 ]]>
