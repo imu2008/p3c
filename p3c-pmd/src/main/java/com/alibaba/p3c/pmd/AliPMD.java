@@ -21,7 +21,7 @@ public class AliPMD {
         list.add("/Users/lq/project/gitrepos/p3c/p3c-pmd/src/test/java/com/alibaba/p3c/pmd/lang/java/rule/naming/NamingRulesTest.java");
 
         list.add("-R");
-        list.add("/Users/lq/project/gitrepos/p3c/p3c-pmd/src/main/resources/rulesets/java/naming.xml");
+        list.add("/Users/lq/project/gitrepos/p3c/p3c-pmd/src/main/resources/rulesets/java/ali-naming.xml");
 
 
         String[] myArgs = list.toArray(new String[list.size()]);
