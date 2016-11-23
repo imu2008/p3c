@@ -4,6 +4,7 @@ import net.sourceforge.pmd.lang.rule.XPathRule;
 
 /**
  * @author changle.lq@alibaba-inc.com 2016/11/23 下午4:41
+ * 1.6 【强制】抽象类命名使用Abstract或Base开头;
  */
 public class AbstractNamingRule extends XPathRule {
     private static final String XPATH = "//ClassOrInterfaceDeclaration\n"

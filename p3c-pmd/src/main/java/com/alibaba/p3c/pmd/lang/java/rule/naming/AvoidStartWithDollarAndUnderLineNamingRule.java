@@ -7,6 +7,7 @@ import net.sourceforge.pmd.lang.java.rule.AbstractJavaRule;
 
 /**
  * @author changle.lq@alibaba-inc.com 2016/11/16 下午2:11
+ * 1.1 【强制】所有编程相关的命名均不能以下划线或美元符号开始；
  */
 public class AvoidStartWithDollarAndUnderLineNamingRule extends AbstractJavaRule {
     

@@ -8,6 +8,7 @@ import net.sourceforge.pmd.lang.java.rule.AbstractJavaRule;
 
 /**
  * @author changle.lq@alibaba-inc.com 2016/11/23 下午7:34
+ * 1.5 【强制】常量命名应该全部大写，单词间用下划线隔开，力求语义表达完整清楚，不要嫌名字长。
  */
 public class ConstantFieldNamingRule extends AbstractJavaRule {
     private static final String LOGGER_NAME = "Logger";

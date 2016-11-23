@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 
 /**
  * @author changle.lq@alibaba-inc.com 2016/11/23 下午5:55
+ * 1.4 【强制】方法名、参数名、成员变量、局部变量都统一使用lowerCamelCase，必须遵从驼峰形式。
  */
 public class LowerCamelCaseVariableNamingRule extends AbstractJavaRule {
 
