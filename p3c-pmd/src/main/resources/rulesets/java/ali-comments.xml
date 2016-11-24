@@ -57,4 +57,48 @@
 ]]>
       </example>
 	</rule>
+
+	<rule name="EnumConstantsMustHaveCommentRule" message="【强制】所有的枚举类型字段必须要有注释，说明每个数据项的用途。"
+		class="com.alibaba.p3c.pmd.lang.java.rule.comments.EnumConstantsMustHaveCommentRule">
+		<description>
+【强制】所有的枚举类型字段必须要有注释，说明每个数据项的用途。
+      </description>
+		<priority>3</priority>
+
+		<example>
+<![CDATA[
+public enum Level {
+    // must have javadoc comment here.
+    HIGH,
+    MEDIUM,
+    LOW
+}
+]]>
+      </example>
+	</rule>
+
+	<rule name="AvoidCommentBehindStatement"
+		message="【强制】方法内部单行注释，在被注释语句上方另起一行，使用//注释。方法内部多行注释使用/* */注释。注意与代码对齐。"
+		class="com.alibaba.p3c.pmd.lang.java.rule.comments.AvoidCommentBehindStatement">
+		<description>
+【强制】方法内部单行注释，在被注释语句上方另起一行，使用//注释。方法内部多行注释使用/* */注释。注意与代码对齐。
+      </description>
+		<priority>3</priority>
+
+		<example>
+<![CDATA[
+public class TestCommentBehindCode {
+    private String name; // 类变量后的注释
+    public String getName() {
+        return this.name; // 普通方法语句内的注释
+    }
+    public void setName(String name) {
+        if (null != name) { // if语句之后的注释
+            this.name = name;
+        }
+    }
+}
+]]>
+      </example>
+	</rule>
 </ruleset>

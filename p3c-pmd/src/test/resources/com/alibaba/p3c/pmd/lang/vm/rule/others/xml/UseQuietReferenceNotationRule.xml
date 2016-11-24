@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test-data>
+
+
+	<code-fragment id="use-quiet-reference-notation"><![CDATA[
+<input type="text" name="email" value="$!email"/>
+<input type="text" name="email" value="$!email"/>
+    ]]>
+	</code-fragment>
+
+	<test-code>
+		<description>Use quiet reference notation</description>
+		<expected-problems>0</expected-problems>
+		<code-ref id="use-quiet-reference-notation" />
+	</test-code>
+
+
+	<code-fragment id="not-use-quiet-reference-notation"><![CDATA[
+<input type="text" name="email" value="$email"/>
+<input type="text" name="email" value="$email"/>
+    ]]>
+	</code-fragment>
+	
+	<test-code>
+		<description>Not use quiet reference notation</description>
+		<expected-problems>2</expected-problems>
+		<expected-linenumbers>1,2</expected-linenumbers>
+		<code-ref id="not-use-quiet-reference-notation" />
+	</test-code>
+	
+	<code-fragment id="directives-is-not-considered"><![CDATA[
+#set( $email = "email" )
+#set( ${email} = "email" )
+#if( $foo )
+  <strong>Velocity!</strong>
+#end
+<ul>
+#foreach( $product in $allProducts )
+    <li>$product</li>
+#end
+</ul>
+#include( "greetings.txt", $seasonalstock )
+    ]]>
+	</code-fragment>
+	
+	<test-code>
+		<description>Directives is not considered</description>
+		<expected-problems>1</expected-problems>
+		<expected-linenumbers>8</expected-linenumbers>
+		<code-ref id="directives-is-not-considered" />
+	</test-code>
+</test-data>
