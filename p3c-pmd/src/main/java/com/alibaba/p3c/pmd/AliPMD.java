@@ -18,11 +18,17 @@ public class AliPMD {
         List<String> list = new ArrayList<>();
 
         list.add("-d");
-        list.add("/Users/lq/project/gitrepos/p3c/p3c-pmd/src/test/java/com/alibaba/p3c/pmd/lang/java/rule/naming/NamingRulesTest.java");
+        list.add("/Users/keriezhang/Documents/program/gitlab/"
+                + "p3c/alibaba-checkstyle-checks/src/test/java/com/alibaba/pmd/comments/"
+                + "MethodOfInterfaceMustUseJavaDocTest.java");
 
         list.add("-R");
-        list.add("/Users/lq/project/gitrepos/p3c/p3c-pmd/src/main/resources/rulesets/java/ali-naming.xml");
+        list.add("/Users/keriezhang/Documents/program/gitlab/"
+                + "p3c/alibaba-checkstyle-checks/src/main/resources/com/alibaba/pmd/"
+                + "abstract-method-and-interface-must-use-java-doc.xml");
 
+        // list.add("-f");
+        // list.add("xml");
 
         String[] myArgs = list.toArray(new String[list.size()]);
         PMD.main(myArgs);
