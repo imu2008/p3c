@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test-data>
+
+	<code-fragment id="whileloops-without-braces"><![CDATA[
+public class Test {	
+    public static void main(String[] args) {
+    	int x = 0;
+        while (true)
+            x++;
+    }
+}
+    ]]>
+	</code-fragment>
+
+	<test-code>
+		<description>WhileLoops without braces.</description>
+		<expected-problems>1</expected-problems>
+		<code-ref id="whileloops-without-braces" />
+	</test-code>
+
+
+	<code-fragment id="whileloops-with-braces"><![CDATA[
+public class Test {	
+    public static void main(String[] args) {
+    	int x = 0;
+        while (true) {
+            x++;
+            }
+    }
+}
+    ]]>
+	</code-fragment>
+	<test-code>
+		<description>WhileLoops with braces.</description>
+		<expected-problems>0</expected-problems>
+		<code-ref id="whileloops-with-braces" />
+	</test-code>
+
+</test-data>

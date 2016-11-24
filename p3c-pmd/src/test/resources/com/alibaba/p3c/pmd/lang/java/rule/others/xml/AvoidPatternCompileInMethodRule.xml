@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test-data>
+
+	<code-fragment id="use-pattern-compile-as-static-field"><![CDATA[
+import java.util.regex.Pattern;
+public class PatternCompile {
+    // 利用正则表达式的预编译功能
+    private static Pattern NUMBER_PATTERN = Pattern.compile("[0-9]+");
+}
+    ]]>
+	</code-fragment>
+
+	<test-code>
+		<description>Use Pattern.compile as static field</description>
+		<expected-problems>0</expected-problems>
+		<code-ref id="use-pattern-compile-as-static-field" />
+	</test-code>
+
+
+	<code-fragment id="use-pattern-compile-in-method"><![CDATA[
+import java.util.regex.Pattern;
+public class PatternCompile {
+    public void getNumberPattern() {
+        // 避免在方法内定义
+        Pattern localPattern = Pattern.compile("[0-9]+");
+    }
+}
+    ]]>
+	</code-fragment>
+	<test-code>
+		<description>Use Pattern.compile in method</description>
+		<expected-problems>1</expected-problems>
+		<expected-linenumbers>5</expected-linenumbers>
+		<code-ref id="use-pattern-compile-in-method" />
+	</test-code>
+
+</test-data>
