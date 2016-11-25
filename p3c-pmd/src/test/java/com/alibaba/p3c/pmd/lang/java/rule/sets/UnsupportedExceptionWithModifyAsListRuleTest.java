@@ -4,7 +4,7 @@ import net.sourceforge.pmd.testframework.SimpleAggregatorTst;
 
 public class UnsupportedExceptionWithModifyAsListRuleTest extends SimpleAggregatorTst {
 
-    private static final String RULESET = "java-sets";
+    private static final String RULESET = "java-ali-sets";
 
     @Override
     public void setUp() {

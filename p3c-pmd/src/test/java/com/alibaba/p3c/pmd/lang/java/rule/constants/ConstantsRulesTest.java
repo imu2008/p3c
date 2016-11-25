@@ -4,7 +4,7 @@ import net.sourceforge.pmd.testframework.SimpleAggregatorTst;
 
 public class ConstantsRulesTest extends SimpleAggregatorTst {
 
-    private static final String RULESET = "java-constants";
+    private static final String RULESET = "java-ali-constants";
     
     @Override
     public void setUp() {
