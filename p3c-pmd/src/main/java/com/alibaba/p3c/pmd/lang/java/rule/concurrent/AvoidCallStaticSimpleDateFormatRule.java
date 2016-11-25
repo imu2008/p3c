@@ -11,7 +11,7 @@ import net.sourceforge.pmd.lang.java.ast.ASTPrimaryExpression;
 import net.sourceforge.pmd.lang.java.ast.ASTPrimaryPrefix;
 import net.sourceforge.pmd.lang.java.ast.ASTStatementExpression;
 import net.sourceforge.pmd.lang.java.ast.ASTSynchronizedStatement;
-import net.sourceforge.pmd.lang.java.ast.AbstractJavaTypeNode;
+import net.sourceforge.pmd.lang.java.ast.AbstractJavaNode;
 import net.sourceforge.pmd.lang.java.ast.Token;
 
 import java.text.SimpleDateFormat;
@@ -65,9 +65,9 @@ public class AvoidCallStaticSimpleDateFormatRule extends AbstractAliRule {
                     continue;
                 }
             }
-            AbstractJavaTypeNode javaTypeNode = (AbstractJavaTypeNode) flowNode.getNode();
+            AbstractJavaNode javaNode = (AbstractJavaNode) flowNode.getNode();
             ASTPrimaryExpression flowPrimaryExpression =
-                    javaTypeNode.getFirstDescendantOfType(ASTPrimaryExpression.class);
+                    javaNode.getFirstDescendantOfType(ASTPrimaryExpression.class);
             if (flowPrimaryExpression == null) {
                 continue;
             }
