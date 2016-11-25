@@ -72,6 +72,9 @@ import java.util.logging.Logger;
 /**
  * 1. 自定义type resolver，修复PMD在对象构造方法中传入匿名类时不能正确解析类型的问题
  * 2. 把匿名类的类型设置为 父亲类型
+ *
+ * @author caikang.ck(骏烈)
+ * @email caikang.ck@alibaba-inc.com
  */
 public class FixClassTypeResolver extends ClassTypeResolver {
 
@@ -672,6 +675,7 @@ public class FixClassTypeResolver extends ClassTypeResolver {
     /**
      * Check whether the supplied class name exists.
      */
+    @Override
     public boolean classNameExists(String fullyQualifiedClassName) {
         try {
             pmdClassLoader.loadClass(fullyQualifiedClassName);
@@ -683,6 +687,7 @@ public class FixClassTypeResolver extends ClassTypeResolver {
         }
     }
 
+    @Override
     public Class<?> loadClass(String fullyQualifiedClassName) {
         try {
             return pmdClassLoader.loadClass(fullyQualifiedClassName);
