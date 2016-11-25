@@ -53,4 +53,73 @@
       </example>
 	</rule>
 
+    <rule name="ClassCastExceptionWithSubListToArrayListRule"
+		message="【强制】ArrayList的subList结果不可强转成ArrayList，否则会抛出ClassCastException异常。"
+		class="com.alibaba.p3c.pmd.lang.java.rule.sets.ClassCastExceptionWithSubListToArrayListRule">
+		<description>
+            【强制】ArrayList的subList结果不可强转成ArrayList，否则会抛出ClassCastException异常。
+        </description>
+		<priority>3</priority>
+
+		<example>
+      <![CDATA[
+      public class Foo {   
+            private void method() { 
+                  List<String> list = new ArrayList<String>();
+                  list.add("22");
+                  //warn
+                  List<String> test = (ArrayList<String>) list.subList(0, 1);	   
+             } 
+      }
+       ]]>
+      </example>
+	</rule>
+	 
+	<rule name="ConcurrentExceptionWithModifyOriginSubListRule"
+		message="【强制】在subList场景中，高度注意对原列表的修改，会导致子列表的遍历、增加、删除均产生ConcurrentModificationException异常。"
+		class="com.alibaba.p3c.pmd.lang.java.rule.sets.ConcurrentExceptionWithModifyOriginSubListRule">
+		<description>
+            【强制】在subList场景中，高度注意对原列表的修改，会导致子列表的遍历、增加、删除均产生ConcurrentModificationException异常。
+        </description>
+		<priority>3</priority>
+
+		<example>
+      <![CDATA[
+      public class Foo {   
+            private void method() { 
+                  List<String> originList = new ArrayList<String>();
+                  originList.add("22");
+                  List<String> subList = originList.subList(0, 1);
+                  //warn
+                  originList.add("22");
+             } 
+      }
+       ]]>
+      </example>
+	</rule>
+	
+	
+	<rule name="DontModifyInForeachCircleRule"
+		message="【强制】不要在foreach循环里进行元素的remove/add操作，remove元素请使用Iterator方式。"
+		class="com.alibaba.p3c.pmd.lang.java.rule.sets.DontModifyInForeachCircleRule">
+		<description>
+           【强制】不要在foreach循环里进行元素的remove/add操作，remove元素请使用Iterator方式。
+        </description>
+		<priority>3</priority>
+
+		<example>
+      <![CDATA[
+      public class Foo {   
+            private void method() { 
+                  List<String> originList = new ArrayList<String>();
+                  originList.add("22");
+                  for (String item : originList) { 
+                     //warn
+                     list.add("bb");
+                  } 
+             } 
+      }
+       ]]>
+      </example>
+	</rule>
 </ruleset>
