@@ -18,5 +18,6 @@ public class ConcurrentRuleTest extends SimpleAggregatorTst {
         addRule(RULE_NAME, "AvoidUseTimerRule");
         addRule(RULE_NAME, "AvoidManuallyCreateThreadRule");
         addRule(RULE_NAME, "ThreadShouldSetNameRule");
+        addRule(RULE_NAME, "AvoidCallStaticSimpleDateFormatRule");
     }
 }
