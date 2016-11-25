@@ -48,8 +48,7 @@ public class ThreadPoolCreationRule extends AbstractJavaRule {
         if (fullAssignStatement.startsWith(EXECUTORS_NEW)) {
             return false;
         }
-        if (!fullAssignStatement.startsWith(NEW) && !fullAssignStatement
-                .startsWith(FULL_EXECUTORS_NEW)) {
+        if (!fullAssignStatement.startsWith(NEW) && !fullAssignStatement.startsWith(FULL_EXECUTORS_NEW)) {
             return true;
         }
         //有lambda表达式的情况
@@ -64,8 +63,7 @@ public class ThreadPoolCreationRule extends AbstractJavaRule {
             return false;
         }
         //静态引入
-        return !importedExecutorsMethods
-                .contains(Executors.class.getName() + DOT + fullAssignStatement);
+        return !importedExecutorsMethods.contains(Executors.class.getName() + DOT + fullAssignStatement);
     }
 
     private String getFullAssignStatement(final Token token) {

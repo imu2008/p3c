@@ -29,6 +29,11 @@
 		</dependency>
 		<dependency>
 			<groupId>net.sourceforge.pmd</groupId>
+			<artifactId>pmd-vm</artifactId>
+			<version>5.5.2</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sourceforge.pmd</groupId>
 			<artifactId>pmd-test</artifactId>
 			<version>5.5.2</version>
 			<scope>test</scope>
@@ -47,15 +52,6 @@
 
 
 	<build>
-		<resources>
-			<resource>
-				<directory>${basedir}/src/main/findbugs</directory>
-				<excludes>
-					<exclude>*.xsd</exclude>
-					<exclude>*.xsl</exclude>
-				</excludes>
-			</resource>
-		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

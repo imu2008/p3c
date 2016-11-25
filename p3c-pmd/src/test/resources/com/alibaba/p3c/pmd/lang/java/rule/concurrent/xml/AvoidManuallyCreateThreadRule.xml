@@ -20,6 +20,11 @@ import java.util.concurrent.TimeUnit;
  * @since 2016/11/15
  */
 public class ThreadCreateTest {
+     {
+        Runtime.getRuntime().addShutdownHook(
+new Thread()
+);
+    }
     private Thread thread = new Thread();
 
     private ThreadFactory threadFactory = r -> {

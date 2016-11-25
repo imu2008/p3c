@@ -1,6 +1,9 @@
 package com.alibaba.p3c.pmd.lang.java.rule.concurrent;
 
+import com.alibaba.p3c.pmd.lang.java.rule.AbstractAliRule;
+
 import net.sourceforge.pmd.lang.java.ast.ASTAllocationExpression;
+import net.sourceforge.pmd.lang.java.ast.ASTBlockStatement;
 import net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceDeclaration;
 import net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceType;
 import net.sourceforge.pmd.lang.java.ast.ASTFieldDeclaration;
@@ -12,7 +15,7 @@ import net.sourceforge.pmd.lang.java.ast.ASTMethodDeclaration;
 import net.sourceforge.pmd.lang.java.ast.ASTResultType;
 import net.sourceforge.pmd.lang.java.ast.ASTType;
 import net.sourceforge.pmd.lang.java.ast.ASTVariableDeclarator;
-import net.sourceforge.pmd.lang.java.rule.AbstractJavaRule;
+import net.sourceforge.pmd.lang.java.ast.Token;
 
 import java.util.List;
 import java.util.concurrent.ThreadFactory;
@@ -31,10 +34,14 @@ import java.util.concurrent.ThreadFactory;
  * @see ThreadShouldSetNameRule
  * @since 2016/11/15
  */
-public class AvoidManuallyCreateThreadRule extends AbstractJavaRule {
+public class AvoidManuallyCreateThreadRule extends AbstractAliRule {
+
     @Override
     public Object visit(ASTAllocationExpression node, Object data) {
         if (node.getType() != Thread.class) {
+            return super.visit(node, data);
+        }
+        if (isAddShutdownHook(node)) {
             return super.visit(node, data);
         }
         //lambda 表达式直接过了
@@ -59,27 +66,32 @@ public class AvoidManuallyCreateThreadRule extends AbstractJavaRule {
             return super.visit(node, data);
         }
         //是否是匿名ThreadFactory字段或者 非匿名ThreadFactory实现
-        if ((checkForNamingClass(node) || threadFactoryVariable(node))
-                && isInPrimaryOrProtectedMethod(node)) {
+        if ((checkForNamingClass(node) || threadFactoryVariable(node)) && isInPrimaryOrProtectedMethod(node)) {
             return super.visit(node, data);
         }
         return addViolationAndReturn(node, data);
     }
 
+    private boolean isAddShutdownHook(ASTAllocationExpression node) {
+        ASTBlockStatement blockStatement = node.getFirstParentOfType(ASTBlockStatement.class);
+        if (blockStatement == null) {
+            return false;
+        }
+        Token token = (Token) blockStatement.jjtGetFirstToken();
+        return Runtime.class.getSimpleName().equals(token.image);
+    }
+
     private boolean threadFactoryVariable(ASTAllocationExpression node) {
-        ASTMethodDeclaration methodDeclaration =
-                node.getFirstParentOfType(ASTMethodDeclaration.class);
+        ASTMethodDeclaration methodDeclaration = node.getFirstParentOfType(ASTMethodDeclaration.class);
         if (methodDeclaration == null) {
             return false;
         }
-        ASTVariableDeclarator variableDeclarator =
-                methodDeclaration.getFirstParentOfType(ASTVariableDeclarator.class);
+        ASTVariableDeclarator variableDeclarator = methodDeclaration.getFirstParentOfType(ASTVariableDeclarator.class);
         return variableDeclarator != null && variableDeclarator.getType() == ThreadFactory.class;
     }
 
     private boolean isInNewThreadMethod(ASTAllocationExpression node) {
-        ASTMethodDeclaration methodDeclaration =
-                node.getFirstParentOfType(ASTMethodDeclaration.class);
+        ASTMethodDeclaration methodDeclaration = node.getFirstParentOfType(ASTMethodDeclaration.class);
         if (methodDeclaration == null) {
             return false;
         }
@@ -89,18 +101,16 @@ public class AvoidManuallyCreateThreadRule extends AbstractJavaRule {
         if (!"newThread".equals(methodDeclaration.getMethodName())) {
             return false;
         }
-        List<ASTFormalParameter> parameters =
-                methodDeclaration.getFirstDescendantOfType(ASTFormalParameters.class)
-                        .findChildrenOfType(ASTFormalParameter.class);
+        List<ASTFormalParameter> parameters = methodDeclaration.getFirstDescendantOfType(ASTFormalParameters.class)
+                .findChildrenOfType(ASTFormalParameter.class);
         return parameters.size() == 1
                 && parameters.get(0).getFirstChildOfType(ASTType.class).getType() == Runnable.class;
     }
 
     private boolean isInPrimaryOrProtectedMethod(ASTAllocationExpression node) {
-        ASTMethodDeclaration methodDeclaration =
-                node.getFirstParentOfType(ASTMethodDeclaration.class);
-        return methodDeclaration != null && returnThread(methodDeclaration) && (
-                methodDeclaration.isPrivate() || methodDeclaration.isProtected());
+        ASTMethodDeclaration methodDeclaration = node.getFirstParentOfType(ASTMethodDeclaration.class);
+        return methodDeclaration != null && returnThread(methodDeclaration) && (methodDeclaration.isPrivate()
+                || methodDeclaration.isProtected());
     }
 
     private boolean returnThread(ASTMethodDeclaration methodDeclaration) {
@@ -120,13 +130,11 @@ public class AvoidManuallyCreateThreadRule extends AbstractJavaRule {
         if (classOrInterfaceDeclaration == null) {
             return false;
         }
-        ASTImplementsList implementsList =
-                classOrInterfaceDeclaration.getFirstChildOfType(ASTImplementsList.class);
+        ASTImplementsList implementsList = classOrInterfaceDeclaration.getFirstChildOfType(ASTImplementsList.class);
         if (implementsList == null) {
             return false;
         }
-        List<ASTClassOrInterfaceType> interfaceTypes =
-                implementsList.findChildrenOfType(ASTClassOrInterfaceType.class);
+        List<ASTClassOrInterfaceType> interfaceTypes = implementsList.findChildrenOfType(ASTClassOrInterfaceType.class);
         for (ASTClassOrInterfaceType type : interfaceTypes) {
             if (type.getType() == ThreadFactory.class) {
                 return true;

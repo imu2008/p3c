@@ -10,12 +10,14 @@ import net.sourceforge.pmd.testframework.SimpleAggregatorTst;
  */
 public class CommentRulesTest extends SimpleAggregatorTst {
 
-    private static final String RULESET = "java-comments";
+    private static final String RULESET = "java-ali-comments";
 
     @Override
     public void setUp() {
         addRule(RULESET, "CommentsMustBeJavadocFormatRule");
         addRule(RULESET, "AbstractMethodOrInterfaceMethodMustUseJavadocRule");
         addRule(RULESET, "ClassMustHaveAuthorRule");
+        addRule(RULESET, "EnumConstantsMustHaveCommentRule");
+        addRule(RULESET, "AvoidCommentBehindStatement");
     }
 }
