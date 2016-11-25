@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test-data>
+
+	<code-fragment id="pojo-not-override-tostring">
+		<![CDATA[
+	public class FooDO {
+		private String tom;
+
+		// BAD,没有Override toString()
+
+		private static class NestedDTO {
+			private String tom;
+			private boolean isBar;
+
+			@Override
+			public String tostring() {		// BAD
+				return tome;
+			}
+		}
+
+		private static class InnerClass {
+			// OK
+		}
+	}
+		]]>
+	</code-fragment>
+	<test-code>
+		<description>POJO未Override toString()</description>
+		<expected-problems>2</expected-problems>
+		<code-ref id="pojo-not-override-tostring" />
+	</test-code>
+
+	<!-- ====================================================================== -->
+
+	<code-fragment id="pojo-extends-no-super">
+		<![CDATA[
+	public class FooDO extends BaseDO {
+		private String tom;
+
+		@Override
+		public String toString() {
+			return toString();
+		}
+
+		private static class NestedDTO extends BaseDO {
+			private String tom;
+			private boolean isBar;
+
+			@Override
+			public String toString() {
+				return super.toString();
+			}
+		}
+
+		private static class InnerClass {
+			// OK
+		}
+	}
+		]]>
+	</code-fragment>
+	<test-code>
+		<description>继承POJO父类,toString未添加super</description>
+		<expected-problems>1</expected-problems>
+		<code-ref id="pojo-extends-no-super" />
+	</test-code>
+
+	<!-- ====================================================================== -->
+
+	<code-fragment id="pojo-override-tostring">
+		<![CDATA[
+	public class FooDO {
+		private String tom;
+
+		@Override
+		public String toString() {
+			return tom;
+		}
+
+		private static class NestedDTO {
+			private String tom;
+			private boolean isBar;
+
+			@Override
+			public String toString() {
+				return super.toString();
+			}
+		}
+
+		private static class InnerClass {
+			// OK
+		}
+	}
+		]]>
+	</code-fragment>
+	<test-code>
+		<description>POJO正确Override toString()</description>
+		<expected-problems>0</expected-problems>
+		<code-ref id="pojo-override-tostring" />
+	</test-code>
+
+</test-data>

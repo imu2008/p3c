@@ -12,7 +12,11 @@ public class OopRuleTest extends SimpleAggregatorTst {
 
     @Override
     public void setUp() {
+        addRule(RULESET, "AccessStaticViaInstanceRule");
         addRule(RULESET, "WrapTypeEqualityRule");
         addRule(RULESET, "PojoNoDefaultValueRule");
+        addRule(RULESET, "ConstructorNoBusinessLogicRule");
+        addRule(RULESET, "PojoMustUsePrimitiveFieldRule");
+        addRule(RULESET, "PojoMustOverrideToStringRule");
     }
 }

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test-data>
+
+	<code-fragment id="constructor-has-if">
+		<![CDATA[
+public class Foo {
+	private String name;
+
+	public Foo(String name) {
+		if (name != null) {
+			this.name = name;
+		}
+	}
+}
+		]]>
+	</code-fragment>
+	<test-code>
+		<description>构造函数有控制语句</description>
+		<expected-problems>1</expected-problems>
+
+		<code-ref id="constructor-has-if" />
+	</test-code>
+
+
+</test-data>

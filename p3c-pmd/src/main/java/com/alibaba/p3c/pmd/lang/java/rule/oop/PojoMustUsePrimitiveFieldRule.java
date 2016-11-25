@@ -1,23 +1,17 @@
 package com.alibaba.p3c.pmd.lang.java.rule.oop;
 
 import com.alibaba.p3c.pmd.lang.java.rule.AbstractPojoRule;
-import com.alibaba.p3c.pmd.lang.java.rule.util.NodeUtils;
 import net.sourceforge.pmd.lang.ast.Node;
-import net.sourceforge.pmd.lang.java.ast.*;
-import net.sourceforge.pmd.lang.java.rule.AbstractJavaRule;
+import net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceDeclaration;
+import net.sourceforge.pmd.lang.java.ast.ASTFieldDeclaration;
 import org.jaxen.JaxenException;
 
 import java.util.List;
 
 /**
- * 强制】关于基本数据类型与包装数据类型的使用标准如下：<br>
- * 1） 所有的POJO类属性使用包装数据类型。<br>
- * 2） RPC方法的返回值和参数必须使用包装数据类型。<br>
- * 3） 所有的局部变量使用基本数据类型。
- *
  * @author zenghou.fw
  */
-public class PojoNoDefaultValueRule extends AbstractPojoRule {
+public class PojoMustUsePrimitiveFieldRule extends AbstractPojoRule {
 
     @Override
     public Object visit(ASTClassOrInterfaceDeclaration node, Object data) {
@@ -29,7 +23,7 @@ public class PojoNoDefaultValueRule extends AbstractPojoRule {
                 for (Node fieldNode : fields) {
                     ASTFieldDeclaration field = (ASTFieldDeclaration)fieldNode;
                     if (!field.isPublic() && !field.isStatic() && !field.isTransient() &&
-                            field.hasDescendantOfType(ASTVariableInitializer.class)) {
+                            field.getType().isPrimitive()) {
                         addViolation(data, field);
                     }
                 }
