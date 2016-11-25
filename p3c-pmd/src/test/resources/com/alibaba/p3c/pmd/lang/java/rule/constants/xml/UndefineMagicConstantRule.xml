@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test-data>
+
+	<code-fragment id="constants-ok"><![CDATA[
+	    public class Foo { 
+	        private final static  String notWarn = "666l";    
+        } 
+    ]]>
+	</code-fragment>
+
+	<test-code>
+		<description>UndefineMagicConstant.</description>
+		<expected-problems>0</expected-problems>
+		<code-ref id="constants-ok" />
+	</test-code>
+ 
+	<code-fragment id="constants-err"><![CDATA[
+  	  public class Foo {   
+           private String item;     
+           private void method() {
+                 Integer i = 1;
+                 String t = "bb"; 
+                 System.out.println(t + "aa");  
+                 Integer j =  i + 2; 
+                 String h = t + "cc";             
+           }  
+           public String toString(){ 
+               return "item = "+item;
+           }
+      } 
+    ]]>
+	</code-fragment>
+
+	<test-code>
+		<description>UndefineMagicConstant.</description>
+		<expected-problems>2</expected-problems>
+		<code-ref id="constants-err" />
+	</test-code>
+
+</test-data>
