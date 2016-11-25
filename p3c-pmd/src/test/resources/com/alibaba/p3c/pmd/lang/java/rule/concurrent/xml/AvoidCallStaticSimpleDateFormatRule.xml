@@ -2,9 +2,8 @@
 <test-data>
     <test-code>
         <description>AvoidCallStaticSimpleDateFormatRule</description>
-        <expected-problems>2</expected-problems>
+        <expected-problems>3</expected-problems>
         <code><![CDATA[
-
 package com.alibaba.idea.pmd.rule.calendar;
 
 import java.text.SimpleDateFormat;
@@ -43,11 +42,10 @@ public class SimpleDateFormatRule {
         dateFormat.format(new Date());
     }
 
-    private synchronized void test2(){
+    private void test2(){
         dateFormat.format(new Date());
     }
 }
-
 
 
         ]]></code>
