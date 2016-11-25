@@ -3,16 +3,86 @@
 
 	<code-fragment id="pojo-field-has-default-value">
 		<![CDATA[
-	public class Foo {
-		private String tom = ""; 	// BAD, 有默认值
+	public class FooDO {
+		private static final String HELLO = "Hello";	// OK
+		private String tom = ""; 	// BAD
 		private String jerry;		// OK
 		private int pageSize = 20;	// BAD
+
+		public void bar() {
+			int pageNo = 1;
+		}
+
+		private static class NestedDTO {
+			private String tom = ""; // BAD
+		}
+
+		private static class InnerClass {
+			private String tom = ""; // OK
+		}
 	}
 		]]>
 	</code-fragment>
 	<test-code>
 		<description>POJO属性包含默认值</description>
-		<expected-problems>2</expected-problems>
+		<expected-problems>3</expected-problems>
 		<code-ref id="pojo-field-has-default-value" />
 	</test-code>
+
+	<!-- ====================================================================== -->
+
+	<code-fragment id="not-pojo">
+		<![CDATA[
+	public class FooPO {
+		private static final String HELLO = "Hello";	// OK
+		private String tom = ""; 	// OK,非POJO不检查
+		private String jerry;		// OK
+		private int pageSize = 20;	// OK,非POJO不检查
+
+		public void bar() {
+			int pageNo = 1;
+		}
+
+		private static class NestedDTO {
+			private String tom = ""; // BAD
+		}
+		private static class InnerClass {
+			private String tom = ""; // OK
+		}
+	}
+		]]>
+	</code-fragment>
+	<test-code>
+		<description>非POJO不检查,但其嵌套的POJO要进行检查</description>
+		<expected-problems>1</expected-problems>
+		<code-ref id="not-pojo" />
+	</test-code>
+
+	<!-- ====================================================================== -->
+
+	<code-fragment id="pojo-feild-exclusion">
+		<![CDATA[
+	public class FooDAO {
+		private static final String HELLO = "Hello";	// OK
+		private String tom = ""; 	// BAD
+		private String jerry;		// OK
+		public int pageSize = 20;	// OK,public
+
+		public void bar() {
+			int pageNo = 1;
+		}
+
+		private static class NestedDTO {
+			private String tom = ""; // BAD
+		}
+	}
+		]]>
+	</code-fragment>
+
+	<test-code>
+		<description>static, transient, public属性不检查</description>
+		<expected-problems>2</expected-problems>
+		<code-ref id="pojo-feild-exclusion" />
+	</test-code>
+
 </test-data>
