@@ -2,7 +2,7 @@
 <test-data>
     <test-code>
         <description>AvoidCallStaticSimpleDateFormatRule</description>
-        <expected-problems>3</expected-problems>
+        <expected-problems>4</expected-problems>
         <code><![CDATA[
 package com.alibaba.idea.pmd.rule.calendar;
 
@@ -36,6 +36,14 @@ public class SimpleDateFormatRule {
         }finally {
             lock.unlock();
         }
+        dateFormat.format(new Date());
+        lock.lock();
+        dateFormat.format(new Date());
+        try{
+        dateFormat.format(new Date());
+        }finally{
+            lock.unlock();
+        }
     }
 
     private synchronized void test1(){
@@ -45,6 +53,52 @@ public class SimpleDateFormatRule {
     private void test2(){
         dateFormat.format(new Date());
     }
+}
+
+
+        ]]></code>
+    </test-code>
+
+    <test-code>
+        <description>call with lock</description>
+        <expected-problems>0</expected-problems>
+        <code><![CDATA[
+package com.alibaba.idea.pmd.rule.calendar;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
+/**
+ * @author caikang.ck(骏烈)
+ * @date 2016/11/25 上午11:45
+ * @email caikang.ck@alibaba-inc.com
+ * @phone 15010667215
+ * @since 2016/11/25
+ */
+public class SimpleDateFormatRule {
+    private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+    private Lock lock = new ReentrantLock();
+
+    private void test(){
+        synchronized (this){
+            dateFormat.format(new Date());
+        }
+        lock.lock();
+        try {
+            dateFormat.format(new Date());
+            dateFormat.format(new Date());
+        }finally {
+            lock.unlock();
+        }
+    }
+
+    private synchronized void test1(){
+        dateFormat.format(new Date());
+    }
+
 }
 
 
