@@ -20,7 +20,8 @@
            private void method() {
                  Integer i = 1;
                  String t = "bb"; 
-                 System.out.println(t + "aa");  
+                 System.out.println(t + "aa"); 
+                 System.err.println(t + "aa");  
                  Integer j =  i + 2; 
                  String h = t + "cc";             
            }  

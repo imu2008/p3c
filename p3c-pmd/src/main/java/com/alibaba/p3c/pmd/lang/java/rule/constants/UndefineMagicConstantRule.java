@@ -14,14 +14,12 @@ import net.sourceforge.pmd.lang.java.ast.ASTLiteral;
 import net.sourceforge.pmd.lang.java.ast.ASTMethodDeclaration;
 import net.sourceforge.pmd.lang.java.ast.ASTMethodDeclarator;
 import net.sourceforge.pmd.lang.java.ast.ASTName;
-import net.sourceforge.pmd.lang.java.ast.ASTPrimaryExpression;
 import net.sourceforge.pmd.lang.java.ast.ASTPrimaryPrefix;
-import net.sourceforge.pmd.lang.java.ast.ASTStatement;
 import net.sourceforge.pmd.lang.java.ast.ASTStatementExpression;
 import net.sourceforge.pmd.lang.java.rule.AbstractJavaRule;
 
 /**
- * 【强制】不允许出现任何魔法值（即未经定义的常量）直接出现在代码中。
+ * 【强制】不允许出现任何魔法值（即未经定义的常量）直接出现在代码中。建议先灰度，不做强制
  * 
  * @author shengfang.gsf
  * 
@@ -81,8 +79,9 @@ public class UndefineMagicConstantRule extends AbstractJavaRule {
         ASTMethodDeclaration method = literal.getFirstParentOfType(ASTMethodDeclaration.class);
         if (method != null) {
             ASTMethodDeclarator methodDeclarator = method.getFirstChildOfType(ASTMethodDeclarator.class);
+            String methodDeclaratorName = methodDeclarator.getImage();
             for (String methodItem : METHOD_WHITE_LIST) {
-                if (methodItem.equals(methodDeclarator.getImage())) {
+                if (methodItem.equals(methodDeclaratorName)) {
                     return true;
                 }
             }
