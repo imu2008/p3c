@@ -1,0 +1,40 @@
+<test-data>
+    <code-fragment id="ConstantFieldNamingRule">
+    <![CDATA[
+    public class ConstantFieldNameRuleTest {
+    private  static final int MAX = 5;
+    //Log除外
+    private static final Logger logger = new Logger();
+    //常量命名需要全部大写，单词间用下划线隔开
+    private static final boolean success = true;
+       public void f() {
+         int il = 0;
+    }
+}
+    ]]>
+    </code-fragment>
+    <test-code>
+        <description>Constant name should be upper case</description>
+        <expected-problems>1</expected-problems>
+        <code-ref id="ConstantFieldNamingRule" />
+        <expected-linenumbers>6</expected-linenumbers>
+    </test-code>
+
+    <code-fragment id="ConstantFieldNamingRule1">
+        <![CDATA[
+    public class ConstantFieldNameRuleTest {
+    private  static final int MAX = 5;
+    //Log除外
+    private static final Logger logger = new Logger();
+       public void f() {
+         int il = 0;
+    }
+}
+    ]]>
+    </code-fragment>
+    <test-code>
+        <description>Constant name should be upper case</description>
+        <expected-problems>0</expected-problems>
+        <code-ref id="ConstantFieldNamingRule1" />
+    </test-code>
+</test-data>
