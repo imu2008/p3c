@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author zenghou.fw
  */
-public class WrapTypeEqualityRule extends AbstractJavaRule {
+public class WrapperTypeEqualityRule extends AbstractJavaRule {
 
     @Override
     public Object visit(ASTEqualityExpression node, Object data) {

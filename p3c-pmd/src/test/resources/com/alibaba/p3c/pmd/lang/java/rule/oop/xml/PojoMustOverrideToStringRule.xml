@@ -39,7 +39,7 @@
 
 		@Override
 		public String toString() {
-			return toString();
+			return toString();		// BAD
 		}
 
 		private static class NestedDTO extends BaseDO {
@@ -48,7 +48,7 @@
 
 			@Override
 			public String toString() {
-				return super.toString();
+				return toString();
 			}
 		}
 

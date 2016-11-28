@@ -28,7 +28,7 @@ public class PojoNoDefaultValueRule extends AbstractPojoRule {
 
                 for (Node fieldNode : fields) {
                     ASTFieldDeclaration field = (ASTFieldDeclaration)fieldNode;
-                    if (!field.isPublic() && !field.isStatic() && !field.isTransient() &&
+                    if (!field.isPublic() && !field.isFinal() && !field.isStatic() && !field.isVolatile() &&
                             field.hasDescendantOfType(ASTVariableInitializer.class)) {
                         addViolation(data, field);
                     }

@@ -17,24 +17,53 @@ import java.util.List;
  */
 public class PojoMustOverrideToStringRule extends AbstractPojoRule {
 
+    private static final String XPATH =
+            "ClassOrInterfaceBody" +
+            "/ClassOrInterfaceBodyDeclaration/MethodDeclaration" +
+            "[" +
+            "@Public='true' and " +
+            "MethodDeclarator[@Image='toString'] and " +
+            "MethodDeclarator[@Image='toString' and @ParameterCount='0']" +
+            "]";
+
+    private static final String TOSTRING_XPATH = "//PrimaryExpression[" +
+            "PrimaryPrefix[Name" +
+            "[(ends-with(@Image, '.toString'))]" +
+            "]" +
+            "[" +
+            "(../PrimarySuffix/Arguments/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Literal[@StringLiteral='true'])" +
+            " and " +
+            "( count(../PrimarySuffix/Arguments/ArgumentList/Expression) = 1 )" +
+            "]" +
+            "]" +
+            "[not(ancestor::Expression/ConditionalAndExpression//EqualityExpression[@Image='!=']//NullLiteral)]" +
+            "[not(ancestor::Expression/ConditionalOrExpression//EqualityExpression[@Image='==']//NullLiteral)]";
+
     @Override
     public Object visit(ASTClassOrInterfaceDeclaration node, Object data) {
         if (isPojo(node)) {
-            if (!node.hasDescendantMatchingXPath("ClassOrInterfaceBody" +
-                    "/ClassOrInterfaceBodyDeclaration/MethodDeclaration" +
-                    "[" +
-                    "@Public='true' and " +
-                    "MethodDeclarator[@Image='toString'] and " +
-                    "MethodDeclarator[@Image='toString' and @ParameterCount='0']" +
-                    "]")) {
+            if (!node.hasDescendantMatchingXPath(XPATH)) {
                 addViolation(data, node);
             } else {
                 // 如果继承了另一个POJO类，注意在前面加一下super.toString。
+                // 跟集成POJO类有啥关系????
                 ASTExtendsList extendsList = node.getFirstChildOfType(ASTExtendsList.class);
                 if (extendsList != null) {
                     String baseName = extendsList.getFirstChildOfType(ASTClassOrInterfaceType.class).getImage();
                     if (PojoUtils.isPojo(baseName)) {
-                        // TODO
+                        try {
+                            // toString()方法定义
+                            ASTMethodDeclaration toStringMethod =
+                                    (ASTMethodDeclaration)node.findChildNodesWithXPath(XPATH).get(0);
+                            ASTBlock block = toStringMethod.getBlock();
+                            if (block.hasDescendantMatchingXPath(TOSTRING_XPATH)) {
+                                addViolation(data, block);
+                            }
+
+                        } catch (JaxenException e) {
+                            throw new RuntimeException("XPath expression " + XPATH + " failed: "
+                                    + e.getLocalizedMessage(), e);
+                        }
                     }
                 }
             }

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test-data>
+
+	<code-fragment id="literal-in-right-of-equals">
+		<![CDATA[
+	public class Foo {
+		public void bar() {
+			String name;
+			if (name.equals("tom")) {	// BAD
+				return;
+			};
+		}
+	}
+		]]>
+	</code-fragment>
+	<test-code>
+		<description>字符串字面量在equals方法右边</description>
+		<expected-problems>1</expected-problems>
+		<code-ref id="literal-in-right-of-equals" />
+	</test-code>
+
+	<!-- ====================================================================== -->
+
+	<code-fragment id="constant-in-right-of-equals">
+		<![CDATA[
+	public class Foo {
+		private static final String NAME = "tom";
+
+		public void bar() {
+			String label;
+			if (label.equals(NAME)) {	// BAD
+				return;
+			};
+		}
+	}
+		]]>
+	</code-fragment>
+	<test-code>
+		<description>常量在equals方法右边</description>
+		<expected-problems>1</expected-problems>
+		<code-ref id="constant-in-right-of-equals" />
+	</test-code>
+
+	<!-- ====================================================================== -->
+
+	<code-fragment id="both-object-equals">
+		<![CDATA[
+	public class Foo {
+		public void bar() {
+			String name;
+			String label;
+			if (name.equals(label)) {	// OK,虽然这里可能NPE,但label并不是字面量
+				return;
+			};
+		}
+	}
+		]]>
+	</code-fragment>
+	<test-code>
+		<description>equals非字面量</description>
+		<expected-problems>0</expected-problems>
+		<code-ref id="both-object-equals" />
+	</test-code>
+
+</test-data>
