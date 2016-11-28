@@ -20,4 +20,19 @@ public class ServiceNameRuleTest implements TestDAO{
         <code-ref id="ServiceClassNamingRule" />
         <expected-linenumbers>1,2</expected-linenumbers>
     </test-code>
+
+
+
+    <code-fragment id="ServiceClassNamingRule1">
+        <![CDATA[
+public class ServiceNameRuleTestImpl implements TestDAO{
+
+}
+    ]]>
+    </code-fragment>
+    <test-code>
+        <description>Service Class Name should be end with Impl</description>
+        <expected-problems>0</expected-problems>
+        <code-ref id="ServiceClassNamingRule1" />
+    </test-code>
 </test-data>

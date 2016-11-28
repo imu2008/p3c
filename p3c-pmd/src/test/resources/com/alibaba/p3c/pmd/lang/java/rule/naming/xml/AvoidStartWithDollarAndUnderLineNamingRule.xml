@@ -15,4 +15,18 @@ public class AvoidStartWithDollarAndUnderLineNamingRuleTest {
         <code-ref id="AvoidStartWithDollarAndUnderLine" />
         <expected-linenumbers>2,3,4,5</expected-linenumbers>
     </test-code>
+
+    <code-fragment id="AvoidStartWithDollarAndUnderLine1">
+        <![CDATA[
+public class AvoidStartWithDollarAndUnderLineNamingRuleTest {
+    private String s;
+    public void sayHello(){}
+}
+    ]]>
+    </code-fragment>
+    <test-code>
+        <description>name should not be start with $ and _</description>
+        <expected-problems>0</expected-problems>
+        <code-ref id="AvoidStartWithDollarAndUnderLine1" />
+    </test-code>
 </test-data>

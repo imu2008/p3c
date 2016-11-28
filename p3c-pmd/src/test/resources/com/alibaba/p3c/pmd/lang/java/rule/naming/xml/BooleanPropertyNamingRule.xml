@@ -18,4 +18,21 @@
         <code-ref id="boolean-property-in-POJO-class" />
         <expected-linenumbers>2,3</expected-linenumbers>
     </test-code>
+
+
+    <code-fragment id="boolean-property-in-POJO-class1">
+        <![CDATA[
+  public class BooleanPropertyNamingRuleTest{
+    private boolean success;
+    public void sayHello (int i) {
+     boolean success1;
+    }
+}
+    ]]>
+    </code-fragment>
+    <test-code>
+        <description>issuccess should not contain is</description>
+        <expected-problems>0</expected-problems>
+        <code-ref id="boolean-property-in-POJO-class1" />
+    </test-code>
 </test-data>

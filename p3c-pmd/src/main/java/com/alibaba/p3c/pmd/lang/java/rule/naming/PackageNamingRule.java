@@ -8,7 +8,7 @@ import net.sourceforge.pmd.lang.rule.XPathRule;
  */
 public class PackageNamingRule extends XPathRule {
     private static final String XPATH = "//PackageDeclaration/Name\n"
-        + "[not (matches(@Image, '^[a-z]+(.[a-z][a-z0-9])$'))]";
+        + "[not (matches(@Image, '^[a-z]+(\\.[a-z][a-z0-9]*)*$'))]";
 
     public PackageNamingRule() {
         super(XPATH);

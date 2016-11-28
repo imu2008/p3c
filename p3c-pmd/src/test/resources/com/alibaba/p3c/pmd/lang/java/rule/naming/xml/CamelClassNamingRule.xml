@@ -18,4 +18,18 @@ public class CamelClassNameRuleTest {
         <code-ref id="CamelClassNaming" />
         <expected-linenumbers>4,5,7</expected-linenumbers>
     </test-code>
+
+
+    <code-fragment id="CamelClassNaming1">
+        <![CDATA[
+public class CamelClassNameRuleTest {
+}
+    ]]>
+    </code-fragment>
+    <test-code>
+        <description>Class Name Should Camel</description>
+        <expected-problems>0</expected-problems>
+        <code-ref id="CamelClassNaming1" />
+    </test-code>
+
 </test-data>
