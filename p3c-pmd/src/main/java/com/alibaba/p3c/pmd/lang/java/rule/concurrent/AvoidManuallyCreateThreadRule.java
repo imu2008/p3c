@@ -26,7 +26,7 @@ import java.util.concurrent.ThreadFactory;
  *
  * 检测规则
  * 线程不能在除自定义ThreadFactory.newThread之外的方法中创建
- *
+ * 或者不能在Runtime.getRuntime().addShutdownHook()之外的地方创建
  * @author caikang.ck(骏烈)
  * @date 2016/11/15 下午6:27
  * @email caikang.ck@alibaba-inc.com
