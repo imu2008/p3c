@@ -45,8 +45,7 @@ public class PojoMustOverrideToStringRule extends AbstractPojoRule {
             if (!node.hasDescendantMatchingXPath(XPATH)) {
                 addViolation(data, node);
             } else {
-                // 如果继承了另一个POJO类，注意在前面加一下super.toString。
-                // 跟集成POJO类有啥关系????
+                // TODO 如果继承了另一个POJO类，注意在前面加一下super.toString。跟继承成POJO类有啥关系????
                 ASTExtendsList extendsList = node.getFirstChildOfType(ASTExtendsList.class);
                 if (extendsList != null) {
                     String baseName = extendsList.getFirstChildOfType(ASTClassOrInterfaceType.class).getImage();
