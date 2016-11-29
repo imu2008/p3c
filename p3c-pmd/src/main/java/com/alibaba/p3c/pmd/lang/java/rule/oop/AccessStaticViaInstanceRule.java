@@ -13,7 +13,7 @@ public class AccessStaticViaInstanceRule extends AbstractJavaRule {
     @Override
     public Object visit(ASTPrimaryExpression node, Object data) {
 //        if (node.get)
-
+        // TODO 需要跨文件访问
         return super.visit(node, data);
     }
 }

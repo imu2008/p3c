@@ -41,6 +41,7 @@ public class EqualsAvoidNullRule extends AbstractJavaRule {
                             "PrimarySuffix/Arguments/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix")
                             .get(0);
                     if (right.getFirstChildOfType(ASTLiteral.class) != null) {
+                        // 如果equals参数是字面量
                         addViolation(data, invocation);
                     } else {
                         // TODO 如果是在文件内申明的常量可以检测,跨文件的就无能为力了
@@ -60,7 +61,6 @@ public class EqualsAvoidNullRule extends AbstractJavaRule {
             throw new RuntimeException("XPath expression " + XPATH + " failed: "
                     + e.getLocalizedMessage(), e);
         }
-
 
         return super.visit(node, data);
     }
