@@ -24,11 +24,12 @@
 	<code-fragment id="constant-in-right-of-equals">
 		<![CDATA[
 	public class Foo {
-		private static final String NAME = "tom";
+		private static final String TOM = "tom";
 
 		public void bar() {
 			String label;
-			if (label.equals(NAME)) {	// BAD
+			"abc".equals(label);		// OK
+			if (label.equals(TOM)) {	// BAD
 				return;
 			};
 		}

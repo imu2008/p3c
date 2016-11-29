@@ -10,7 +10,7 @@ import net.sourceforge.pmd.lang.java.rule.AbstractJavaRule;
  */
 public class ConstructorNoBusinessLogicRule extends AbstractJavaRule {
 
-    // TODO 根据之前的讨论,构造函数中不能有任何控制语句.这样的判断太粗暴,比如检查入参是否null可以放开?
+    // TODO 根据之前的讨论,构造函数中不能有任何控制语句.这样的判断太粗暴,构造函数完全废了,是否可酌情放开?
     @Override
     public Object visit(ASTConstructorDeclaration node, Object data) {
         if (node.hasDecendantOfAnyType(
@@ -18,7 +18,8 @@ public class ConstructorNoBusinessLogicRule extends AbstractJavaRule {
                 ASTSwitchStatement.class,
                 ASTForStatement.class,
                 ASTWhileStatement.class,
-                ASTDoStatement.class)) {
+                ASTDoStatement.class,
+                ASTAllocationExpression.class)) {
             addViolation(data, node);
         }
         return super.visit(node, data);

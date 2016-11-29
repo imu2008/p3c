@@ -1,6 +1,7 @@
 package com.alibaba.p3c.pmd.lang.java.rule.util;
 
 import net.sourceforge.pmd.lang.ast.Node;
+import net.sourceforge.pmd.lang.java.ast.ASTFieldDeclaration;
 import net.sourceforge.pmd.lang.java.ast.ASTPrimaryExpression;
 import net.sourceforge.pmd.lang.java.typeresolution.TypeHelper;
 
@@ -35,5 +36,9 @@ public class NodeUtils {
                 || TypeHelper.isA(expression, Short.class)
                 || TypeHelper.isA(expression, Float.class)
                 || TypeHelper.isA(expression, Character.class);
+    }
+
+    public static boolean isConstant(ASTFieldDeclaration field) {
+        return field != null && field.isStatic() && field.isFinal();
     }
 }
