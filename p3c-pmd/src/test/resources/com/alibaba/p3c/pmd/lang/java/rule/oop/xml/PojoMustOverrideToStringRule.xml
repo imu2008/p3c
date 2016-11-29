@@ -32,40 +32,6 @@
 
 	<!-- ====================================================================== -->
 
-	<code-fragment id="pojo-extends-no-super">
-		<![CDATA[
-	public class FooDO extends BaseDO {
-		private String tom;
-
-		@Override
-		public String toString() {
-			return toString();		// BAD
-		}
-
-		private static class NestedDTO extends BaseDO {
-			private String tom;
-			private boolean isBar;
-
-			@Override
-			public String toString() {
-				return toString();
-			}
-		}
-
-		private static class InnerClass {
-			// OK
-		}
-	}
-		]]>
-	</code-fragment>
-	<test-code>
-		<description>继承POJO父类,toString未添加super</description>
-		<expected-problems>1</expected-problems>
-		<code-ref id="pojo-extends-no-super" />
-	</test-code>
-
-	<!-- ====================================================================== -->
-
 	<code-fragment id="pojo-override-tostring">
 		<![CDATA[
 	public class FooDO {

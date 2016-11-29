@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <test-data>
 
-	<code-fragment id="access-static-method-via-instance">
-		<![CDATA[
-	public class FooDO {
-		public void bar() {
-			Integer i = 1;
-			int j = i.valueOf("s");			// BAD
-			int k = Integer.valueOf("s");	// OK
-		}
-	}
-		]]>
-	</code-fragment>
-	<test-code>
-		<description>使用对象实例访问静态访问</description>
-		<expected-problems>1</expected-problems>
-		<code-ref id="access-static-method-via-instance" />
-	</test-code>
+	<!--<code-fragment id="access-static-method-via-instance">-->
+		<!--<![CDATA[-->
+	<!--public class FooDO {-->
+		<!--public void bar() {-->
+			<!--Integer i = 1;-->
+			<!--int j = i.valueOf("s");			// BAD-->
+			<!--int k = Integer.valueOf("s");	// OK-->
+		<!--}-->
+	<!--}-->
+		<!--]]>-->
+	<!--</code-fragment>-->
+	<!--<test-code>-->
+		<!--<description>使用对象实例访问静态访问</description>-->
+		<!--<expected-problems>1</expected-problems>-->
+		<!--<code-ref id="access-static-method-via-instance" />-->
+	<!--</test-code>-->
 
 
 </test-data>
