@@ -7,8 +7,8 @@ import net.sourceforge.pmd.testframework.SimpleAggregatorTst;
  */
 public class FlowControlRuleTest extends SimpleAggregatorTst {
 
-    // 加载CLASSPATH下的rulesets/java/flowcontrol.xml
-    private static final String RULESET = "java-flowcontrol";
+    // 加载CLASSPATH下的rulesets/java/ali-flowcontrol.xml
+    private static final String RULESET = "java-ali-flowcontrol";
 
     @Override
     public void setUp() {
