@@ -36,6 +36,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 public class ThreadShouldSetNameRule extends AbstractAliRule {
     private static final int ARGUMENT_LENGTH_2 = 2;
     private static final int ARGUMENT_LENGTH_6 = 6;
+    private static final int INDEX_1 = 1;
+    private static final int SINGLE_LENGTH = 1;
 
     @Override
     public Object visit(ASTAllocationExpression node, Object data) {
@@ -67,7 +69,7 @@ public class ThreadShouldSetNameRule extends AbstractAliRule {
             addViolation(data, node);
             return super.visit(node, data);
         }
-        if (!checkThreadFactoryArgument((ASTExpression) argumentList.jjtGetChild(ARGUMENT_LENGTH_6 - 1))) {
+        if (!checkThreadFactoryArgument((ASTExpression) argumentList.jjtGetChild(ARGUMENT_LENGTH_6 - INDEX_1))) {
             addViolation(data, node);
         }
         return super.visit(node, data);
@@ -79,7 +81,7 @@ public class ThreadShouldSetNameRule extends AbstractAliRule {
             addViolation(data, node);
             return super.visit(node, data);
         }
-        if (!checkThreadFactoryArgument((ASTExpression) argumentList.jjtGetChild(ARGUMENT_LENGTH_2 - 1))) {
+        if (!checkThreadFactoryArgument((ASTExpression) argumentList.jjtGetChild(ARGUMENT_LENGTH_2 - INDEX_1))) {
             addViolation(data, node);
         }
         return super.visit(node, data);
@@ -97,7 +99,7 @@ public class ThreadShouldSetNameRule extends AbstractAliRule {
         if (lambdaExpression != null) {
             List<ASTVariableDeclaratorId> variableDeclaratorIds =
                     lambdaExpression.findChildrenOfType(ASTVariableDeclaratorId.class);
-            if (variableDeclaratorIds == null || variableDeclaratorIds.size() != 1) {
+            if (variableDeclaratorIds == null || variableDeclaratorIds.size() != SINGLE_LENGTH) {
                 return false;
             }
         } else if (expression.getType() != null && RejectedExecutionHandler.class

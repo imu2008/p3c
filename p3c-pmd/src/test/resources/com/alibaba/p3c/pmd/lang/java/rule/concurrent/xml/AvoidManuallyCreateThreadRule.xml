@@ -2,7 +2,44 @@
 <test-data>
     <test-code>
         <description>AvoidManuallyCreateThreadRule</description>
-        <expected-problems>2</expected-problems>
+        <expected-problems>3</expected-problems>
+        <code><![CDATA[
+
+package com.alibaba.idea.pmd.test.concurrent;
+
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
+/**
+ * @author caikang.ck(骏烈)
+ * @date 2016/11/15 下午7:20
+ * @email caikang.ck@alibaba-inc.com
+ * @phone 15010667215
+ * @since 2016/11/15
+ */
+public class ThreadCreateTest {
+
+    private Thread thread = new Thread();
+
+    private Thread createThread(){
+        return new Thread();
+    }
+
+    public void testParamter(){
+    Thread thread = new Thread();
+
+    }
+
+}
+
+
+        ]]></code>
+    </test-code>
+    <test-code>
+        <description>right</description>
+        <expected-problems>0</expected-problems>
         <code><![CDATA[
 
 package com.alibaba.idea.pmd.test.concurrent;
@@ -25,8 +62,6 @@ public class ThreadCreateTest {
 new Thread()
 );
     }
-    private Thread thread = new Thread();
-
     private ThreadFactory threadFactory = r -> {
         Thread thread1 = new Thread(r);
         thread1.setName("kdsljf");
@@ -54,10 +89,6 @@ new Thread()
             }.newThread(r);
         }
     };
-
-    private Thread createThread(){
-        return new Thread();
-    }
 
     public void testNewThread(){
         new ThreadFactory(){

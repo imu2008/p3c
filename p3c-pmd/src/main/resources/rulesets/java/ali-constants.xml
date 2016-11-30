@@ -32,5 +32,40 @@
        ]]>
       </example>
 	</rule>
+	
+	<rule name="UndefineMagicConstantRule"
+		message="【强制】不允许出现任何魔法值（即未经定义的常量）直接出现在代码中。"
+		class="com.alibaba.p3c.pmd.lang.java.rule.constants.UndefineMagicConstantRule">
+		<description>
+            【强制】不允许出现任何魔法值（即未经定义的常量）直接出现在代码中。
+        </description>
+		<priority>3</priority>
+
+		<example>
+      <![CDATA[
+      
+	  public class Foo {   
+            private String item;        
+   
+            private void method() {
+                 Integer i = 1;
+                 String t = "bb";
+                 
+                 // whitelist ok
+                 System.out.println(t + "aa"); 
+                 // warn
+                 Integer j =  i + 2;
+                 // warn
+                 String h = t + "cc";             
+           } 
+
+           public String toString(){
+               //whitelist ok
+               return "item = "+item;
+           }
+      }
+       ]]>
+      </example>
+	</rule>
 
 </ruleset>
