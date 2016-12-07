@@ -86,6 +86,8 @@ public class SimpleDateFormatRule {
         synchronized (this){
             dateFormat.format(new Date());
         }
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        simpleDateFormat.format(new Date());
         lock.lock();
         try {
             dateFormat.format(new Date());

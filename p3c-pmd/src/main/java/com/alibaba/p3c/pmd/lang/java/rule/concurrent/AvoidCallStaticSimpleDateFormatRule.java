@@ -11,10 +11,14 @@ import net.sourceforge.pmd.lang.java.ast.ASTPrimaryExpression;
 import net.sourceforge.pmd.lang.java.ast.ASTPrimaryPrefix;
 import net.sourceforge.pmd.lang.java.ast.ASTStatementExpression;
 import net.sourceforge.pmd.lang.java.ast.ASTSynchronizedStatement;
+import net.sourceforge.pmd.lang.java.ast.ASTVariableDeclarator;
+import net.sourceforge.pmd.lang.java.ast.ASTVariableDeclaratorId;
 import net.sourceforge.pmd.lang.java.ast.AbstractJavaNode;
 import net.sourceforge.pmd.lang.java.ast.Token;
 
 import java.text.SimpleDateFormat;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Stack;
 import java.util.concurrent.locks.Lock;
 
@@ -46,9 +50,19 @@ public class AvoidCallStaticSimpleDateFormatRule extends AbstractAliRule {
             return;
         }
         Stack<Node> stack = new Stack<>();
+        Set<String> localSimpleDateFormatNames = new HashSet<>();
         for (DataFlowNode flowNode : dataFlowNode.getFlow()) {
             if (flowNode instanceof StartOrEndDataFlowNode || flowNode.getNode() instanceof ASTMethodDeclaration) {
                 continue;
+            }
+            if (flowNode.getNode() instanceof ASTVariableDeclarator) {
+                ASTVariableDeclarator variableDeclarator = (ASTVariableDeclarator) flowNode.getNode();
+                if (variableDeclarator.getType() == SimpleDateFormat.class) {
+                    ASTVariableDeclaratorId variableDeclaratorId =
+                            variableDeclarator.getFirstChildOfType(ASTVariableDeclaratorId.class);
+                    localSimpleDateFormatNames.add(variableDeclaratorId.getImage());
+                    continue;
+                }
             }
             if (flowNode.getNode() instanceof ASTStatementExpression) {
                 ASTStatementExpression statementExpression = (ASTStatementExpression) flowNode.getNode();
@@ -66,15 +80,14 @@ public class AvoidCallStaticSimpleDateFormatRule extends AbstractAliRule {
                 }
             }
             AbstractJavaNode javaNode = (AbstractJavaNode) flowNode.getNode();
-            ASTPrimaryExpression flowPrimaryExpression =
-                    javaNode.getFirstDescendantOfType(ASTPrimaryExpression.class);
+            ASTPrimaryExpression flowPrimaryExpression = javaNode.getFirstDescendantOfType(ASTPrimaryExpression.class);
             if (flowPrimaryExpression == null) {
                 continue;
             }
             if (flowPrimaryExpression.getFirstParentOfType(ASTSynchronizedStatement.class) != null) {
                 continue;
             }
-            if (!isSimpleDateFormatCall(flowPrimaryExpression)) {
+            if (!isStaticSimpleDateFormatCall(flowPrimaryExpression, localSimpleDateFormatNames)) {
                 continue;
             }
             stack.push(flowPrimaryExpression);
@@ -95,12 +108,16 @@ public class AvoidCallStaticSimpleDateFormatRule extends AbstractAliRule {
         return isLockStatementExpression(statementExpression);
     }
 
-    private boolean isSimpleDateFormatCall(ASTPrimaryExpression primaryExpression) {
+    private boolean isStaticSimpleDateFormatCall(ASTPrimaryExpression primaryExpression,
+            Set<String> localSimpleDateFormatNames) {
         if (primaryExpression.jjtGetNumChildren() == 0) {
             return false;
         }
         ASTName name = primaryExpression.getFirstDescendantOfType(ASTName.class);
         if (name == null || name.getType() != SimpleDateFormat.class) {
+            return false;
+        }
+        if (localSimpleDateFormatNames.contains(name.getNameDeclaration().getName())) {
             return false;
         }
         ASTPrimaryPrefix primaryPrefix = (ASTPrimaryPrefix) primaryExpression.jjtGetChild(0);
