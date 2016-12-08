@@ -3,6 +3,7 @@
     <![CDATA[
     public class ConstantFieldNameRuleTest {
     private  static final int MAX = 5;
+    private  static final long serialVersionUID = 1L;
     //Log除外
     private static final Logger logger = new Logger();
     //常量命名需要全部大写，单词间用下划线隔开
@@ -17,13 +18,14 @@
         <description>Constant name should be upper case</description>
         <expected-problems>1</expected-problems>
         <code-ref id="ConstantFieldNamingRule" />
-        <expected-linenumbers>6</expected-linenumbers>
+        <expected-linenumbers>7</expected-linenumbers>
     </test-code>
 
     <code-fragment id="ConstantFieldNamingRule1">
         <![CDATA[
     public class ConstantFieldNameRuleTest {
     private  static final int MAX = 5;
+    private  static final long serialVersionUID = 1L;
     //Log除外
     private static final Logger logger = new Logger();
        public void f() {
