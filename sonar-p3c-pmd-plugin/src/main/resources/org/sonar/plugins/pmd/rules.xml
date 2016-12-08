@@ -1,0 +1,8 @@
+<rules>
+
+  <rule key="CommentsMustBeJavadocFormatRule">
+    <priority>MAJOR</priority>
+    <configKey>rulesets/java/ali-comments.xml/CommentsMustBeJavadocFormatRule</configKey>
+  </rule>
+
+</rules>

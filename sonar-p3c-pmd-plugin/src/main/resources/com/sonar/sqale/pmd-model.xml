@@ -1,0 +1,48 @@
+<sqale>
+  <chc>
+    <key>REUSABILITY</key>
+    <name>Reusability</name>
+    <chc>
+      <key>COMMENT</key>
+      <name>Comment</name>
+      <chc>
+        <rule-repo>pmd</rule-repo>
+        <rule-key>CommentsMustBeJavadocFormatRule</rule-key>
+        <prop>
+          <key>remediationFunction</key>
+          <txt>CONSTANT_ISSUE</txt>
+        </prop>
+        <prop>
+          <key>offset</key>
+          <val>10</val>
+          <txt>min</txt>
+        </prop>
+      </chc>
+    </chc>
+  </chc>
+  
+  
+  
+   <chc>
+    <key>TESTABILITY</key>
+    <name>Testability</name>
+    <chc>
+      <key>NAMING</key>
+      <name>Name</name>
+      <chc>
+        <rule-repo>pmd-unit-tests</rule-repo>
+        <rule-key>TestClassNamingRule</rule-key>
+        <prop>
+          <key>remediationFunction</key>
+          <txt>CONSTANT_ISSUE</txt>
+        </prop>
+        <prop>
+          <key>offset</key>
+          <val>10</val>
+          <txt>min</txt>
+        </prop>
+      </chc>
+    </chc>
+  </chc>
+ 
+</sqale>
