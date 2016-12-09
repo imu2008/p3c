@@ -22,20 +22,21 @@ public class ConstantFieldNamingRule extends AbstractJavaRule {
 
     private static final String LOGGER_NAME = "Logger";
 
+    @Override
     public Object visit(ASTFieldDeclaration node, Object data) {
         if (node.isStatic() && node.isFinal()) {
             if (node.hasDecendantOfAnyType(ASTClassOrInterfaceType.class) && LOGGER_NAME
                 .equals(node.getFirstDescendantOfType(ASTClassOrInterfaceType.class).getImage())) {
-                return data;
+                return super.visit(node, data);
             }
             String constantName = node.jjtGetChild(1).jjtGetChild(0).getImage();
             if (StringUtils.isEmpty(constantName) || WHITE_LIST.contains(constantName)) {
-                return data;
+                return super.visit(node, data);
             }
             if (!(constantName.equals(constantName.toUpperCase()))) {
                 addViolation(data, node);
             }
-            return data;
+            return super.visit(node, data);
         }
 
         return super.visit(node, data);

@@ -27,4 +27,56 @@
         <expected-problems>0</expected-problems>
         <code-ref id="LowerCamelCaseVariableNamingRuleTest1" />
     </test-code>
+
+    <code-fragment id="LowerCamelCaseVariableNamingRuleTest2">
+        <![CDATA[
+public interface PluginConstants {
+    String PLUGIN_ID = "PMDPlugin";
+     String RULE = "java/ali-pmd";
+}
+    ]]>
+    </code-fragment>
+    <test-code>
+        <description>Variable name should be lowerCamelCase</description>
+        <expected-problems>0</expected-problems>
+        <code-ref id="LowerCamelCaseVariableNamingRuleTest2" />
+    </test-code>
+
+
+
+    <code-fragment id="LowerCamelCaseVariableNamingRuleTest3">
+        <![CDATA[
+public class PluginConstants {
+    String PLUGIN_ID = "PMDPlugin";
+    String RULE = "java/ali-pmd";
+    private private static final String CONSTANT_RULE = "constantRuleTest";
+}
+    ]]>
+    </code-fragment>
+    <test-code>
+        <description>Variable name should be lowerCamelCase</description>
+        <expected-problems>2</expected-problems>
+        <code-ref id="LowerCamelCaseVariableNamingRuleTest3" />
+        <expected-linenumbers>2,3</expected-linenumbers>
+    </test-code>
+
+    <code-fragment id="LowerCamelCaseVariableNamingRuleTest4">
+        <![CDATA[
+public interface BizConstants {
+        interface SDK4cloud {
+        int USER_TYPE_JAQ = 1;
+        int USER_TYPE_ALIYUN = 2;
+        int ACCESS_USAGE_SERVER = 0;
+        int GATEWAY_TYPE_POP = 2;
+        }
+        }
+    ]]>
+    </code-fragment>
+    <test-code>
+        <description>Variable name should be lowerCamelCase</description>
+        <expected-problems>0</expected-problems>
+        <code-ref id="LowerCamelCaseVariableNamingRuleTest4" />
+    </test-code>
 </test-data>
+
+

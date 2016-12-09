@@ -9,10 +9,9 @@ import net.sourceforge.pmd.lang.rule.XPathRule;
  */
 public class BooleanPropertyNamingRule extends XPathRule {
     private static final String XPATH = "//VariableDeclaratorId\n" + "[(ancestor::ClassOrInterfaceDeclaration)[\n"
-            + "@Interface='false'\n" + "or ends-with(@Image, 'DO')\n" + "or ends-with(@Image, 'DTO')\n"
-            + "or ends-with(@Image, 'VO')\n" + "or ends-with(@Image, 'DAO')\n" + "]]\n"
-            + "[../../../FieldDeclaration/Type/PrimitiveType[@Image = 'boolean']]\n"
-            + "[.[ starts-with(@Image, 'is')]]";
+        + "@Interface='false'\n" + "and\n" + "( ends-with(@Image, 'DO')\n" + "or ends-with(@Image, 'DTO')\n"
+        + "or ends-with(@Image, 'VO')\n" + "or ends-with(@Image, 'DAO')\n" + ")\n" + "]]\n"
+        + "[../../../FieldDeclaration/Type/PrimitiveType[@Image = 'boolean']]\n" + "[.[ starts-with(@Image, 'is')]]";
 
     public BooleanPropertyNamingRule() {
         super(XPATH);
