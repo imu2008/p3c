@@ -45,9 +45,12 @@ public class ClassCastExceptionWithToArrayRule extends AbstractJavaRule {
                     }
                     ASTPrimaryPrefix prefix = primaryPrefixs.get(0);
                     ASTPrimarySuffix suffix = primarySuffixs.get(0);
-
-                    String childName = prefix.jjtGetChild(0).getImage();
-                    if (childName == null) {
+                    if (prefix.jjtGetNumChildren() == 0) {
+                        continue;
+                    }
+                    Node prefixChildNode = prefix.jjtGetChild(0);
+                    String childName = prefixChildNode.getImage();
+                    if (childName == null || prefixChildNode == null) {
                         continue;
                     }
                     if (childName.endsWith(".toArray") && suffix.getArgumentCount() == 0
