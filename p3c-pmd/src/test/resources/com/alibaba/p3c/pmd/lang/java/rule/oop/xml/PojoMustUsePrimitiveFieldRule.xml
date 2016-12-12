@@ -33,4 +33,81 @@
 
 	<!-- ====================================================================== -->
 
+	<code-fragment id="npe-bug-fix">
+		<![CDATA[
+	package com.alibaba.ak.codenavigator.biz.dto.kythe;
+	import java.util.Date;
+	import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+	import com.alibaba.ak.codenavigator.model.kythe.CodeComments;
+	@JsonIgnoreProperties(value = {"codeComments"})
+	public class CodeCommentDTO {
+		private CodeComments codeComments;
+		/**
+		 * nickname
+		 */
+		private String nickName;
+		/**
+		 * 头像
+		 */
+		private String avatar;
+
+		public CodeCommentDTO(CodeComments comment) {
+			this.codeComments = comment;
+		}
+		public String getNickName() {
+			return nickName;
+		}
+
+		public void setNickName(String nickName) {
+			this.nickName = nickName;
+		}
+		public String getAvatar() {
+			return avatar;
+		}
+		public void setAvatar(String avatar) {
+			this.avatar = avatar;
+		}
+		public Long getId() {
+			return codeComments.getId();
+		}
+		public Long getParentId() {
+			return codeComments.getParentId();
+		}
+
+		public String getContent() {
+			if (this.codeComments.getStatus() == 0) {
+				return codeComments.getContent();
+			}
+			//已经删除
+			return "该评论已被作者删除";
+		}
+		public Integer getStatus() {
+			return codeComments.getStatus();
+		}
+
+		public Date getCreateTime() {
+			return codeComments.getGmtCreate();
+		}
+		public Integer getStartLine() {
+			return codeComments.getStartLine();
+		}
+		public Integer getStartColumn() {
+			return codeComments.getStartColumn();
+		}
+		public Integer getEndLine() {
+			return codeComments.getEndLine();
+		}
+		public Integer getEndColumn() {
+			return codeComments.getEndColumn();
+		}
+
+	}
+		]]>
+	</code-fragment>
+	<test-code>
+		<description>NPE bugfix</description>
+		<expected-problems>0</expected-problems>
+		<code-ref id="npe-bug-fix" />
+	</test-code>
+
 </test-data>

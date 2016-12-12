@@ -63,4 +63,78 @@
 		<code-ref id="both-object-equals" />
 	</test-code>
 
+	<!-- ====================================================================== -->
+
+	<code-fragment id="npe-bug-fix">
+		<![CDATA[
+	package com.alibaba.ak.codenavigator.biz.manager.impl.kythe;
+	import java.util.List;
+	import javax.annotation.Resource;
+	import com.alibaba.ak.codenavigator.biz.manager.kythe.ActiveStatisticsManager;
+	import com.alibaba.ak.codenavigator.biz.manager.kythe.WatcherManager;
+	import com.alibaba.ak.codenavigator.biz.mapper.kythe.WatcherMapper;
+	import com.alibaba.ak.codenavigator.model.kythe.WatcherType;
+	import com.alibaba.ak.codenavigator.model.kythe.CodeWatchers;
+	import com.taobao.hsf.remoting.util.StringUtils;
+	public class WatcherManagerImpl implements WatcherManager {
+		@Resource
+		private WatcherMapper watcherMapper;
+
+		@Resource
+		private ActiveStatisticsManager activeStatisticsManager;
+
+		@Override
+		public boolean addWatcher(String staffId, WatcherType targetType, Long targetId) {
+			if (StringUtils.isBlank(staffId) || targetType == null || targetId == null || targetId < 0) {
+				return false;
+			}
+			int num = watcherMapper.addWatcher(staffId, targetType.toString(), targetId);
+			if (num == 1) {
+				if (targetType.equals(WatcherType.Project)) {
+					//增加项目的关注量
+					activeStatisticsManager.addWatchersValue(targetId, 1l);
+				}
+				return true;
+			}
+			return false;
+		}
+		@Override
+		public boolean deletedWatcher(String staffId, WatcherType targetType, Long targetId) {
+			if (StringUtils.isBlank(staffId) || targetType == null || targetId == null || targetId < 0) {
+				return false;
+			}
+			int num = watcherMapper.deletedWatcher(staffId, targetType.toString(), targetId);
+			if (num > 0) {
+				if (targetType.equals(WatcherType.Project)) {
+					//减少项目的关注量
+					activeStatisticsManager.addWatchersValue(targetId, -1l);
+				}
+				return true;
+			}
+			return false;
+		}
+		@Override
+		public List<CodeWatchers> getWatchersByType(String staffId, WatcherType targetType) {
+			if (StringUtils.isBlank(staffId) || targetType == null) {
+				return null;
+			}
+			return watcherMapper.getWatchersByType(staffId, targetType.toString());
+		}
+		@Override
+		public boolean ReversionWatch(String staffId, WatcherType targetType, Long targetId) {
+			CodeWatchers codeWatchers = watcherMapper.getWatcherByTarget(staffId, targetType.toString(), targetId);
+			if (codeWatchers == null) {
+				return addWatcher(staffId, targetType, targetId);
+			}
+			return deletedWatcher(staffId, targetType, targetId);
+		}
+
+	}
+		]]>
+	</code-fragment>
+	<test-code>
+		<description>NPE bugfix</description>
+		<expected-problems>0</expected-problems>
+		<code-ref id="npe-bug-fix" />
+	</test-code>
 </test-data>
