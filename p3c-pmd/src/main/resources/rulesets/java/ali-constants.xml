@@ -6,12 +6,12 @@
 
 
 	<rule name="UpperEllRule"
-		message="【强制】long或者Long初始赋值时，必须使用大写的L，不能是小写的l，小写容易跟数字1混淆，造成误解。"
+		message="long或者Long初始赋值时，必须使用大写的L，不能是小写的l，小写容易跟数字1混淆，造成误解。"
 		class="com.alibaba.p3c.pmd.lang.java.rule.constants.UpperEllRule">
 		<description>
             【强制】long或者Long初始赋值时，必须使用大写的L，不能是小写的l，小写容易跟数字1混淆，造成误解。
         </description>
-		<priority>3</priority>
+		<priority>1</priority>
 
 		<example>
       <![CDATA[
@@ -34,12 +34,12 @@
 	</rule>
 	
 	<rule name="UndefineMagicConstantRule"
-		message="【强制】不允许出现任何魔法值（即未经定义的常量）直接出现在代码中。"
+		message="不允许出现任何魔法值（即未经定义的常量）直接出现在代码中。"
 		class="com.alibaba.p3c.pmd.lang.java.rule.constants.UndefineMagicConstantRule">
 		<description>
             【强制】不允许出现任何魔法值（即未经定义的常量）直接出现在代码中。
         </description>
-		<priority>3</priority>
+		<priority>1</priority>
 
 		<example>
       <![CDATA[

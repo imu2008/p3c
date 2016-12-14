@@ -23,6 +23,7 @@ import java.util.Stack;
 import java.util.concurrent.locks.Lock;
 
 /**
+ * 【强制】SimpleDateFormat 是线程不安全的类，一般不要定义为static变量，如果定义为static，必须加锁，或者使用DateUtils工具类。
  * @author caikang.ck(骏烈)
  * @date 2016/11/25 上午11:43
  * @email caikang.ck@alibaba-inc.com

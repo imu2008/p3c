@@ -96,7 +96,7 @@ public abstract class Foo {
         <description>
             方法名、参数名、成员变量、局部变量都统一使用lowerCamelCase
         </description>
-        <priority>2</priority>
+        <priority>1</priority>
         <example>
             <![CDATA[
             public class VariableNameRuleTest {
@@ -134,7 +134,7 @@ public abstract class Foo {
         <description>
             常量命名应该全部大写，单词间用下划线隔开，力求语义表达完整清楚，不要嫌名字长, Log除外
         </description>
-        <priority>2</priority>
+        <priority>1</priority>
         <example>
             <![CDATA[
             public class ConstantFieldNameRuleTest {
@@ -159,7 +159,7 @@ public abstract class Foo {
         <description>
             对于Service和DAO类，基于SOA的理念，暴露出来的服务一定是接口，内部的实现类用Impl的后缀与接口区别
         </description>
-        <priority>2</priority>
+        <priority>1</priority>
         <example>
             <![CDATA[
             //接口以Service和DAO结尾，实现类必须以Impl作为后缀
@@ -178,7 +178,7 @@ public class ServiceNameRuleTest implements TestDAO{
         <description>
             包名统一使用小写，点分隔符之间有且仅有一个自然语义的英语单词。包名统一使用单数形式，但是类名如果有复数含义，类名可以使用复数形式。
         </description>
-        <priority>2</priority>
+        <priority>1</priority>
         <example>
             <![CDATA[
              // should be lowercase name
@@ -197,7 +197,7 @@ public class ServiceNameRuleTest implements TestDAO{
         <description>
             POJO类中的任何布尔类型的变量，都不要加is，否则部分框架解析会引起序列化错误
         </description>
-        <priority>2</priority>
+        <priority>1</priority>
         <example>
             <![CDATA[
     public class FooDAO{
@@ -216,7 +216,7 @@ public class ServiceNameRuleTest implements TestDAO{
         <description>
             中括号是数组类型的一部分，数组定义如下：String[] args;
         </description>
-        <priority>2</priority>
+        <priority>1</priority>
         <example>
             <![CDATA[
   public class ArrayNamingTest{
