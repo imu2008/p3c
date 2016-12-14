@@ -26,10 +26,9 @@ public class ClassMustHaveAuthorRule extends AbstractCommentRule {
             addViolation(data, decl);
         } else {
             String commentContent = comment.getImage();
-            if (!AUTHOR_PATTERN.matcher(commentContent).matches()) {
-                addViolation(data, decl);
-            }
-            if (!DATE_PATTERN.matcher(commentContent).matches()) {
+            boolean hasAuthorAndDate = AUTHOR_PATTERN.matcher(commentContent).matches()
+                    && DATE_PATTERN.matcher(commentContent).matches();
+            if (!hasAuthorAndDate) {
                 addViolation(data, decl);
             }
         }
