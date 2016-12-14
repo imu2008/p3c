@@ -22,6 +22,7 @@ import net.sourceforge.pmd.lang.java.rule.comments.AbstractCommentRule;
  * 【强制】类、类属性、类方法的注释必须使用javadoc规范，不得使用//xxx方式。
  * 
  * @author keriezhang
+ * @date 2016年12月14日 上午11:08:39
  *
  */
 public class CommentsMustBeJavadocFormatRule extends AbstractCommentRule {

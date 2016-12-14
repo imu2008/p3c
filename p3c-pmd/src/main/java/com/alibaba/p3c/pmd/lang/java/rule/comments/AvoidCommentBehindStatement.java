@@ -19,6 +19,7 @@ import net.sourceforge.pmd.lang.java.rule.comments.AbstractCommentRule;
  * 【强制】方法内部单行注释，在被注释语句上方另起一行，使用//注释。方法内部多行注释使用javadoc注释。注意与代码对齐。
  * 
  * @author keriezhang
+ * @date 2016年12月14日 上午11:08:29
  *
  */
 public class AvoidCommentBehindStatement extends AbstractCommentRule {

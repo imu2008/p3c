@@ -7,6 +7,7 @@ import net.sourceforge.pmd.lang.rule.XPathRule;
  * 
  * @author keriezhang
  * @author xuantan.zym
+ * @date 2016年12月14日 上午11:09:07
  *
  */
 public class AvoidNewDateGetTimeRule extends XPathRule {

@@ -17,7 +17,7 @@ public class PatternCompile {
 	</test-code>
 
 
-	<code-fragment id="use-pattern-compile-in-method"><![CDATA[
+	<code-fragment id="use-pattern-compile-in-method-string-literal"><![CDATA[
 import java.util.regex.Pattern;
 public class PatternCompile {
     public void getNumberPattern() {
@@ -28,10 +28,27 @@ public class PatternCompile {
     ]]>
 	</code-fragment>
 	<test-code>
-		<description>Use Pattern.compile in method</description>
+		<description>Use Pattern.compile in method string literal</description>
 		<expected-problems>1</expected-problems>
 		<expected-linenumbers>5</expected-linenumbers>
-		<code-ref id="use-pattern-compile-in-method" />
+		<code-ref id="use-pattern-compile-in-method-string-literal" />
+	</test-code>
+
+
+	<code-fragment id="use-pattern-compile-in-method-not-literal"><![CDATA[
+import java.util.regex.Pattern;
+public class PatternCompile {
+    public void getNumberPattern(String number) {
+        // 避免在方法内定义
+        Pattern localPattern = Pattern.compile(number);
+    }
+}
+    ]]>
+	</code-fragment>
+	<test-code>
+		<description>Use Pattern.compile in method not literal</description>
+		<expected-problems>0</expected-problems>
+		<code-ref id="use-pattern-compile-in-method-not-literal" />
 	</test-code>
 
 </test-data>

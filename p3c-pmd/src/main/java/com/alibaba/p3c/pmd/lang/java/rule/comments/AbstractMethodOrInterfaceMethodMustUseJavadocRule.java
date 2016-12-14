@@ -17,6 +17,7 @@ import net.sourceforge.pmd.lang.java.rule.comments.AbstractCommentRule;
  * 【强制】所有的抽象方法（包括接口中的方法）必须要用javadoc注释、除了返回值、参数、异常说明外，还必须指出该方法做什么事情，实现什么功能。
  * 
  * @author keriezhang
+ * @date 2016年12月14日 上午11:08:18
  *
  */
 public class AbstractMethodOrInterfaceMethodMustUseJavadocRule extends AbstractCommentRule {
