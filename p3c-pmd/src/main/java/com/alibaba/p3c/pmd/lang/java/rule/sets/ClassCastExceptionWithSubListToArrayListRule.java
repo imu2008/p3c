@@ -17,6 +17,7 @@ import net.sourceforge.pmd.lang.java.rule.AbstractJavaRule;
  * cannot be cast to java.util.ArrayList ;
  * 
  * @author shengfang.gsf
+ * @date 2016/12/13
  * 
  *
  */
