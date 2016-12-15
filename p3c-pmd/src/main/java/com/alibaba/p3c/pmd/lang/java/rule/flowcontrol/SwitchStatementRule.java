@@ -4,7 +4,7 @@ import net.sourceforge.pmd.lang.java.ast.ASTSwitchStatement;
 import net.sourceforge.pmd.lang.java.rule.AbstractJavaRule;
 
 /**
- * 【强制】在一个switch块内，每个case要么通过break/return来终止，要么注释说明程序将继续执行到哪一个case为止；
+ * 【强制】在一个switch块内，每个case要么通过break/return等来终止，要么注释说明程序将继续执行到哪一个case为止；
  * 在一个switch块内，都必须包含一个default语句并且放在最后，即使它什么代码也没有。
  *
  * @author zenghou.fw
