@@ -54,7 +54,7 @@
         <priority>1</priority>
         <example>
             <![CDATA[
-            class CacheDemoException extends Exception{
+            public class CacheDemoException extends Exception{
             }
             ]]>
         </example>
@@ -72,7 +72,7 @@
         <priority>1</priority>
         <example>
             <![CDATA[
-            class DemoTest {
+            public class DemoTest {
             }
             ]]>
         </example>
@@ -190,7 +190,7 @@
         <priority>1</priority>
         <example>
             <![CDATA[
-                class DemoDO{
+                public class DemoDO{
                     Boolean success;
                     Boolean delete;
                 }
