@@ -17,7 +17,13 @@ public class WrapperTypeEqualityRule extends AbstractJavaRule {
 
     @Override
     public Object visit(ASTEqualityExpression node, Object data) {
-        // ==两边可能的类型有PrimaryExpression或UnaryExpression
+
+        // 如果"=="或"!="两边有null,则不检查包装类型
+        if (node.hasDescendantMatchingXPath("PrimaryExpression/PrimaryPrefix/Literal/NullLiteral")) {
+            return super.visit(node, data);
+        }
+
+        // "=="两边可能的类型有PrimaryExpression或UnaryExpression
         List<ASTPrimaryExpression> expressions = node.findChildrenOfType(ASTPrimaryExpression.class);
 
         for (ASTPrimaryExpression expression : expressions) {
@@ -26,7 +32,6 @@ public class WrapperTypeEqualityRule extends AbstractJavaRule {
                 break;
             }
         }
-
         return super.visit(node, data);
     }
 

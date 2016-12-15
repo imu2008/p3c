@@ -15,7 +15,12 @@
 
         <example>
             <![CDATA[
-				// TODO
+        public void f(String str){
+            String inner = "hi";
+            if(inner.equals(str)){
+                System.out.println("hello world");
+            }
+        }
 			]]>
         </example>
     </rule>
@@ -31,7 +36,11 @@
 
         <example>
             <![CDATA[
-				// TODO
+        Integer a = 235;
+        Integer b = 235;
+        if (a.equals(b)) {
+            //相等
+        }
 			]]>
         </example>
     </rule>
@@ -51,7 +60,10 @@
 
         <example>
             <![CDATA[
-				// TODO
+        public class DemoDO {
+            String str;
+            Integer a;
+        }
 			]]>
         </example>
     </rule>
@@ -67,7 +79,10 @@
 
         <example>
             <![CDATA[
-				// TODO
+        public class DemoDO {
+            String str;
+            Integer a;
+        }
 			]]>
         </example>
     </rule>
@@ -79,11 +94,23 @@
         <description>
             构造方法里面禁止加入任何业务逻辑，如果有初始化逻辑，请放在init方法中。
         </description>
-        <priority>1</priority>
+        <priority>3</priority>
 
         <example>
             <![CDATA[
-				// TODO
+		public class InitDemo {
+            private int money;
+
+            public InitDemo(int money){
+                this.money = money;
+            }
+
+            public void init(){
+                if (money < 100){
+                    money = money - 100;
+                }
+            }
+        }
 			]]>
         </example>
     </rule>
@@ -100,7 +127,23 @@
 
         <example>
             <![CDATA[
-				// TODO
+        public class ToStringDemo extends Super{
+            private String secondName;
+
+            @Override
+            public String toString() {
+                return super.toString() + "ToStringDemo{" + "secondName='" + secondName + '\'' + '}';
+            }
+        }
+
+        class Super {
+            private String firstName;
+
+            @Override
+            public String toString() {
+                return "Super{" + "firstName=" + firstName + '\'' + '}';
+            }
+        }
 			]]>
         </example>
     </rule>
