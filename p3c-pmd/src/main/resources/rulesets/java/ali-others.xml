@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<ruleset name="Others" xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+<ruleset name="AlibabaJavaOthers" xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
 
@@ -8,7 +8,7 @@
 		message="在使用正则表达式时，利用好其预编译功能，可以有效加快正则匹配速度。"
 		class="com.alibaba.p3c.pmd.lang.java.rule.others.AvoidPatternCompileInMethodRule">
 		<description>
-【强制】在使用正则表达式时，利用好其预编译功能，可以有效加快正则匹配速度。
+在使用正则表达式时，利用好其预编译功能，可以有效加快正则匹配速度。
 说明：不要在方法体内定义：Pattern pattern = Pattern.compile(规则);
       </description>
 		<priority>1</priority>
@@ -32,7 +32,7 @@ public class PatternCompile {
 		message="避免用Apache Beanutils进行属性的copy。" 
 		class="com.alibaba.p3c.pmd.lang.java.rule.others.AvoidApacheBeanUtilsCopyRule">
 		<description>
-【强制】避免用Apache Beanutils进行属性的copy。
+避免用Apache Beanutils进行属性的copy。
 说明：Apache BeanUtils性能较差，可以使用其他方案比如Spring BeanUtils, Cglib BeanCopier。
       </description>
 		<priority>1</priority>
@@ -53,7 +53,7 @@ public class MyTest {
 		message="获取当前毫秒数：System.currentTimeMillis(); 而不是new Date().getTime();"
 		class="com.alibaba.p3c.pmd.lang.java.rule.others.AvoidNewDateGetTimeRule">
 		<description>
-【强制】获取当前毫秒数：System.currentTimeMillis(); 而不是new Date().getTime();
+获取当前毫秒数：System.currentTimeMillis(); 而不是new Date().getTime();
 说明：如果想获取更加精确的纳秒级时间值，用System.nanoTime。在JDK8中，针对统计时间等场景，推荐使用Instant类。
       </description>
 		<priority>1</priority>

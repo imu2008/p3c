@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ruleset name="My custom rules"
+<ruleset name="AlibabaJavaConcurrent"
          xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
@@ -10,9 +10,35 @@
           message="线程池不允许使用Executors去创建，而是通过ThreadPoolExecutor的方式，这样的处理方式让写的同学更加明确线程池的运行规则，规避资源耗尽的风险。"
           class="com.alibaba.p3c.pmd.lang.java.rule.concurrent.ThreadPoolCreationRule">
         <description>
-            线程池不允许使用Executors去创建，而是通过ThreadPoolExecutor的方式，这样的处理方式让写的同学更加明确线程池的运行规则，规避资源耗尽的风险。
+         线程池不允许使用Executors去创建，而是通过ThreadPoolExecutor的方式，这样的处理方式让写的同学更加明确线程池的运行规则，规避资源耗尽的风险。
         </description>
         <priority>1</priority>
+        <example>
+            <![CDATA[
+正例1：
+        //org.apache.commons.lang3.concurrent.BasicThreadFactory
+        ScheduledExecutorService executorService = new ScheduledThreadPoolExecutor(1,
+                new BasicThreadFactory.Builder().namingPattern("example-schedule-pool-%d").daemon(true).build());
+
+正例2：
+        ThreadPoolTaskExecutor userThreadPool = new ThreadPoolTaskExecutor();
+        userThreadPool.setCorePoolSize(20);
+        userThreadPool.setMaxPoolSize(3000);
+        userThreadPool.setKeepAliveSeconds(0);
+        userThreadPool.setQueueCapacity(100);
+
+正例3：
+        <bean id="userThreadPool"
+            class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+            <property name="corePoolSize" value="10" />
+            <property name="maxPoolSize" value="100" />
+            <property name="queueCapacity" value="2000" />
+            <property name="rejectedExecutionHandler">
+                <ref local="rejectedExecutionHandler" />
+            </property>
+        </bean>
+       ]]>
+        </example>
     </rule>
     <rule name="AvoidUseTimerRule"
           language="java"
@@ -26,6 +52,19 @@
        ]]>
         </description>
         <priority>1</priority>
+        <example>
+            <![CDATA[
+        //org.apache.commons.lang3.concurrent.BasicThreadFactory
+        ScheduledExecutorService executorService = new ScheduledThreadPoolExecutor(1,
+                new BasicThreadFactory.Builder().namingPattern("example-schedule-pool-%d").daemon(true).build());
+        executorService.scheduleAtFixedRate(new Runnable() {
+            @Override
+            public void run() {
+                //do something
+            }
+        },initialDelay,period, TimeUnit.HOURS);
+       ]]>
+        </example>
     </rule>
     <rule name="AvoidManuallyCreateThreadRule"
           language="java"
@@ -35,7 +74,7 @@
           class="com.alibaba.p3c.pmd.lang.java.rule.concurrent.AvoidManuallyCreateThreadRule">
         <description>
             <![CDATA[
-            线程资源必须通过线程池提供，不允许在应用中自行显式创建线程。
+     线程资源必须通过线程池提供，不允许在应用中自行显式创建线程。
 说明：使用线程池的好处是减少在创建和销毁线程上所花的时间以及系统资源的开销，解决资源不足的问题。如果不使用线程池，有可能造成系统创建大量同类线程而导致消耗完内存或者“过度切换”的问题。
        ]]>
         </description>
@@ -53,6 +92,14 @@
        ]]>
         </description>
         <priority>1</priority>
+        <example>
+            <![CDATA[
+        public class TimerTaskThread extends Thread {
+            public TimerTaskThread(){
+            super.setName("TimerTaskThread"); …
+        }
+       ]]>
+        </example>
     </rule>
     <rule name="AvoidCallStaticSimpleDateFormatRule"
           language="java"
@@ -62,7 +109,8 @@
           class="com.alibaba.p3c.pmd.lang.java.rule.concurrent.AvoidCallStaticSimpleDateFormatRule">
         <description>
             <![CDATA[
-            SimpleDateFormat 是线程不安全的类，一般不要定义为static变量，如果定义为static，必须加锁，或者使用DateUtils工具类。
+SimpleDateFormat 是线程不安全的类，一般不要定义为static变量，如果定义为static，必须加锁，或者使用DateUtils工具类。
+
 正例：注意线程安全，使用DateUtils。亦推荐如下处理：
 
 private static final ThreadLocal<DateFormat> df = new ThreadLocal<DateFormat>() {
@@ -74,6 +122,33 @@ private static final ThreadLocal<DateFormat> df = new ThreadLocal<DateFormat>() 
 说明：如果是JDK8的应用，可以使用instant代替Date，Localdatetime代替Calendar，Datetimeformatter代替Simpledateformatter，官方给出的解释：simple beautiful strong immutable thread-safe
        ]]>
         </description>
+        <example>
+            <![CDATA[
+正例1：
+
+private static final String FORMAT = "yyyy-MM-dd HH:mm:ss";
+public String getFormat(Date date){
+    SimpleDateFormat dateFormat = new SimpleDateFormat(FORMAT);
+    return sdf.format(date);
+}
+正例2：
+
+private static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+public void getFormat(){
+    synchronized (sdf){
+    sdf.format(new Date());
+    ….;
+}
+
+正例3：
+private static final ThreadLocal<DateFormat> DATE_FORMATTER = new ThreadLocal<DateFormat>() {
+    @Override
+    protected DateFormat initialValue() {
+        return new SimpleDateFormat("yyyy-MM-dd");
+    }
+};
+        ]]>
+        </example>
         <priority>1</priority>
     </rule>
 </ruleset>
