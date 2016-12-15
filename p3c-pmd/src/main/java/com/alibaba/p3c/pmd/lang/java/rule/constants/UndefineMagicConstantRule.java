@@ -3,7 +3,6 @@
  */
 package com.alibaba.p3c.pmd.lang.java.rule.constants;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.jaxen.JaxenException;
@@ -13,11 +12,6 @@ import net.sourceforge.pmd.lang.java.ast.ASTCompilationUnit;
 import net.sourceforge.pmd.lang.java.ast.ASTForStatement;
 import net.sourceforge.pmd.lang.java.ast.ASTIfStatement;
 import net.sourceforge.pmd.lang.java.ast.ASTLiteral;
-import net.sourceforge.pmd.lang.java.ast.ASTMethodDeclaration;
-import net.sourceforge.pmd.lang.java.ast.ASTMethodDeclarator;
-import net.sourceforge.pmd.lang.java.ast.ASTName;
-import net.sourceforge.pmd.lang.java.ast.ASTPrimaryPrefix;
-import net.sourceforge.pmd.lang.java.ast.ASTStatementExpression;
 import net.sourceforge.pmd.lang.java.ast.ASTWhileStatement;
 import net.sourceforge.pmd.lang.java.rule.AbstractJavaRule;
 
@@ -30,9 +24,12 @@ import net.sourceforge.pmd.lang.java.rule.AbstractJavaRule;
  *
  */
 public class UndefineMagicConstantRule extends AbstractJavaRule {
- 
- 
-
+    
+    /**
+     * 判断未定义变量是否在非循环体的if语句中
+     * @param node
+     * @param data
+     */ 
     @Override
     public Object visit(ASTCompilationUnit node, Object data) {
 
@@ -40,8 +37,7 @@ public class UndefineMagicConstantRule extends AbstractJavaRule {
             // 找未定义变量的父节点
             List<Node> parentNodes = node.findChildNodesWithXPath("//Literal/../../../../..[not(VariableInitializer)]");
             for (Node parentItem : parentNodes) {
-                List<ASTLiteral> literals = parentItem.findDescendantsOfType(ASTLiteral.class);
-                // 判断未定义变量是否在白名单模板
+                List<ASTLiteral> literals = parentItem.findDescendantsOfType(ASTLiteral.class); 
                 for(ASTLiteral literal: literals){
                     if (inBlackList(literal)) {
                         addViolation(data, literal);
