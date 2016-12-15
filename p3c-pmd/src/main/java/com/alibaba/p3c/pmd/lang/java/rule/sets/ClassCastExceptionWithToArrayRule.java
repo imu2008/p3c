@@ -50,7 +50,7 @@ public class ClassCastExceptionWithToArrayRule extends AbstractJavaRule {
                     }
                     Node prefixChildNode = prefix.jjtGetChild(0);
                     String childName = prefixChildNode.getImage();
-                    if (childName == null || prefixChildNode == null) {
+                    if (childName == null) {
                         continue;
                     }
                     if (childName.endsWith(".toArray") && suffix.getArgumentCount() == 0

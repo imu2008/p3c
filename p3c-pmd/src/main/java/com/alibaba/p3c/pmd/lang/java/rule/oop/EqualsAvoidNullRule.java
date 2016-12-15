@@ -6,6 +6,7 @@ import net.sourceforge.pmd.lang.ast.Node;
 import net.sourceforge.pmd.lang.java.ast.*;
 import net.sourceforge.pmd.lang.java.rule.AbstractJavaRule;
 import net.sourceforge.pmd.lang.rule.XPathRule;
+import net.sourceforge.pmd.lang.symboltable.NameDeclaration;
 import org.jaxen.JaxenException;
 
 import java.util.List;
@@ -44,16 +45,21 @@ public class EqualsAvoidNullRule extends AbstractJavaRule {
                         // 如果equals参数是字面量
                         addViolation(data, invocation);
                     } else {
-                        // TODO 如果是在文件内申明的常量可以检测,跨文件的就无能为力了
                         ASTName name = right.getFirstChildOfType(ASTName.class);
-                        Node nameNode = name.getNameDeclaration().getNode();
+                        NameDeclaration nameDeclaration = name.getNameDeclaration();
+                        // TODO 在文本件内能找到名称的才进行检查,为null时是跨文件的就无能为力了
+                        if (nameDeclaration == null || nameDeclaration.getNode() == null) {
+                            return super.visit(node, data);
+                        }
+                        Node nameNode = nameDeclaration.getNode();
                         if ((nameNode instanceof ASTVariableDeclaratorId)
-                                && (nameNode.getNthParent(2) instanceof  ASTFieldDeclaration)) {
+                                && (nameNode.getNthParent(2) instanceof ASTFieldDeclaration)) {
                             ASTFieldDeclaration field = (ASTFieldDeclaration)nameNode.getNthParent(2);
                             if (NodeUtils.isConstant(field)) {
                                 addViolation(data, invocation);
                             }
                         };
+
                     }
                 }
             }
@@ -61,11 +67,6 @@ public class EqualsAvoidNullRule extends AbstractJavaRule {
             throw new RuntimeException("XPath expression " + XPATH + " failed: "
                     + e.getLocalizedMessage(), e);
         }
-
         return super.visit(node, data);
-    }
-
-    private List<Node> findConstants(ASTClassOrInterfaceDeclaration node) {
-        return null;
     }
 }

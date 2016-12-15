@@ -83,7 +83,8 @@ public class ThreadPoolCreationRule extends AbstractJavaRule {
     public Object visit(ASTImportDeclaration node, Object data) {
         ASTName name = node.getFirstChildOfType(ASTName.class);
         //考虑到有同学要静态引入方法的情况
-        executorsUsed = executorsUsed || name.getType() == Executors.class;
+        executorsUsed = executorsUsed || (name.getType() == Executors.class || Executors.class.getName()
+                .equals(name.getImage()));
         if (name.getImage().startsWith(Executors.class.getName() + DOT)) {
             importedExecutorsMethods.add(name.getImage());
         }

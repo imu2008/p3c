@@ -17,6 +17,7 @@ import net.sourceforge.pmd.lang.java.rule.comments.AbstractCommentRule;
  * 【强制】所有的枚举类型字段必须要有注释，说明每个数据项的用途。
  * 
  * @author keriezhang
+ * @date 2016年12月14日 上午11:08:44
  *
  */
 public class EnumConstantsMustHaveCommentRule extends AbstractCommentRule {

@@ -8,14 +8,16 @@ import net.sourceforge.pmd.lang.java.ast.Comment;
 import net.sourceforge.pmd.lang.java.rule.comments.AbstractCommentRule;
 
 /**
- * 【强制】所有的类都必须添加创建者信息。
+ * 【强制】所有的类都必须添加创建者和日期信息。
  * 
  * @author keriezhang
+ * @date 2016年12月14日 上午11:07:45
  *
  */
 public class ClassMustHaveAuthorRule extends AbstractCommentRule {
 
     private static final Pattern AUTHOR_PATTERN = Pattern.compile(".*@author.*", Pattern.DOTALL);
+    private static final Pattern DATE_PATTERN = Pattern.compile(".*@date.*", Pattern.DOTALL);
 
     @Override
     public Object visit(ASTClassOrInterfaceDeclaration decl, Object data) {
@@ -24,7 +26,9 @@ public class ClassMustHaveAuthorRule extends AbstractCommentRule {
             addViolation(data, decl);
         } else {
             String commentContent = comment.getImage();
-            if (!AUTHOR_PATTERN.matcher(commentContent).matches()) {
+            boolean hasAuthorAndDate = AUTHOR_PATTERN.matcher(commentContent).matches()
+                    && DATE_PATTERN.matcher(commentContent).matches();
+            if (!hasAuthorAndDate) {
                 addViolation(data, decl);
             }
         }

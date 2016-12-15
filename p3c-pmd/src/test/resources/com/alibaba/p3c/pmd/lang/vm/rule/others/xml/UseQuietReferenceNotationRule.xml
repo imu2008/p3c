@@ -4,7 +4,7 @@
 
 	<code-fragment id="use-quiet-reference-notation"><![CDATA[
 <input type="text" name="email" value="$!email"/>
-<input type="text" name="email" value="$!email"/>
+<input type="text" name="email" value="$!{email}"/>
     ]]>
 	</code-fragment>
 
@@ -17,7 +17,7 @@
 
 	<code-fragment id="not-use-quiet-reference-notation"><![CDATA[
 <input type="text" name="email" value="$email"/>
-<input type="text" name="email" value="$email"/>
+<input type="text" name="email" value="${email}"/>
     ]]>
 	</code-fragment>
 	
@@ -28,7 +28,7 @@
 		<code-ref id="not-use-quiet-reference-notation" />
 	</test-code>
 	
-	<code-fragment id="directives-is-not-considered"><![CDATA[
+	<code-fragment id="directives-is-considered"><![CDATA[
 #set( $email = "email" )
 #set( ${email} = "email" )
 #if( $foo )
@@ -44,9 +44,8 @@
 	</code-fragment>
 	
 	<test-code>
-		<description>Directives is not considered</description>
-		<expected-problems>1</expected-problems>
-		<expected-linenumbers>8</expected-linenumbers>
-		<code-ref id="directives-is-not-considered" />
+		<description>Directives is considered</description>
+		<expected-problems>7</expected-problems>
+		<code-ref id="directives-is-considered" />
 	</test-code>
 </test-data>

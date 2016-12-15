@@ -1,33 +1,17 @@
 <?xml version="1.0"?>
 
-<ruleset name="Oop" xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+<ruleset name="AlibabaJavaOop" xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
 
-    <rule name="AccessStaticViaInstanceRule"
-          language="java"
-          message="【强制】避免通过一个类的对象引用访问此类的静态变量或静态方法，无谓增加编译器解析成本，直接用类名来访问即可。"
-          class="com.alibaba.p3c.pmd.lang.java.rule.oop.AccessStaticViaInstanceRule">
-        <description>
-            强制】避免通过一个类的对象引用访问此类的静态变量或静态方法，无谓增加编译器解析成本，直接用类名来访问即可。
-        </description>
-        <priority>3</priority>
-
-        <example>
-            <![CDATA[
-				// TODO
-			]]>
-        </example>
-    </rule>
-
     <rule name="EqualsAvoidNullRule"
           language="java"
-          message="【强制】Object的equals方法容易抛空指针异常，应使用常量或确定有值的对象来调用equals。"
+          message="Object的equals方法容易抛空指针异常，应使用常量或确定有值的对象来调用equals。"
           class="com.alibaba.p3c.pmd.lang.java.rule.oop.EqualsAvoidNullRule">
         <description>
-            【强制】Object的equals方法容易抛空指针异常，应使用常量或确定有值的对象来调用equals。
+            Object的equals方法容易抛空指针异常，应使用常量或确定有值的对象来调用equals。
         </description>
-        <priority>3</priority>
+        <priority>1</priority>
 
         <example>
             <![CDATA[
@@ -38,12 +22,12 @@
 
     <rule name="WrapperTypeEqualityRule"
           language="java"
-          message="【强制】所有的包装类对象之间值的比较，全部使用equals方法比较。"
+          message="所有的包装类对象之间值的比较，全部使用equals方法比较。"
           class="com.alibaba.p3c.pmd.lang.java.rule.oop.WrapperTypeEqualityRule">
         <description>
-            【强制】所有的包装类对象之间值的比较，全部使用equals方法比较。
+            所有的包装类对象之间值的比较，全部使用equals方法比较。
         </description>
-        <priority>3</priority>
+        <priority>1</priority>
 
         <example>
             <![CDATA[
@@ -54,16 +38,16 @@
 
     <rule name="PojoMustUsePrimitiveFieldRule"
           language="java"
-          message="强制】关于基本数据类型与包装数据类型的使用标准如下：
+          message="关于基本数据类型与包装数据类型的使用标准如下：
  1） 所有的POJO类属性使用包装数据类型。"
           class="com.alibaba.p3c.pmd.lang.java.rule.oop.PojoMustUsePrimitiveFieldRule">
         <description>
-            强制】关于基本数据类型与包装数据类型的使用标准如下：
+           关于基本数据类型与包装数据类型的使用标准如下：
              1） 所有的POJO类属性使用包装数据类型。
              2） RPC方法的返回值和参数必须使用包装数据类型。
              3） 所有的局部变量使用基本数据类型。
         </description>
-        <priority>3</priority>
+        <priority>1</priority>
 
         <example>
             <![CDATA[
@@ -74,12 +58,12 @@
 
     <rule name="PojoNoDefaultValueRule"
           language="java"
-          message="【强制】定义DO/DTO/VO等POJO类时，不要加任何属性默认值。"
+          message="定义DO/DTO/VO等POJO类时，不要加任何属性默认值。"
           class="com.alibaba.p3c.pmd.lang.java.rule.oop.PojoNoDefaultValueRule">
         <description>
-            【强制】定义DO/DTO/VO等POJO类时，不要加任何属性默认值。
+            定义DO/DTO/VO等POJO类时，不要加任何属性默认值。
         </description>
-        <priority>3</priority>
+        <priority>1</priority>
 
         <example>
             <![CDATA[
@@ -90,12 +74,12 @@
 
     <rule name="ConstructorNoBusinessLogicRule"
           language="java"
-          message="【强制】构造方法里面禁止加入任何业务逻辑，如果有初始化逻辑，请放在init方法中。"
+          message="构造方法里面禁止加入任何业务逻辑，如果有初始化逻辑，请放在init方法中。"
           class="com.alibaba.p3c.pmd.lang.java.rule.oop.ConstructorNoBusinessLogicRule">
         <description>
-            【强制】构造方法里面禁止加入任何业务逻辑，如果有初始化逻辑，请放在init方法中。
+            构造方法里面禁止加入任何业务逻辑，如果有初始化逻辑，请放在init方法中。
         </description>
-        <priority>3</priority>
+        <priority>1</priority>
 
         <example>
             <![CDATA[
@@ -107,12 +91,12 @@
 
     <rule name="PojoMustOverrideToStringRule"
           language="java"
-          message="【强制】POJO类必须写toString方法。使用工具类source> generate toString时，如果继承了另一个POJO类，注意在前面加一下super.toString。"
+          message="POJO类必须写toString方法。使用工具类source> generate toString时，如果继承了另一个POJO类，注意在前面加一下super.toString。"
           class="com.alibaba.p3c.pmd.lang.java.rule.oop.PojoMustOverrideToStringRule">
         <description>
-            【强制】POJO类必须写toString方法。使用工具类source> generate toString时，如果继承了另一个POJO类，注意在前面加一下super.toString。
+            POJO类必须写toString方法。使用工具类source> generate toString时，如果继承了另一个POJO类，注意在前面加一下super.toString。
         </description>
-        <priority>3</priority>
+        <priority>1</priority>
 
         <example>
             <![CDATA[

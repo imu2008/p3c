@@ -22,8 +22,35 @@ public class ClassMustHaveAuthorRule {}
 	</code-fragment>
 	<test-code>
 		<description>Class with author.</description>
-		<expected-problems>0</expected-problems>
+		<expected-problems>1</expected-problems>
 		<code-ref id="class-with-author" />
+	</test-code>
+	
+	<code-fragment id="class-with-date"><![CDATA[
+/**
+ * @date 2016年12月14日 上午11:24:59
+ */
+public class ClassMustHaveAuthorRule {}
+    ]]>
+	</code-fragment>
+	<test-code>
+		<description>Class with date.</description>
+		<expected-problems>1</expected-problems>
+		<code-ref id="class-with-date" />
+	</test-code>
+	
+	<code-fragment id="class-with-author-and-date"><![CDATA[
+/**
+ * @author keriezhang
+ * @date 2016年12月14日 上午11:24:59
+ */
+public class ClassMustHaveAuthorRule {}
+    ]]>
+	</code-fragment>
+	<test-code>
+		<description>Class with author and date.</description>
+		<expected-problems>0</expected-problems>
+		<code-ref id="class-with-author-and-date" />
 	</test-code>
 
 </test-data>

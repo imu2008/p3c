@@ -17,18 +17,14 @@ public class WrapperTypeEqualityRule extends AbstractJavaRule {
 
     @Override
     public Object visit(ASTEqualityExpression node, Object data) {
+        // ==两边可能的类型有PrimaryExpression或UnaryExpression
         List<ASTPrimaryExpression> expressions = node.findChildrenOfType(ASTPrimaryExpression.class);
-        if (2 != expressions.size()) {
-            addViolation(data, node);
-            return super.visit(node, data);
-        }
 
-        // 表达式左值和右值
-        ASTPrimaryExpression left = expressions.get(0);
-        ASTPrimaryExpression right = expressions.get(1);
-
-        if (NodeUtils.isWrapperType(left) || NodeUtils.isWrapperType(right)) {
-            addViolation(data, node);
+        for (ASTPrimaryExpression expression : expressions) {
+            if (NodeUtils.isWrapperType(expression)) {
+                addViolation(data, node);
+                break;
+            }
         }
 
         return super.visit(node, data);
