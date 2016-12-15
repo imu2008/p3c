@@ -21,5 +21,35 @@ public class Foo {
 		<code-ref id="constructor-has-if" />
 	</test-code>
 
+	<!-- ====================================================================== -->
+
+	<test-code>
+		<description>构造函数有三元表达式</description>
+		<expected-problems>1</expected-problems>
+		<code-ref id="constructor-has-ternary" />
+	</test-code>
+	<code-fragment id="constructor-has-ternary">
+		<![CDATA[
+	public class Parameters {
+        private final Map<String, String> parameters;
+
+        static final Logger logger = LoggerInit.LOGGER;
+
+        public Parameters(String... pairs) {
+            this(toMap(pairs));
+        }
+
+        public Parameters(Map<String, String> parameters) {
+            this.parameters = Collections.unmodifiableMap(parameters != null ?
+            new HashMap<String, String>(parameters) : new HashMap<String, String>(0));
+        }
+    }
+		]]>
+	</code-fragment>
+	<test-code>
+		<description>构造函数有三元表达式</description>
+		<expected-problems>1</expected-problems>
+		<code-ref id="constructor-has-ternary" />
+	</test-code>
 
 </test-data>

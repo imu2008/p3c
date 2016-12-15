@@ -15,6 +15,9 @@
 	    	if (a == c) {	// BAD
 	    		// do nothing
 	    	}
+	    	if (a != null) {	// OK
+	    		// do nothing
+	    	}
 	    }
 	}
 		]]>

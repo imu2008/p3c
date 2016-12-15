@@ -4,18 +4,28 @@
 	<code-fragment id="literal-in-right-of-equals">
 		<![CDATA[
 	public class Foo {
+		private string alias;
+
 		public void bar() {
 			String name;
 			if (name.equals("tom")) {	// BAD
 				return;
 			};
+
+			if (name.toString().equals("tom")) { // BAD
+			    return;
+			}
+
+			if (this.alias.equals("tom")) { // BAD
+			    return;
+			}
 		}
 	}
 		]]>
 	</code-fragment>
 	<test-code>
 		<description>字符串字面量在equals方法右边</description>
-		<expected-problems>1</expected-problems>
+		<expected-problems>3</expected-problems>
 		<code-ref id="literal-in-right-of-equals" />
 	</test-code>
 
@@ -28,8 +38,9 @@
 
 		public void bar() {
 			String label;
-			"abc".equals(label);		// OK
-			if (label.equals(TOM)) {	// BAD
+			"abc".equals(label);			// OK
+			"abc".equals(label.toString()); // OK
+			if (label.equals(TOM)) {		// BAD
 				return;
 			};
 		}
@@ -67,68 +78,376 @@
 
 	<code-fragment id="npe-bug-fix">
 		<![CDATA[
-	package com.alibaba.ak.codenavigator.biz.manager.impl.kythe;
+	package com.alibaba.ak.base.openapi;
+
+	import java.io.IOException;
+	import java.lang.reflect.Method;
+	import java.nio.charset.Charset;
+	import java.text.ParseException;
+	import java.text.SimpleDateFormat;
+	import java.util.ArrayList;
+	import java.util.Arrays;
+	import java.util.Date;
+	import java.util.HashMap;
+	import java.util.HashSet;
 	import java.util.List;
-	import javax.annotation.Resource;
-	import com.alibaba.ak.codenavigator.biz.manager.kythe.ActiveStatisticsManager;
-	import com.alibaba.ak.codenavigator.biz.manager.kythe.WatcherManager;
-	import com.alibaba.ak.codenavigator.biz.mapper.kythe.WatcherMapper;
-	import com.alibaba.ak.codenavigator.model.kythe.WatcherType;
-	import com.alibaba.ak.codenavigator.model.kythe.CodeWatchers;
-	import com.taobao.hsf.remoting.util.StringUtils;
-	public class WatcherManagerImpl implements WatcherManager {
-		@Resource
-		private WatcherMapper watcherMapper;
+	import java.util.Map;
+	import java.util.Set;
+	import java.util.regex.Matcher;
+	import java.util.regex.Pattern;
 
-		@Resource
-		private ActiveStatisticsManager activeStatisticsManager;
+	import javax.servlet.ServletException;
+	import javax.servlet.http.HttpServletRequest;
+	import javax.servlet.http.HttpServletResponse;
 
-		@Override
-		public boolean addWatcher(String staffId, WatcherType targetType, Long targetId) {
-			if (StringUtils.isBlank(staffId) || targetType == null || targetId == null || targetId < 0) {
-				return false;
-			}
-			int num = watcherMapper.addWatcher(staffId, targetType.toString(), targetId);
-			if (num == 1) {
-				if (targetType.equals(WatcherType.Project)) {
-					//增加项目的关注量
-					activeStatisticsManager.addWatchersValue(targetId, 1l);
-				}
-				return true;
-			}
-			return false;
+	import org.apache.commons.lang.StringUtils;
+	import org.slf4j.Logger;
+	import org.slf4j.LoggerFactory;
+	import org.springframework.beans.factory.InitializingBean;
+	import org.springframework.util.Assert;
+	import org.springframework.web.HttpRequestHandler;
+
+	import com.alibaba.ak.base.common.RequestMethod;
+	import com.alibaba.ak.base.common.Result;
+	import com.alibaba.ak.base.openapi.data.Pair;
+	import com.alibaba.ak.base.service.AuthorizationService;
+	import com.alibaba.fastjson.JSONObject;
+
+	import static com.alibaba.ak.base.openapi.OpenApiConst.*;
+
+	public class OpenApiHandler implements HttpRequestHandler, InitializingBean {
+
+		private static final Logger LOGGER = LoggerFactory.getLogger(OpenApiHandler.class);
+
+		private static final Pattern API_URL_PATTERN =
+				Pattern.compile("^/(.+)/openapi/(.+[Service|Facade|Manager])/(.+)$");
+
+		private List<Class<?>> interfaces;
+
+		private Map<String, Class<?>> interfaceMap;
+
+		private AuthorizationService authorizationService;
+
+		private String authorizeServiceUrl;
+
+		public String getAuthorizeServiceUrl() {
+			return authorizeServiceUrl;
 		}
-		@Override
-		public boolean deletedWatcher(String staffId, WatcherType targetType, Long targetId) {
-			if (StringUtils.isBlank(staffId) || targetType == null || targetId == null || targetId < 0) {
-				return false;
-			}
-			int num = watcherMapper.deletedWatcher(staffId, targetType.toString(), targetId);
-			if (num > 0) {
-				if (targetType.equals(WatcherType.Project)) {
-					//减少项目的关注量
-					activeStatisticsManager.addWatchersValue(targetId, -1l);
-				}
-				return true;
-			}
-			return false;
+
+		public void setAuthorizeServiceUrl(String authorizeServiceUrl) {
+			this.authorizeServiceUrl = authorizeServiceUrl;
 		}
-		@Override
-		public List<CodeWatchers> getWatchersByType(String staffId, WatcherType targetType) {
-			if (StringUtils.isBlank(staffId) || targetType == null) {
+
+		public List<Class<?>> getInterfaces() {
+			return interfaces;
+		}
+
+		public void setInterfaces(List<Class<?>> interfaces) {
+			this.interfaces = interfaces;
+		}
+
+		public void handleRequest(HttpServletRequest request, HttpServletResponse response)
+				throws ServletException, IOException {
+
+			Object result = null;
+			OpenApiInvocation invocation = createInvocation(request);
+			if (invocation == null) {
+				result = writeErrorResult("invalid invocation");
+			} else {
+				result = doInvoke(invocation);
+			}
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			String jsonString = JSONObject.toJSONString(result);
+			response.getOutputStream().write(jsonString.getBytes(Charset.forName("UTF-8")));
+		}
+
+		private Result<Void> authCheck(OpenApiInvocation invocation) {
+			String clientKey = invocation.getClientKey();
+			String signature = invocation.getSignature();
+			Long timestamp = invocation.getTimestamp();
+			if (StringUtils.isBlank(clientKey)) {
+				clientKey = "unknown";
+				return new Result<Void>("clientKey blank");
+			}
+			if (StringUtils.isBlank(signature)) {
+				return new Result<Void>("signature blank");
+			}
+			if (timestamp == null) {
+				return new Result<Void>("timestamp blank");
+			}
+			String serviceName = invocation.getServiceName();
+			String methodName = invocation.getMethodName();
+			Result<Void> authCheck = authorizationService.authenticate(clientKey, timestamp, signature,
+					serviceName, methodName);
+			if (authCheck != null && authCheck.isSuccess()) {
+				return new Result<Void>();
+			} else {
+				LOGGER.error("authCheck fail, message:" + authCheck.getMessage());
+				return new Result<Void>("authCheck fail, message:" + authCheck.getMessage());
+			}
+		}
+
+		private Object doInvoke(OpenApiInvocation invoc) {
+			Object service = null;
+			String serviceName = invoc.getServiceName();
+			Map<String, OpenApiProviderBean> factorys = OpenApiProviderBean.getFactoryMap();
+			OpenApiProviderBean provider = factorys.get(serviceName);
+			if (provider != null) {
+				try {
+					service = provider.getObject();
+					invoc.setAuthCheckEnable(provider.isAuthCheckEnable());
+				} catch (Exception e) {
+					LOGGER.warn("factory exception", e);
+					return writeErrorResult("factory exception", e);
+				}
+			}
+			if (service == null) {
+				return writeErrorResult("service not found, %s", invoc.getServiceName());
+			}
+			return doInvoke(invoc, service);
+		}
+
+		private Object doInvoke(OpenApiInvocation invoc, Object service) {
+			// do auth check per api
+			if (invoc.isAuthCheckEnable()) {
+				Result<Void> checkResult = authCheck(invoc);
+				if (!checkResult.isSuccess()) {
+					return writeErrorResult(checkResult.getMessage() + ", %s", invoc.getServiceName());
+				}
+			}
+
+			Method method = searchMethod(service, invoc);
+			if (method == null) {
+				return writeErrorResult("method not found");
+			}
+			Object[] params = deserializeArgs(method, invoc.getParameters());
+			try {
+				Object result = method.invoke(service, params);
+				return result;
+			} catch (Exception e) {
+				LOGGER.warn("doInvoke 2", e);
+				return writeErrorResult("invoke exception", e);
+			}
+		}
+
+		private Object[] deserializeArgs(Method method, Object[] params) {
+			Object[] deArgs = new Object[params.length];
+			Class<?>[] types = method.getParameterTypes();
+			for (int i = 0; i < params.length; i++) {
+				@SuppressWarnings("unchecked")
+				Pair<String, String> p = (Pair<String, String>) params[i];
+				Class<?> type = types[i];
+				if (type.isPrimitive() || type.equals(String.class)) {
+					deArgs[i] = (Object) p.getValue();
+				} else if (type.equals(Date.class)) {
+					String text = p.getValue();
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					try {
+						deArgs[i] = sdf.parse(text);
+					} catch (ParseException e) {
+					}
+				} else if (isJSON(p.getValue())) {
+					deArgs[i] = (Object) JSONObject.parseObject(p.getValue(), type);
+				} else {
+					deArgs[i] = null;
+				}
+			}
+			if (deArgs.length == 0) {
 				return null;
 			}
-			return watcherMapper.getWatchersByType(staffId, targetType.toString());
-		}
-		@Override
-		public boolean ReversionWatch(String staffId, WatcherType targetType, Long targetId) {
-			CodeWatchers codeWatchers = watcherMapper.getWatcherByTarget(staffId, targetType.toString(), targetId);
-			if (codeWatchers == null) {
-				return addWatcher(staffId, targetType, targetId);
-			}
-			return deletedWatcher(staffId, targetType, targetId);
+			return deArgs;
 		}
 
+		private boolean isJSON(String value) {
+			if (StringUtils.isBlank(value)) {
+				return false;
+			}
+			try {
+				JSONObject.parse(value);
+			} catch (Exception e) {
+				LOGGER.warn("isJSON", e);
+				return false;
+			}
+			return true;
+		}
+
+		private boolean isInterfaceEquals(String name1, String name2) {
+			if (name1 == null || name2 == null) {
+				return false;
+			}
+			String simp1 = name1.replaceAll("Manager", "");
+			simp1 = simp1.replaceAll("Service", "").replaceAll("Facade", "").replaceAll("Manager", "");
+			String simp2 = name2.replaceAll("Manager", "");
+			simp2 = simp2.replaceAll("Service", "").replaceAll("Facade", "").replaceAll("Manager", "");;
+			return StringUtils.equals(simp1, simp2);
+		}
+
+		/**
+		 * 根据接口方法上的注解判断接口支持的方法，如果注解为null则视为GET/POST都支持
+		 *
+		 * @param method 方法实体
+		 * @param invocMethod 调用实体
+		 * @return
+		 */
+		private boolean isHttpMethodEqual(Method method, String invocMethod) {
+			RequestMethod httpMethod = method.getAnnotation(RequestMethod.class);
+			if (httpMethod == null) {
+				return true;
+			} else {
+				return StringUtils.equalsIgnoreCase(httpMethod.value(), invocMethod);
+			}
+		}
+
+		private Method searchMethod(Object service, OpenApiInvocation invocation) {
+			List<Method> nameMatchedMethod = new ArrayList<Method>();
+			Method[] methods = null;
+			Class<?>[] interfaces = service.getClass().getInterfaces();
+			for (Class<?> inf : interfaces) {
+				if (isInterfaceEquals(inf.getSimpleName(), invocation.getServiceName())) {
+					methods = inf.getMethods();
+					break;
+				}
+			}
+			if (methods == null) {
+				methods = service.getClass().getMethods();
+			}
+			for (Method method : methods) {
+				if (method.getName().equals(invocation.getMethodName())) {
+					if (isHttpMethodEqual(method, invocation.getHttpMethod())) {
+						nameMatchedMethod.add(method);
+					}
+				}
+			}
+			if (nameMatchedMethod.isEmpty()) {
+				LOGGER.warn("cannot find method '" + invocation.getMethodName() + "' by name");
+				return null;
+			}
+			Set<String> givenNames = new HashSet<String>();
+			for (Object param : invocation.getParameters()) {
+				@SuppressWarnings("unchecked")
+				Pair<String, String> pair = (Pair<String, String>) param;
+				givenNames.add(pair.getKey());
+			}
+
+			for (Method method : nameMatchedMethod) {
+				String[] parameterNames = ParamUtils.getParameterNamesBySpring(method);
+				if (parameterNames.length == givenNames.size()
+						&& givenNames.containsAll(Arrays.asList(parameterNames))) {
+					Object[] resortParam = resortParams(parameterNames, invocation.getParameters());
+					invocation.setParameters(resortParam);
+					return method;
+				}
+			}
+			LOGGER.warn("cannot find method by match parameter name, " + invocation.getMethodName());
+			return null;
+		}
+
+		private Object[] resortParams(String[] parameterNames, Object[] params) {
+			Object[] parameters = new Object[parameterNames.length];
+			for (int i = 0; i < parameterNames.length; i++) {
+				String name = parameterNames[i];
+				for (Object param : params) {
+					@SuppressWarnings("unchecked")
+					Pair<String, String> pair = (Pair<String, String>) param;
+					if (pair.getKey().equals(name)) {
+						parameters[i] = pair;
+					}
+				}
+			}
+			return parameters;
+		}
+
+		private Object[] readParameter(Map<String, String[]> parameterMap) {
+			List<Object> params = new ArrayList<Object>();
+			Object[] parameterNames = parameterMap.keySet().toArray();
+			for (int i = 0; i < parameterNames.length; i++) {
+				String paramName = parameterNames[i].toString();
+				if (!paramName.startsWith("_") && !KEY_PARAMS.contains(paramName)) {
+					String value = null;
+					String[] originValue = parameterMap.get(paramName);
+					if (originValue.length != 0) {
+						value = originValue[0];
+					}
+					params.add((Object) new Pair<String, String>(paramName, value));
+				}
+			}
+			return params.toArray();
+		}
+
+		private OpenApiInvocation createInvocation(HttpServletRequest request) {
+			String fullUrl = request.getRequestURI();
+			Matcher matcher = API_URL_PATTERN.matcher(fullUrl);
+			if (!matcher.matches()) {
+				LOGGER.warn("invalid openapi calls, " + fullUrl);
+				return null;
+			}
+			OpenApiInvocation invocation = new OpenApiInvocation();
+			invocation.setServiceName(matcher.group(2));
+			invocation.setMethodName(matcher.group(3));
+			invocation.setFullServiceName(request.getHeader("fullServiceName"));
+			Object[] params = null;
+			params = readParameter(request.getParameterMap());
+			invocation.setParameters(params);
+			// 处理鉴权参数
+			invocation.setClientKey(request.getHeader(KEY_PARAM_CLIENTKEY));
+			if (StringUtils.isBlank(invocation.getClientKey())) {
+				invocation.setClientKey(request.getParameter(KEY_PARAM_CLIENTKEY));
+			}
+			invocation.setSignature(request.getHeader(KEY_PARAM_SIGNATURE));
+			if (StringUtils.isBlank(invocation.getSignature())) {
+				invocation.setSignature(request.getParameter(KEY_PARAM_SIGNATURE));
+			}
+			String timestamp = request.getHeader(KEY_PARAM_TIMESTAMP);
+			if (StringUtils.isNotBlank(timestamp) && StringUtils.isNumeric(timestamp)) {
+				invocation.setTimestamp(Long.valueOf(timestamp));
+			} else {
+				timestamp = request.getParameter(KEY_PARAM_TIMESTAMP);
+				if (StringUtils.isNotBlank(timestamp) && StringUtils.isNumeric(timestamp)) {
+					invocation.setTimestamp(Long.valueOf(timestamp));
+				}
+			}
+			invocation.setHttpMethod(request.getMethod());
+			return invocation;
+		}
+
+		private Object writeErrorResult(String message, Exception e, Object... args) {
+			String msg = String.format(message, args);
+			Result<Object> result = new Result<Object>();
+			result.addFailureMessage(msg);
+			LOGGER.error(msg);
+			if (e != null) {
+				result.addFailureMessage(e.getLocalizedMessage());
+			}
+			return result;
+		}
+
+		private Object writeErrorResult(String message, Object... args) {
+			return writeErrorResult(message, null, args);
+		}
+
+		public void afterPropertiesSet() throws Exception {
+			LOGGER.info("initialize openApiHandler");
+			interfaceMap = new HashMap<String, Class<?>>();
+			if (interfaces != null && !interfaces.isEmpty()) {
+				for (Class<?> clazz : interfaces) {
+					Assert.isTrue(clazz.isInterface());
+					String simpleName = clazz.getSimpleName();
+					interfaceMap.put(simpleName, clazz);
+					// String module = getModuleFromPackage(clazz);
+					// LOGGER.info("mapped /" + module + "/" + simpleName + " to /openapi/" +
+					// simpleName);
+				}
+			} else {
+				LOGGER.warn("interfaces is empty");
+			}
+
+			OpenApiProxyFactoryBean factory = new OpenApiProxyFactoryBean();
+			factory.setServiceInterface(AuthorizationService.class);
+			factory.setServiceUrl(authorizeServiceUrl);
+			factory.afterPropertiesSet();
+			authorizationService = (AuthorizationService) factory.getObject();
+		}
 	}
 		]]>
 	</code-fragment>

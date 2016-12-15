@@ -19,9 +19,8 @@ import java.util.List;
 public class EqualsAvoidNullRule extends AbstractJavaRule {
 
     private static final String XPATH = "//PrimaryExpression[" +
-            "PrimaryPrefix[Name" +
-            "[(ends-with(@Image, '.equals'))]" +
-            "]" +
+            "(PrimaryPrefix[Name[(ends-with(@Image, '.equals'))]]|" +
+            "PrimarySuffix[@Image='equals'])" +
             "[" +
             "(../PrimarySuffix/Arguments/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix)" +
             " and " +
@@ -45,13 +44,13 @@ public class EqualsAvoidNullRule extends AbstractJavaRule {
                         // 如果equals参数是字面量
                         addViolation(data, invocation);
                     } else {
+                        // a.equals(void.class)时,right只包含1个ResultType子节点,name为空
                         ASTName name = right.getFirstChildOfType(ASTName.class);
-                        NameDeclaration nameDeclaration = name.getNameDeclaration();
                         // TODO 在文本件内能找到名称的才进行检查,为null时是跨文件的就无能为力了
-                        if (nameDeclaration == null || nameDeclaration.getNode() == null) {
+                        if (name == null || name.getNameDeclaration() == null || name.getNameDeclaration().getNode() == null) {
                             return super.visit(node, data);
                         }
-                        Node nameNode = nameDeclaration.getNode();
+                        Node nameNode = name.getNameDeclaration().getNode();
                         if ((nameNode instanceof ASTVariableDeclaratorId)
                                 && (nameNode.getNthParent(2) instanceof ASTFieldDeclaration)) {
                             ASTFieldDeclaration field = (ASTFieldDeclaration)nameNode.getNthParent(2);
