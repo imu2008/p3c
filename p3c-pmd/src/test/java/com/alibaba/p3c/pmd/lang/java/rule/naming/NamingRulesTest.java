@@ -10,16 +10,16 @@ public class NamingRulesTest extends SimpleAggregatorTst {
 
     @Override
     public void setUp() {
-        addRule(RULESET, "BooleanPropertyNamingRule");
-        addRule(RULESET, "ArrayTypeStyleNamingRule");
-        addRule(RULESET, "AvoidStartWithDollarAndUnderLineNamingRule");
-        addRule(RULESET, "TestClassNamingRule");
-        addRule(RULESET, "CamelClassNamingRule");
-        addRule(RULESET, "AbstractNamingRule");
-        addRule(RULESET, "ExceptionNamingRule");
+        addRule(RULESET, "ClassNamingShouldBeCamelRule");
+        addRule(RULESET, "AbstractClassShouldStartWithAbstractNamingRule");
+        addRule(RULESET, "ExceptionClassShouldEndWithExceptionRule");
+        addRule(RULESET, "TestClassShouldEndWithTestNamingRule");
         addRule(RULESET, "LowerCamelCaseVariableNamingRule");
-        addRule(RULESET, "ConstantFieldNamingRule");
-        addRule(RULESET, "ServiceClassNamingRule");
+        addRule(RULESET, "AvoidStartWithDollarAndUnderLineNamingRule");
+        addRule(RULESET, "ConstantFieldShouldBeUpperCaseRule");
+        addRule(RULESET, "ServiceOrDaoClassShouldEndWithImplRule");
+        addRule(RULESET, "BooleanPropertyShouldNotStartWithIsRule");
+        addRule(RULESET, "ArrayNamingShouldHaveBracketRule");
         addRule(RULESET, "PackageNamingRule");
     }
 }

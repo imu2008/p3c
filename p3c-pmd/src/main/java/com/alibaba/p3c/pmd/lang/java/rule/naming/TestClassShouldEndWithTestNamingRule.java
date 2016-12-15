@@ -10,7 +10,7 @@ import java.util.List;
  * @author changle.lq@alibaba-inc.com 2016/11/16 上午9:21
  * 测试类命名以它要测试的类的名称开始，以Test结尾
  */
-public class TestClassNamingRule extends AbstractJUnitRule {
+public class TestClassShouldEndWithTestNamingRule extends AbstractJUnitRule {
     
     @Override
     public Object visit(ASTClassOrInterfaceDeclaration node, Object data) {

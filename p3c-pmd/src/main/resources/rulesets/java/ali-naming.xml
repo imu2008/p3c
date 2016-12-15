@@ -5,104 +5,91 @@
          xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
 
 
-    <rule name="CamelClassNamingRule"
+    <rule name="ClassNamingShouldBeCamelRule"
           language="java"
           since="1.6"
-          message="类名使用UpperCamelCase。 不能以下划线或美元符号打头，必须遵从驼峰形式，但以下情形例外：（领域模型的相关命名）DO / DTO / VO / DAO等。
-
-正例：MarcoPolo / UserDO / HtmlDTO / XmlService / TcpUdpDeal / TaPromotion
-
-反例：macroPolo / UserDo / HTMLDto / XMLService / TCPUDPDeal / TAPromotion"
-          class="com.alibaba.p3c.pmd.lang.java.rule.naming.CamelClassNamingRule">
+          message="类名使用UpperCamelCase，必须遵从驼峰形式，但以下情形例外：（领域模型的相关命名）DO / DTO / VO / DAO等"
+          class="com.alibaba.p3c.pmd.lang.java.rule.naming.ClassNamingShouldBeCamelRule">
         <description>
             <![CDATA[
-类名使用UpperCamelCase。 不能以下划线或美元符号打头，必须遵从驼峰形式，但以下情形例外：（领域模型的相关命名）DO / DTO / VO / DAO等。
-            正例：MarcoPolo / UserDO / HtmlDTO / XmlService / TcpUdpDeal / TaPromotion
-            反例：macroPolo / UserDo / HTMLDto / XMLService / TCPUDPDeal / TAPromotion
-                    ]]>
+            类名使用UpperCamelCase，必须遵从驼峰形式，但以下情形例外：（领域模型的相关命名）DO / DTO / VO / DAO等
+            ]]>
         </description>
         <priority>1</priority>
         <example>
             <![CDATA[
-正例：MarcoPolo / UserDO / HtmlDTO / XmlService / TcpUdpDeal / TaPromotion
-            反例：macroPolo / UserDo / HTMLDto / XMLService / TCPUDPDeal / TAPromotion
-]]>
+            类名使用UpperCamelCase，必须遵从驼峰形式，但以下情形例外：（领域模型的相关命名）DO / DTO / VO / DAO等
+            ]]>
         </example>
     </rule>
 
-    <rule name="AbstractNamingRule"
+    <rule name="AbstractClassShouldStartWithAbstractNamingRule"
           language="java"
           since="1.4"
           message="抽象类命名使用Abstract或Base开头"
-          class="com.alibaba.p3c.pmd.lang.java.rule.naming.AbstractNamingRule">
+          class="com.alibaba.p3c.pmd.lang.java.rule.naming.AbstractClassShouldStartWithAbstractNamingRule">
         <description>
             抽象类命名使用Abstract或Base开头
         </description>
         <priority>1</priority>
         <example>
             <![CDATA[
-            // should be AbstractFoo
-public abstract class Foo {
-}
-]]>
+            abstract class BaseControllerDemo{
+            }
+
+            abstract class AbstractActionDemo{
+            }
+        ]]>
         </example>
     </rule>
 
-    <rule name="ExceptionNamingRule"
+    <rule name="ExceptionClassShouldEndWithExceptionRule"
           language="java"
           since="1.6"
           message="异常类命名使用Exception结尾"
-          class="com.alibaba.p3c.pmd.lang.java.rule.naming.ExceptionNamingRule">
+          class="com.alibaba.p3c.pmd.lang.java.rule.naming.ExceptionClassShouldEndWithExceptionRule">
         <description>
             异常类命名使用Exception结尾
         </description>
         <priority>1</priority>
         <example>
             <![CDATA[
-            //异常类需要以Exception结尾
-            public class EndWithExceptionRuleTest extends Exception {
+            class CacheDemoException extends Exception{
             }
             ]]>
         </example>
     </rule>
 
 
-    <rule name="TestClassNamingRule"
+    <rule name="TestClassShouldEndWithTestNamingRule"
           language="java"
           since="1.6"
-          message="测试类命名使用Test结尾"
-          class="com.alibaba.p3c.pmd.lang.java.rule.naming.TestClassNamingRule">
+          message="测试类命名以它要测试的类的名称开始，以Test结尾"
+          class="com.alibaba.p3c.pmd.lang.java.rule.naming.TestClassShouldEndWithTestNamingRule">
         <description>
-            测试类命名使用Test结尾
+            测试类命名以它要测试的类的名称开始，以Test结尾
         </description>
         <priority>1</priority>
         <example>
             <![CDATA[
-        public class TestClassName {
-        @Test
-        public void testCase() {
-
-        }
-    }
-]]>
+            class DemoTest {
+            }
+            ]]>
         </example>
     </rule>
 
     <rule name="LowerCamelCaseVariableNamingRule"
           language="java"
           since="1.6"
-          message="方法名、参数名、成员变量、局部变量都统一使用lowerCamelCase"
+          message="方法名、参数名、成员变量、局部变量都统一使用lowerCamelCase，必须遵从驼峰形式"
           class="com.alibaba.p3c.pmd.lang.java.rule.naming.LowerCamelCaseVariableNamingRule">
         <description>
-            方法名、参数名、成员变量、局部变量都统一使用lowerCamelCase
+            方法名、参数名、成员变量、局部变量都统一使用lowerCamelCase，必须遵从驼峰形式
         </description>
         <priority>1</priority>
         <example>
             <![CDATA[
-            public class VariableNameRuleTest {
-            //命名应当遵守lowerCamelCase
-    private String AbC;
-}
+            方法名、参数名、成员变量、局部变量都统一使用lowerCamelCase，必须遵从驼峰形式
             ]]>
         </example>
     </rule>
@@ -118,54 +105,60 @@ public abstract class Foo {
         <priority>1</priority>
         <example>
             <![CDATA[
-        public class AvoidStartWithDollarAndUnderLineNamingRule {
-        //命名不能以下划线或美元符号开始
-        private String $1;
-    }
+        所有编程相关的命名均不能以下划线或美元符号开始
 ]]>
         </example>
     </rule>
 
-    <rule name="ConstantFieldNamingRule"
+    <rule name="ConstantFieldShouldBeUpperCaseRule"
           language="java"
           since="1.6"
-          message="常量命名应该全部大写，单词间用下划线隔开，力求语义表达完整清楚，不要嫌名字长, Log除外"
-          class="com.alibaba.p3c.pmd.lang.java.rule.naming.ConstantFieldNamingRule">
+          message="常量命名应该全部大写，单词间用下划线隔开，力求语义表达完整清楚，不要嫌名字长"
+          class="com.alibaba.p3c.pmd.lang.java.rule.naming.ConstantFieldShouldBeUpperCaseRule">
         <description>
-            常量命名应该全部大写，单词间用下划线隔开，力求语义表达完整清楚，不要嫌名字长, Log除外
+            常量命名应该全部大写，单词间用下划线隔开，力求语义表达完整清楚，不要嫌名字长
         </description>
         <priority>1</priority>
         <example>
             <![CDATA[
-            public class ConstantFieldNameRuleTest {
-    private   static final int MAX = 5;
-    //Log除外
-    private static final Logger logger = new Logger();
-    //常量命名需要全部大写，单词间用下划线隔开
-    private static final boolean success = true;
-       public void f() {
-         int il = 0;
-       }
-}
+             public class ConstantNameDemo {
+
+            /**
+             * 最大库存数
+             */
+            public static final Long MAX_STOCK_COUNT = 50000L;
+
+            /**
+             * 用户退款状态
+             */
+            public static final String USER_REFUND_STATUS = "USER_REFUND_STATUS";
+
+        }
             ]]>
         </example>
     </rule>
 
-    <rule name="ServiceClassNamingRule"
+    <rule name="ServiceOrDaoClassShouldEndWithImplRule"
           language="java"
           since="1.6"
           message="对于Service和DAO类，基于SOA的理念，暴露出来的服务一定是接口，内部的实现类用Impl的后缀与接口区别"
-          class="com.alibaba.p3c.pmd.lang.java.rule.naming.ServiceClassNamingRule">
+          class="com.alibaba.p3c.pmd.lang.java.rule.naming.ServiceOrDaoClassShouldEndWithImplRule">
         <description>
             对于Service和DAO类，基于SOA的理念，暴露出来的服务一定是接口，内部的实现类用Impl的后缀与接口区别
         </description>
         <priority>1</priority>
         <example>
             <![CDATA[
-            //接口以Service和DAO结尾，实现类必须以Impl作为后缀
-public class ServiceNameRuleTest implements TestDAO{
+                public interface DemoService{
+                    void f();
+                }
 
-}
+                public class DemoServiceImpl implements DemoService {
+                    @Override
+                        public void f(){
+                            System.out.println("hello world");
+                        }
+                }
             ]]>
         </example>
     </rule>
@@ -173,63 +166,51 @@ public class ServiceNameRuleTest implements TestDAO{
     <rule name="PackageNamingRule"
           language="java"
           since="1.6"
-          message="包名统一使用小写，点分隔符之间有且仅有一个自然语义的英语单词。包名统一使用单数形式，但是类名如果有复数含义，类名可以使用复数形式。"
+          message="包名统一使用小写，点分隔符之间有且仅有一个自然语义的英语单词。包名统一使用单数形式，但是类名如果有复数含义，类名可以使用复数形式"
           class="com.alibaba.p3c.pmd.lang.java.rule.naming.PackageNamingRule">
         <description>
-            包名统一使用小写，点分隔符之间有且仅有一个自然语义的英语单词。包名统一使用单数形式，但是类名如果有复数含义，类名可以使用复数形式。
+            包名统一使用小写，点分隔符之间有且仅有一个自然语义的英语单词。包名统一使用单数形式，但是类名如果有复数含义，类名可以使用复数形式
         </description>
         <priority>1</priority>
         <example>
             <![CDATA[
-             // should be lowercase name
-            package com.MyCompany;
-            public class SomeClass {
-            }
-]]>
+                 com.alibaba.mpp.util / com.taobao.tddl.domain.dto
+            ]]>
         </example>
     </rule>
 
-    <rule name="BooleanPropertyNamingRule"
+    <rule name="BooleanPropertyShouldNotStartWithIsRule"
           language="java"
           since="1.6"
           message="POJO类中的任何布尔类型的变量，都不要加is，否则部分框架解析会引起序列化错误"
-          class="com.alibaba.p3c.pmd.lang.java.rule.naming.BooleanPropertyNamingRule">
+          class="com.alibaba.p3c.pmd.lang.java.rule.naming.BooleanPropertyShouldNotStartWithIsRule">
         <description>
             POJO类中的任何布尔类型的变量，都不要加is，否则部分框架解析会引起序列化错误
         </description>
         <priority>1</priority>
         <example>
             <![CDATA[
-    public class FooDAO{
-    //POJO类的boolean属性不要加is
-    private boolean issuccess;
-}
-]]>
+                class DemoDO{
+                    Boolean success;
+                    Boolean delete;
+                }
+            ]]>
         </example>
     </rule>
 
-    <rule name="ArrayTypeStyleNamingRule"
+    <rule name="ArrayNamingShouldHaveBracketRule"
           language="java"
           since="1.6"
-          message="中括号是数组类型的一部分，数组定义如下：String[] args;"
-          class="com.alibaba.p3c.pmd.lang.java.rule.naming.ArrayTypeStyleNamingRule">
+          message="中括号是数组类型的一部分，数组定义如下：String[] args"
+          class="com.alibaba.p3c.pmd.lang.java.rule.naming.ArrayNamingShouldHaveBracketRule">
         <description>
-            中括号是数组类型的一部分，数组定义如下：String[] args;
+            中括号是数组类型的一部分，数组定义如下：String[] args
         </description>
         <priority>1</priority>
         <example>
             <![CDATA[
-  public class ArrayNamingTest{
-    private String[] array1;
-    //中括号应当是数组的一部分
-    private String array2[];
-    public void f(){
-      String[] array3;
-      //中括号应当是数组的一部分
-      String array4[];
-    }
-}
-]]>
+                String[] a = new String[3];
+            ]]>
         </example>
     </rule>
 
