@@ -18,7 +18,7 @@ import net.sourceforge.pmd.lang.java.rule.AbstractJavaRule;
  * 【强制】使用集合转数组的方法，必须使用集合的toArray(T[] array)，传入的是类型完全一样的数组，大小就是list.size()。
  * 
  * @author shengfang.gsf
- * 
+ * @date 2016/12/13
  *
  */
 public class ClassCastExceptionWithToArrayRule extends AbstractJavaRule {

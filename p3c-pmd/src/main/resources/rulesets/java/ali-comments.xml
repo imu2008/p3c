@@ -16,8 +16,33 @@
 
 		<example>
 <![CDATA[
-    // 这是一个class，但注释必须是java doc的格式
-	public class CommentsMustUseJavaDocFormat {}
+/**
+ * 
+ * XXX类功能说明。
+ *
+ */
+public class XxClass implements Serializable {
+    private static final long serialVersionUID = 113323427779853001L;
+    /**
+     * id号
+     */
+    private Long id;
+    /**
+     * 标题
+     */
+    private String title;
+
+    /**
+     * 根据规则ID，查询专场列表
+     * 
+     * @param ruleId 规则ID
+     * @param page 从1开始
+     * @return Result<Xxxx>
+     */
+    public Result<Xxxx> funcA(Long ruleId, Integer page) {
+        return null;
+    }
+}
 ]]>
       </example>
 	</rule>
@@ -33,10 +58,15 @@
 
 		<example>
 <![CDATA[
-	public abstract class CommentsMustUseJavaDocFormat {
-	    // 抽象方法必须要有javadoc注释
-	    public abstract String getName(String firstName, String secondName);
-	}
+    /**
+     * 通过规则id，抽取数据列表。
+     * 
+     * @param ruleId 规则id
+     * @param page 翻页号
+     * @param jsonContext json格式的上下文
+     * @return Result<XxxxDO>
+     */
+    Result<XxxxDO> fetchDataByRuleId(Long ruleId, Integer page, String jsonContext);
 ]]>
       </example>
 	</rule>
@@ -50,10 +80,14 @@
 
 		<example>
 <![CDATA[
-    // should have @author javadoc
-	public class ClassMustHaveAuthorRule {
-	    public abstract String getName(String firstName, String secondName);
-	}
+/**
+ * Demo类
+ * 
+ * @author keriezhang
+ * @date 2016年12月15日 下午4:27:31
+ */
+public class CodeNoteDemo {
+}
 ]]>
       </example>
 	</rule>
@@ -67,11 +101,25 @@
 
 		<example>
 <![CDATA[
-public enum Level {
-    // must have javadoc comment here.
-    HIGH,
-    MEDIUM,
-    LOW
+public enum TestEnum {
+    /**
+     * 审核同意
+     */
+    agree("同意"),
+    /**
+     * 审核退回
+     */
+    reject("退回");
+    
+    private String action;
+
+    TestEnum(String action) {
+        this.action = action;
+    }
+
+    public String getAction() {
+        return action;
+    }
 }
 ]]>
       </example>
@@ -87,16 +135,14 @@ public enum Level {
 
 		<example>
 <![CDATA[
-public class TestCommentBehindCode {
-    private String name; // 类变量后的注释
-    public String getName() {
-        return this.name; // 普通方法语句内的注释
-    }
-    public void setName(String name) {
-        if (null != name) { // if语句之后的注释
-            this.name = name;
-        }
-    }
+public void method() {
+    // 单行注释在需要被注释的代码行上方，（注：//与代码对齐）
+    int a = 3;
+
+    /**
+    * 这里需要大量注释来说明下边的代码的逻辑含义和业务背景（注：/**与代码对齐） 换行接着说
+    */
+    int b = 4;
 }
 ]]>
       </example>

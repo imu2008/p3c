@@ -42,28 +42,37 @@
 		<priority>1</priority>
 
 		<example>
-      <![CDATA[
-      
-	  public class Foo {   
-            private String item;        
-   
-            private void method() {
-                 Integer i = 1;
-                 String t = "bb";
-                 
-                 // whitelist ok
-                 System.out.println(t + "aa"); 
-                 // warn
-                 Integer j =  i + 2;
-                 // warn
-                 String h = t + "cc";             
-           } 
-
-           public String toString(){
-               //whitelist ok
-               return "item = "+item;
-           }
-      }
+      <![CDATA[ 
+	  public class Foo {        
+           private void method() {
+                  Integer i = 1;
+                  Integer k = 0;
+                  Boolean h = false;
+                  //warn
+                  if(i > 2){ 
+                  } 
+                  //ok
+                  if(i != null){ 
+                  }
+                  //ok
+                  if(h != false){ 
+                  }    
+                  for(int j=0 ; j< 10 ; i++){
+               	     //ok
+               	     if(i > 2){ 
+                     }
+                     //ok
+                     if(i != null){ 
+                     }   
+                  }     
+                  while(k < 1){
+                     //ok
+                     if(i > 2){ 
+                     }
+                     k++;
+                  }
+           }   
+      } 
        ]]>
       </example>
 	</rule>
