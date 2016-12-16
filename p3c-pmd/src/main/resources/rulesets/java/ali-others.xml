@@ -14,8 +14,7 @@
 		<priority>1</priority>
 		<example>
 <![CDATA[
-import java.util.regex.Pattern;
-public class PatternCompile {
+public class XxxClass {
     // 利用正则表达式的预编译功能
     private static Pattern NUMBER_PATTERN = Pattern.compile("[0-9]+");
     public Pattern getNumberPattern() {
@@ -38,13 +37,10 @@ public class PatternCompile {
 		<priority>1</priority>
 		<example>
 <![CDATA[
-import java.lang.reflect.InvocationTargetException;
-import org.apache.commons.beanutils.BeanUtils;
-public class MyTest {
-    public void test(Object a, Object b) throws IllegalAccessException, InvocationTargetException {
-        BeanUtils.copyProperties(a, b); // 避免使用apache BeanUtils的cotpy
-    }
-}
+TestObject a = new TestObject();
+TestObject b = new TestObject();
+a.setX(b.getX());
+a.setY(b.getY());
 ]]>
       </example>
 	</rule>
@@ -59,11 +55,15 @@ public class MyTest {
 		<priority>1</priority>
 		<example>
 <![CDATA[
-import java.util.Date;
-public class AvoidNewDateGetTimeRule {
-    public void test() {
-        // 避免下面的使用方式，使用System.currentTimeMillis()
-        long time = new Date().getTime();
+public class TimeMillisDemo {
+    public static void main(String args[]) {
+        // 正例
+        long a = System.currentTimeMillis();
+        // 反例
+        long b = new Date().getTime();
+
+        System.out.println(a);
+        System.out.println(b);
     }
 }
 ]]>

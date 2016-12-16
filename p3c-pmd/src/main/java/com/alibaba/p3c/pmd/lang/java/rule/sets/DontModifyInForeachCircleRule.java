@@ -17,7 +17,7 @@ import net.sourceforge.pmd.lang.java.rule.AbstractJavaRule;
  * 【强制】不要在foreach循环里进行元素的remove/add操作。remove元素请使用Iterator方式
  * 
  * @author shengfang.gsf
- * 
+ * @date 2016/12/13
  *
  */
 public class DontModifyInForeachCircleRule extends AbstractJavaRule {

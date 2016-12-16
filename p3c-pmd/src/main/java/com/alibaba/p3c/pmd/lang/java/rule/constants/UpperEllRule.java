@@ -10,7 +10,7 @@ import net.sourceforge.pmd.lang.java.rule.AbstractJavaRule;
  * 【强制】long或者Long初始赋值时，必须使用大写的L，不能是小写的l，小写容易跟数字1混淆，造成误解。
  * 
  * @author shengfang.gsf
- * 
+ * @date 2016/12/13
  *
  */
 public class UpperEllRule extends AbstractJavaRule {

@@ -21,6 +21,11 @@ public class ClassMustHaveAuthorRule extends AbstractCommentRule {
 
     @Override
     public Object visit(ASTClassOrInterfaceDeclaration decl, Object data) {
+        // 排除内部类
+        if (decl.isNested()) {
+            return super.visit(decl, data);
+        }
+
         Comment comment = decl.comment();
         if (null == comment) {
             addViolation(data, decl);

@@ -53,4 +53,21 @@ public class ClassMustHaveAuthorRule {}
 		<code-ref id="class-with-author-and-date" />
 	</test-code>
 
+	<code-fragment id="class-with-inner-class"><![CDATA[
+/**
+ * @author keriezhang
+ * @date 2016年12月14日 上午11:24:59
+ */
+public class Outer_Demo {
+   public class Inner_Demo {
+   }
+}
+    ]]>
+	</code-fragment>
+	<test-code>
+		<description>Class with inner class.</description>
+		<expected-problems>0</expected-problems>
+		<code-ref id="class-with-inner-class" />
+	</test-code>
+
 </test-data>

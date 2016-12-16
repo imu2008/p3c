@@ -17,7 +17,7 @@ import net.sourceforge.pmd.lang.java.rule.AbstractJavaRule;
  * 【强制】在subList场景中，高度注意对原列表的修改，会导致子列表的遍历、增加、删除均产生ConcurrentModificationException 异常。
  * 
  * @author shengfang.gsf
- * 
+ * @date 2016/12/13
  *
  */
 public class ConcurrentExceptionWithModifyOriginSubListRule extends AbstractJavaRule {

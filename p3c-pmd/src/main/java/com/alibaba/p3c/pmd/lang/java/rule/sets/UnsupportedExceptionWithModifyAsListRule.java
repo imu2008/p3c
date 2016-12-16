@@ -20,7 +20,7 @@ import net.sourceforge.pmd.lang.java.rule.AbstractJavaRule;
  * clear方法会抛出UnsupportedOperationException异常。
  * 
  * @author shengfang.gsf
- * 
+ * @date 2016/12/13
  *
  */
 public class UnsupportedExceptionWithModifyAsListRule extends AbstractJavaRule {
