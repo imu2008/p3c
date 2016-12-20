@@ -1,23 +1,25 @@
 <?xml version="1.0"?>
 
 <ruleset name="AlibabaVelocityOthers" xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
 
-	<rule name="UseQuietReferenceNotationRule" language="vm"
-		message="后台输送给页面的变量必须加感叹号，${var}——中间加感叹号！。"
-		class="com.alibaba.p3c.pmd.lang.vm.rule.others.UseQuietReferenceNotationRule">
-		<description>
+    <rule name="UseQuietReferenceNotationRule" language="vm"
+        message="后台输送给页面的变量必须加感叹号，${var}——中间加感叹号！。"
+        class="com.alibaba.p3c.pmd.lang.vm.rule.others.UseQuietReferenceNotationRule">
+        <description>
+            <![CDATA[
 后台输送给页面的变量必须加$!{var}——中间的感叹号。
 说明：如果var=null或者不存在，那么${var}会直接显示在页面上。
-      </description>
-		<priority>1</priority>
-		<example>
+            ]]>
+        </description>
+        <priority>1</priority>
+        <example>
 <![CDATA[
-<input type="text" name="email" value="$!email"/>
-<input type="text" name="email" value="$!{email}"/>
+    <input type="text" name="email" value="$!email"/>
+    <input type="text" name="email" value="$!{email}"/>
 ]]>
       </example>
-	</rule>
+    </rule>
 
 </ruleset>

@@ -1,73 +1,79 @@
 <?xml version="1.0"?>
 
 <ruleset name="AlibabaJavaOthers" xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
 
-	<rule name="AvoidPatternCompileInMethodRule" language="java"
-		message="在使用正则表达式时，利用好其预编译功能，可以有效加快正则匹配速度。"
-		class="com.alibaba.p3c.pmd.lang.java.rule.others.AvoidPatternCompileInMethodRule">
-		<description>
+    <rule name="AvoidPatternCompileInMethodRule" language="java"
+        message="在使用正则表达式时，利用好其预编译功能，可以有效加快正则匹配速度。"
+        class="com.alibaba.p3c.pmd.lang.java.rule.others.AvoidPatternCompileInMethodRule">
+        <description>
+            <![CDATA[
 在使用正则表达式时，利用好其预编译功能，可以有效加快正则匹配速度。
 说明：不要在方法体内定义：Pattern pattern = Pattern.compile(规则);
-      </description>
-		<priority>1</priority>
-		<example>
+            ]]>
+        </description>
+        <priority>1</priority>
+        <example>
 <![CDATA[
-public class XxxClass {
-    // 利用正则表达式的预编译功能
-    private static Pattern NUMBER_PATTERN = Pattern.compile("[0-9]+");
-    public Pattern getNumberPattern() {
-        // 避免在方法内定义
-        Pattern localPattern = Pattern.compile("[0-9]+");
-        return localPattern;
+    public class XxxClass {
+        // 利用正则表达式的预编译功能
+        private static Pattern NUMBER_PATTERN = Pattern.compile("[0-9]+");
+        public Pattern getNumberPattern() {
+            // 避免在方法内定义
+            Pattern localPattern = Pattern.compile("[0-9]+");
+            return localPattern;
+        }
     }
-}
 ]]>
       </example>
-	</rule>
+    </rule>
 
-	<rule name="AvoidApacheBeanUtilsCopyRule" language="java"
-		message="避免用Apache Beanutils进行属性的copy。" 
-		class="com.alibaba.p3c.pmd.lang.java.rule.others.AvoidApacheBeanUtilsCopyRule">
-		<description>
+    <rule name="AvoidApacheBeanUtilsCopyRule" language="java"
+        message="避免用Apache Beanutils进行属性的copy。"
+        class="com.alibaba.p3c.pmd.lang.java.rule.others.AvoidApacheBeanUtilsCopyRule">
+        <description>
+            <![CDATA[
 避免用Apache Beanutils进行属性的copy。
 说明：Apache BeanUtils性能较差，可以使用其他方案比如Spring BeanUtils, Cglib BeanCopier。
+            ]]>
       </description>
-		<priority>1</priority>
-		<example>
+        <priority>1</priority>
+        <example>
 <![CDATA[
-TestObject a = new TestObject();
-TestObject b = new TestObject();
-a.setX(b.getX());
-a.setY(b.getY());
+    TestObject a = new TestObject();
+    TestObject b = new TestObject();
+    a.setX(b.getX());
+    a.setY(b.getY());
 ]]>
       </example>
-	</rule>
+    </rule>
 
-	<rule name="AvoidNewDateGetTimeRule" language="java"
-		message="获取当前毫秒数：System.currentTimeMillis(); 而不是new Date().getTime();"
-		class="com.alibaba.p3c.pmd.lang.java.rule.others.AvoidNewDateGetTimeRule">
-		<description>
+    <rule name="AvoidNewDateGetTimeRule" language="java"
+        message="获取当前毫秒数：System.currentTimeMillis(); 而不是new Date().getTime();"
+        class="com.alibaba.p3c.pmd.lang.java.rule.others.AvoidNewDateGetTimeRule">
+        <description>
+            <![CDATA[
 获取当前毫秒数：System.currentTimeMillis(); 而不是new Date().getTime();
 说明：如果想获取更加精确的纳秒级时间值，用System.nanoTime。在JDK8中，针对统计时间等场景，推荐使用Instant类。
-      </description>
-		<priority>1</priority>
-		<example>
+            ]]>
+        </description>
+        <priority>1</priority>
+        <example>
 <![CDATA[
-public class TimeMillisDemo {
-    public static void main(String args[]) {
-        // 正例
-        long a = System.currentTimeMillis();
-        // 反例
-        long b = new Date().getTime();
-
-        System.out.println(a);
-        System.out.println(b);
+    public class TimeMillisDemo {
+        public static void main(String args[]) {
+            // 正例
+            long a = System.currentTimeMillis();
+            // 反例
+            long b = new Date().getTime();
+    
+            System.out.println(a);
+            System.out.println(b);
+        }
     }
-}
 ]]>
       </example>
-	</rule>
+    </rule>
 
 </ruleset>

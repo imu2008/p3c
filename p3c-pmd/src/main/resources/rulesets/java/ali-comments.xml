@@ -1,62 +1,65 @@
 <?xml version="1.0"?>
 
 <ruleset name="AlibabaJavaComments" xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
 
 
-	<rule name="CommentsMustBeJavadocFormatRule"
-		message="类、类属性、类方法的注释必须使用javadoc规范，使用/**内容*/格式，不得使用//xxx方式。"
-		class="com.alibaba.p3c.pmd.lang.java.rule.comments.CommentsMustBeJavadocFormatRule">
-		<description>
+    <rule name="CommentsMustBeJavadocFormatRule" message="类、类属性、类方法的注释必须使用javadoc规范，使用/**内容*/格式，不得使用//xxx方式。"
+        class="com.alibaba.p3c.pmd.lang.java.rule.comments.CommentsMustBeJavadocFormatRule">
+        <description>
+            <![CDATA[
 类、类属性、类方法的注释必须使用javadoc规范，使用/**内容*/格式，不得使用//xxx方式。
 说明：在IDE编辑窗口中，javadoc方式会提示相关注释，生成javadoc可以正确输出相应注释；在IDE中，工程调用方法时，不进入方法即可悬浮提示方法、参数、返回值的意义，提高阅读效率。
-      </description>
-		<priority>1</priority>
+            ]]>
+        </description>
+        <priority>1</priority>
 
-		<example>
+        <example>
 <![CDATA[
-/**
- * 
- * XXX类功能说明。
- *
- */
-public class XxClass implements Serializable {
-    private static final long serialVersionUID = 113323427779853001L;
     /**
-     * id号
-     */
-    private Long id;
-    /**
-     * 标题
-     */
-    private String title;
-
-    /**
-     * 根据规则ID，查询专场列表
      * 
-     * @param ruleId 规则ID
-     * @param page 从1开始
-     * @return Result<Xxxx>
+     * XXX类功能说明。
+     *
      */
-    public Result<Xxxx> funcA(Long ruleId, Integer page) {
-        return null;
+    public class XxClass implements Serializable {
+        private static final long serialVersionUID = 113323427779853001L;
+        /**
+         * id号
+         */
+        private Long id;
+        /**
+         * 标题
+         */
+        private String title;
+    
+        /**
+         * 根据规则ID，查询专场列表
+         * 
+         * @param ruleId 规则ID
+         * @param page 从1开始
+         * @return Result<Xxxx>
+         */
+        public Result<Xxxx> funcA(Long ruleId, Integer page) {
+            return null;
+        }
     }
-}
 ]]>
-      </example>
-	</rule>
+        </example>
+    </rule>
 
-	<rule name="AbstractMethodOrInterfaceMethodMustUseJavadocRule"
-		message="所有的抽象方法（包括接口中的方法）必须要用javadoc注释、除了返回值、参数、异常说明外，还必须指出该方法做什么事情，实现什么功能。"
-		class="com.alibaba.p3c.pmd.lang.java.rule.comments.AbstractMethodOrInterfaceMethodMustUseJavadocRule">
-		<description>
+    <rule name="AbstractMethodOrInterfaceMethodMustUseJavadocRule"
+        message="所有的抽象方法（包括接口中的方法）必须要用javadoc注释、除了返回值、参数、异常说明外，还必须指出该方法做什么事情，实现什么功能。"
+        class="com.alibaba.p3c.pmd.lang.java.rule.comments.AbstractMethodOrInterfaceMethodMustUseJavadocRule">
+        <description>
+            <![CDATA[
 所有的抽象方法（包括接口中的方法）必须要用javadoc注释、除了返回值、参数、异常说明外，还必须指出该方法做什么事情，实现什么功能。
 说明：如有实现和调用注意事项，请一并说明。
-      </description>
-		<priority>1</priority>
+            ]]>
+        </description>
+        <priority>1</priority>
 
-		<example>
+        <example>
 <![CDATA[
     /**
      * 通过规则id，抽取数据列表。
@@ -68,83 +71,89 @@ public class XxClass implements Serializable {
      */
     Result<XxxxDO> fetchDataByRuleId(Long ruleId, Integer page, String jsonContext);
 ]]>
-      </example>
-	</rule>
+        </example>
+    </rule>
 
-	<rule name="ClassMustHaveAuthorRule" message="所有的类都必须添加创建者和日期信息。"
-		class="com.alibaba.p3c.pmd.lang.java.rule.comments.ClassMustHaveAuthorRule">
-		<description>
+    <rule name="ClassMustHaveAuthorRule" message="所有的类都必须添加创建者和日期信息。"
+        class="com.alibaba.p3c.pmd.lang.java.rule.comments.ClassMustHaveAuthorRule">
+        <description>
+            <![CDATA[
 所有的类都必须添加创建者和日期信息。
-      </description>
-		<priority>1</priority>
+            ]]>
+        </description>
+        <priority>1</priority>
 
-		<example>
+        <example>
 <![CDATA[
-/**
- * Demo类
- * 
- * @author keriezhang
- * @date 2016年12月15日 下午4:27:31
- */
-public class CodeNoteDemo {
-}
+    /**
+     * Demo类
+     * 
+     * @author keriezhang
+     * @date 2016年12月15日 下午4:27:31
+     */
+    public class CodeNoteDemo {
+    }
 ]]>
-      </example>
-	</rule>
+        </example>
+    </rule>
 
-	<rule name="EnumConstantsMustHaveCommentRule" message="所有的枚举类型字段必须要有注释，说明每个数据项的用途。"
-		class="com.alibaba.p3c.pmd.lang.java.rule.comments.EnumConstantsMustHaveCommentRule">
-		<description>
+    <rule name="EnumConstantsMustHaveCommentRule" message="所有的枚举类型字段必须要有注释，说明每个数据项的用途。"
+        class="com.alibaba.p3c.pmd.lang.java.rule.comments.EnumConstantsMustHaveCommentRule">
+        <description>
+            <![CDATA[
 所有的枚举类型字段必须要有注释，说明每个数据项的用途。
-      </description>
-		<priority>1</priority>
+            ]]>
+        </description>
+        <priority>1</priority>
 
-		<example>
+        <example>
 <![CDATA[
-public enum TestEnum {
-    /**
-     * 审核同意
-     */
-    agree("同意"),
-    /**
-     * 审核退回
-     */
-    reject("退回");
+    public enum TestEnum {
+        /**
+         * 审核同意
+         */
+        agree("同意"),
+        /**
+         * 审核退回
+         */
+        reject("退回");
+        
+        private String action;
     
-    private String action;
-
-    TestEnum(String action) {
-        this.action = action;
+        TestEnum(String action) {
+            this.action = action;
+        }
+    
+        public String getAction() {
+            return action;
+        }
     }
-
-    public String getAction() {
-        return action;
-    }
-}
 ]]>
-      </example>
-	</rule>
+        </example>
+    </rule>
 
-	<rule name="AvoidCommentBehindStatement"
-		message="方法内部单行注释，在被注释语句上方另起一行，使用//注释。方法内部多行注释使用/* */注释。注意与代码对齐。"
-		class="com.alibaba.p3c.pmd.lang.java.rule.comments.AvoidCommentBehindStatement">
-		<description>
+    <rule name="AvoidCommentBehindStatement"
+        message="方法内部单行注释，在被注释语句上方另起一行，使用//注释。方法内部多行注释使用/* */注释。注意与代码对齐。"
+        class="com.alibaba.p3c.pmd.lang.java.rule.comments.AvoidCommentBehindStatement">
+        <description>
+            <![CDATA[
 方法内部单行注释，在被注释语句上方另起一行，使用//注释。方法内部多行注释使用/* */注释。注意与代码对齐。
-      </description>
-		<priority>1</priority>
+            ]]>
+        </description>
+        <priority>1</priority>
 
-		<example>
+        <example>
 <![CDATA[
-public void method() {
-    // 单行注释在需要被注释的代码行上方，（注：//与代码对齐）
-    int a = 3;
-
-    /**
-    * 这里需要大量注释来说明下边的代码的逻辑含义和业务背景（注：/**与代码对齐） 换行接着说
-    */
-    int b = 4;
-}
+    public void method() {
+        // 单行注释在需要被注释的代码行上方，（注：//与代码对齐）
+        int a = 3;
+    
+        /**
+        * 这里需要大量注释来说明下边的代码的逻辑含义和业务背景（注：/**与代码对齐） 换行接着说
+        */
+        int b = 4;
+    }
 ]]>
-      </example>
-	</rule>
+        </example>
+    </rule>
 </ruleset>
