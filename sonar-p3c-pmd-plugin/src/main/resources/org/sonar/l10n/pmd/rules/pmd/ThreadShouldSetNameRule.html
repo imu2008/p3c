@@ -1,0 +1,9 @@
+创建线程或线程池时请指定有意义的线程名称，方便出错时回溯。
+
+<pre>
+public class TimerTaskThread extends Thread {
+    public TimerTaskThread(){
+    super.setName("TimerTaskThread");
+    // ...
+}
+</pre>

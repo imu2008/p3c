@@ -1,0 +1,30 @@
+线程池不允许使用Executors去创建，而是通过ThreadPoolExecutor的方式，这样的处理方式让写的同学更加明确线程池的运行规则，规避资源耗尽的风险。
+
+正例1：
+<pre>
+        //org.apache.commons.lang3.concurrent.BasicThreadFactory
+        ScheduledExecutorService executorService = new ScheduledThreadPoolExecutor(1,
+        new BasicThreadFactory.Builder().namingPattern("example-schedule-pool-%d").daemon(true).build());
+</pre>
+
+正例2：
+<pre>
+        ThreadPoolTaskExecutor userThreadPool = new ThreadPoolTaskExecutor();
+        userThreadPool.setCorePoolSize(20);
+        userThreadPool.setMaxPoolSize(3000);
+        userThreadPool.setKeepAliveSeconds(0);
+        userThreadPool.setQueueCapacity(100);
+</pre>
+
+正例3：
+<pre>
+        &lt;bean id=&quot;userThreadPool&quot;
+            class=&quot;org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor&quot;&gt;
+            &lt;property name=&quot;corePoolSize&quot; value=&quot;10&quot; /&gt;
+            &lt;property name=&quot;maxPoolSize&quot; value=&quot;100&quot; /&gt;
+            &lt;property name=&quot;queueCapacity&quot; value=&quot;2000&quot; /&gt;
+            &lt;property name=&quot;rejectedExecutionHandler&quot;&gt;
+                &lt;ref local=&quot;rejectedExecutionHandler&quot; /&gt;
+            &lt;/property&gt;
+        &lt;/bean&gt;
+</pre>

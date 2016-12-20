@@ -1,0 +1,24 @@
+所有的枚举类型字段必须要有注释，说明每个数据项的用途。
+
+<pre>
+public enum TestEnum {
+    /**
+     * 审核同意
+     */
+    agree("同意"),
+    /**
+     * 审核退回
+     */
+    reject("退回");
+    
+    private String action;
+
+    TestEnum(String action) {
+        this.action = action;
+    }
+
+    public String getAction() {
+        return action;
+    }
+}
+</pre>

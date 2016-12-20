@@ -1,0 +1,9 @@
+避免用Apache Beanutils进行属性的copy。
+说明：Apache BeanUtils性能较差，可以使用其他方案比如Spring BeanUtils, Cglib BeanCopier。
+
+<pre>
+TestObject a = new TestObject();
+TestObject b = new TestObject();
+a.setX(b.getX());
+a.setY(b.getY());
+</pre>

@@ -1,0 +1,14 @@
+不要在foreach循环里进行元素的remove/add操作，remove元素请使用Iterator方式。
+
+<pre>
+public class Foo {   
+    private void method() { 
+        List<String> originList = new ArrayList<String>();
+        originList.add("22");
+        for (String item : originList) { 
+            //warn
+            list.add("bb");
+        } 
+    } 
+}
+</pre>

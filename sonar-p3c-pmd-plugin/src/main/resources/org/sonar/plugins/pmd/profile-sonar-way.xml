@@ -1,6 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ruleset xsi:schemaLocation="http://pmd.sf.net/ruleset/1.0.0 http://pmd.sf.net/ruleset_xml_schema.xsd" xmlns="http://pmd.sf.net/ruleset/1.0.0" xsi:noNamespaceSchemaLocation="http://pmd.sf.net/ruleset_xml_schema.xsd" name="Sonar rules set" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <description>Sonar PMD rules generated configuration</description>
-  <rule ref="rulesets/java/ali-comments.xml/CommentsMustBeJavadocFormatRule" />
-  <rule ref="rulesets/java/ali-naming.xml/TestClassNamingRule" />
+<ruleset
+	xsi:schemaLocation="http://pmd.sf.net/ruleset/1.0.0 http://pmd.sf.net/ruleset_xml_schema.xsd"
+	xmlns="http://pmd.sf.net/ruleset/1.0.0" xsi:noNamespaceSchemaLocation="http://pmd.sf.net/ruleset_xml_schema.xsd"
+	name="Sonar rules set" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<description>Sonar PMD rules generated configuration</description>
+	
+	<!-- Naming -->
+	<rule ref="rulesets/java/ali-naming.xml/ClassNamingShouldBeCamelRule" />
+	<rule ref="rulesets/java/ali-naming.xml/AbstractClassShouldStartWithAbstractNamingRule" />
+	<rule ref="rulesets/java/ali-naming.xml/ExceptionClassShouldEndWithExceptionRule" />
+	<rule ref="rulesets/java/ali-naming.xml/TestClassShouldEndWithTestNamingRule" />
+	<rule ref="rulesets/java/ali-naming.xml/LowerCamelCaseVariableNamingRule" />
+	<rule ref="rulesets/java/ali-naming.xml/AvoidStartWithDollarAndUnderLineNamingRule" />
+	<rule ref="rulesets/java/ali-naming.xml/ConstantFieldShouldBeUpperCaseRule" />
+	<rule ref="rulesets/java/ali-naming.xml/ServiceOrDaoClassShouldEndWithImplRule" />
+	<rule ref="rulesets/java/ali-naming.xml/PackageNamingRule" />
+	<rule ref="rulesets/java/ali-naming.xml/BooleanPropertyShouldNotStartWithIsRule" />
+	<rule ref="rulesets/java/ali-naming.xml/ArrayNamingShouldHaveBracketRule" />
+	
+	<!-- Constants -->
+	<rule ref="rulesets/java/ali-constants.xml/UpperEllRule" />
+	<rule ref="rulesets/java/ali-constants.xml/UndefineMagicConstantRule" />
+	
+	<!-- OOP -->
+	<rule ref="rulesets/java/ali-oop.xml/EqualsAvoidNullRule" />
+	<rule ref="rulesets/java/ali-oop.xml/WrapperTypeEqualityRule" />
+	<rule ref="rulesets/java/ali-oop.xml/PojoMustUsePrimitiveFieldRule" />
+	<rule ref="rulesets/java/ali-oop.xml/PojoNoDefaultValueRule" />
+	<rule ref="rulesets/java/ali-oop.xml/ConstructorNoBusinessLogicRule" />
+	<rule ref="rulesets/java/ali-oop.xml/PojoMustOverrideToStringRule" />
+	
+	<!-- SETS -->
+	<rule ref="rulesets/java/ali-sets.xml/ClassCastExceptionWithToArrayRule" />
+	<rule ref="rulesets/java/ali-sets.xml/UnsupportedExceptionWithModifyAsListRule" />
+	<rule ref="rulesets/java/ali-sets.xml/ClassCastExceptionWithSubListToArrayListRule" />
+	<rule ref="rulesets/java/ali-sets.xml/ConcurrentExceptionWithModifyOriginSubListRule" />
+	<rule ref="rulesets/java/ali-sets.xml/DontModifyInForeachCircleRule" />
+	
+	<!-- CONCURRENT -->
+	<rule ref="rulesets/java/ali-concurrent.xml/ThreadPoolCreationRule" />
+	<rule ref="rulesets/java/ali-concurrent.xml/AvoidUseTimerRule" />
+	<rule ref="rulesets/java/ali-concurrent.xml/AvoidManuallyCreateThreadRule" />
+	<rule ref="rulesets/java/ali-concurrent.xml/ThreadShouldSetNameRule" />
+	<rule ref="rulesets/java/ali-concurrent.xml/AvoidCallStaticSimpleDateFormatRule" />
+	
+	<!-- FLOW CONTROL -->
+	<rule ref="rulesets/java/ali-flowcontrol.xml/SwitchStatementRule" />
+	<rule ref="rulesets/java/ali-flowcontrol.xml/NeedBraceRule" />
+	
+	<!-- Comments -->
+	<rule ref="rulesets/java/ali-comments.xml/CommentsMustBeJavadocFormatRule" />
+	<rule
+		ref="rulesets/java/ali-comments.xml/AbstractMethodOrInterfaceMethodMustUseJavadocRule" />
+	<rule ref="rulesets/java/ali-comments.xml/ClassMustHaveAuthorRule" />
+	<rule ref="rulesets/java/ali-comments.xml/EnumConstantsMustHaveCommentRule" />
+	<rule ref="rulesets/java/ali-comments.xml/AvoidCommentBehindStatement" />
+
+	<!-- Others -->
+	<rule ref="rulesets/java/ali-others.xml/AvoidPatternCompileInMethodRule" />
+	<rule ref="rulesets/java/ali-others.xml/AvoidApacheBeanUtilsCopyRule" />
+	<rule ref="rulesets/java/ali-others.xml/AvoidNewDateGetTimeRule" />
+	<rule ref="rulesets/vm/ali-others.xml/UseQuietReferenceNotationRule" />
+
 </ruleset>

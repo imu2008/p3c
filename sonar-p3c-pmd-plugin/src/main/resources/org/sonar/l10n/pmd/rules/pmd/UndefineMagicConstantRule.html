@@ -1,0 +1,34 @@
+不允许出现任何魔法值（即未经定义的常量）直接出现在代码中。
+
+<pre>
+public class Foo {        
+    private void method() {
+        Integer i = 1;
+        Integer k = 0;
+        Boolean h = false;
+        //warn
+        if(i > 2){ 
+        } 
+        //ok
+        if(i != null){ 
+        }
+        //ok
+        if(h != false){ 
+        }    
+        for(int j=0 ; j< 10 ; i++){
+	        //ok
+	        if(i > 2){ 
+	        }
+	        //ok
+	        if(i != null){ 
+	        }   
+    	}     
+        while(k < 1){
+            //ok
+            if(i > 2){ 
+            }
+            k++;
+        }
+    }
+} 
+</pre>

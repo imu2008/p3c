@@ -1,6 +1,32 @@
-类、类属性、类方法的注释必须使用javadoc规范，使用/**内容*/格式，不得使用//xxx方式。例如:
+类、类属性、类方法的注释必须使用javadoc规范，使用/**内容*/格式，不得使用//xxx方式。
+说明：在IDE编辑窗口中，javadoc方式会提示相关注释，生成javadoc可以正确输出相应注释；在IDE中，工程调用方法时，不进入方法即可悬浮提示方法、参数、返回值的意义，提高阅读效率。
 
 <pre>
-   // 这是一个class，但注释必须是java doc的格式
-	public class CommentsMustUseJavaDocFormat {}
+/**
+ * 
+ * XXX类功能说明。
+ *
+ */
+public class XxClass implements Serializable {
+    private static final long serialVersionUID = 113323427779853001L;
+    /**
+     * id号
+     */
+    private Long id;
+    /**
+     * 标题
+     */
+    private String title;
+
+    /**
+     * 根据规则ID，查询专场列表
+     * 
+     * @param ruleId 规则ID
+     * @param page 从1开始
+     * @return Result<Xxxx>
+     */
+    public Result<Xxxx> funcA(Long ruleId, Integer page) {
+        return null;
+    }
+}
 </pre>
