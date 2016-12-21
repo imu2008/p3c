@@ -2,6 +2,7 @@ package com.alibaba.p3c.pmd.lang.java.rule.naming;
 
 import net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceType;
 import net.sourceforge.pmd.lang.java.ast.ASTFieldDeclaration;
+import net.sourceforge.pmd.lang.java.ast.ASTVariableDeclaratorId;
 import net.sourceforge.pmd.lang.java.rule.AbstractJavaRule;
 import org.apache.commons.lang3.StringUtils;
 
@@ -34,7 +35,7 @@ public class ConstantFieldShouldBeUpperCaseRule extends AbstractJavaRule {
                 return super.visit(node, data);
             }
             if (!(constantName.equals(constantName.toUpperCase()))) {
-                addViolation(data, node);
+                addViolation(data, node.getFirstDescendantOfType(ASTVariableDeclaratorId.class));
             }
             return super.visit(node, data);
         }
