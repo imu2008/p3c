@@ -13,7 +13,7 @@
 Object的equals方法容易抛空指针异常，应使用常量或确定有值的对象来调用equals。
 			]]>
         </description>
-        <priority>1</priority>
+        <priority>2</priority>
 
         <example>
             <![CDATA[
@@ -62,7 +62,7 @@ if (a.equals(b)) {
  3） 所有的局部变量使用基本数据类型。
 			]]>
         </description>
-        <priority>1</priority>
+        <priority>3</priority>
 
         <example>
             <![CDATA[
@@ -83,7 +83,7 @@ public class DemoDO {
 定义DO/DTO/VO等POJO类时，不要加任何属性默认值。
 			]]>
         </description>
-        <priority>1</priority>
+        <priority>3</priority>
 
         <example>
             <![CDATA[
@@ -136,7 +136,7 @@ public class InitDemo {
 POJO类必须写toString方法。使用工具类source> generate toString时，如果继承了另一个POJO类，注意在前面加一下super.toString。
 			]]>
         </description>
-        <priority>1</priority>
+        <priority>3</priority>
 
         <example>
             <![CDATA[
