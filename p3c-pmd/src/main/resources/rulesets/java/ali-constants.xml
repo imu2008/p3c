@@ -16,13 +16,16 @@ long或者Long初始赋值时，必须使用大写的L，不能是小写的l，�
 		<priority>1</priority> 
 		<example>
       <![CDATA[
-long或者Long初始赋值时，必须使用大写的L，不能是小写的l，小写容易跟数字1混淆，造成误解。 
 反例:  
-   Long warn = 1l; 
+   Long warn = 1l;  
+       ]]>
+        </example> 
+        <example>
+        <![CDATA[
 正例:
    Long notwarn = 1L;   
-       ]]>
-      </example>
+        ]]>
+         </example>
 	</rule>
 	
 	<rule name="UndefineMagicConstantRule"
@@ -36,16 +39,20 @@ long或者Long初始赋值时，必须使用大写的L，不能是小写的l，�
 		<priority>3</priority>
 
 		<example>
-      <![CDATA[    
+        <![CDATA[    
 反例: 
    if(key.equals("Id#taobao_1")){ 
       //...业务逻辑
-   }   
+   }    
+         ]]>
+        </example>
+        <example>
+        <![CDATA[ 
 正例: 
    //魔法值需要有常量名称定义
    String KEY_PRE = "Id#taobao_1";  
    if(key.equals(KEY_PRE)){ 
-   //...
+       //...业务逻辑
    }
       ]]>
       </example>
