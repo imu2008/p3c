@@ -15,7 +15,8 @@ public class OopRuleTest extends SimpleAggregatorTst {
         addRule(RULESET, "EqualsAvoidNullRule");
         addRule(RULESET, "WrapperTypeEqualityRule");
         addRule(RULESET, "PojoNoDefaultValueRule");
-        addRule(RULESET, "ConstructorNoBusinessLogicRule");
+        // 由于业务逻辑不好界定，本规则先取消不进行检查
+        // addRule(RULESET, "ConstructorNoBusinessLogicRule");
         addRule(RULESET, "PojoMustUsePrimitiveFieldRule");
         addRule(RULESET, "PojoMustOverrideToStringRule");
     }

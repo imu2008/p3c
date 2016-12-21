@@ -10,7 +10,7 @@ import net.sourceforge.pmd.lang.java.rule.AbstractJavaRule;
  */
 public class ConstructorNoBusinessLogicRule extends AbstractJavaRule {
 
-    // TODO 根据之前的讨论,构造函数中不能有任何控制语句.这样的判断太粗暴,构造函数完全废了,是否可酌情放开?
+    // TODO 由于业务逻辑不好界定，本规则先取消不进行检查，已从配置文件拿掉，代码暂时保留
     @Override
     public Object visit(ASTConstructorDeclaration node, Object data) {
         if (node.hasDecendantOfAnyType(
