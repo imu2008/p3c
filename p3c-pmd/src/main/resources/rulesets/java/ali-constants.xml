@@ -9,71 +9,52 @@
 		message="long或者Long初始赋值时，必须使用大写的L，不能是小写的l，小写容易跟数字1混淆，造成误解。"
 		class="com.alibaba.p3c.pmd.lang.java.rule.constants.UpperEllRule">
 		<description>
-            long或者Long初始赋值时，必须使用大写的L，不能是小写的l，小写容易跟数字1混淆，造成误解。
+		<![CDATA[ 
+long或者Long初始赋值时，必须使用大写的L，不能是小写的l，小写容易跟数字1混淆，造成误解。
+        ]]> 
         </description>
-		<priority>1</priority>
-
+		<priority>1</priority> 
 		<example>
       <![CDATA[
-      // long或者Long初始赋值时，必须使用大写的L，不能是小写的l，小写容易跟数字1混淆，造成误解
-	   public class Foo { 
-            private static final long IGNORE = 666l + 666L; //warn
-        
-            private static final String notWarn = "666l"; //ok
-        
-            private static final Long notWarn = 666L; //ok
-            
-            private void processUpperEll(long aLong) {
-                long bad = (4+5*7^66l/7+890) //warn
-                    & (88l + 78 * 4); //warn
-                long good = (4+5*7^66L/7+890) & (88L + 78 * 4); //ok
-             } 
-        }
+反例:  
+   Long warn = 1l;  
        ]]>
-      </example>
+        </example> 
+        <example>
+        <![CDATA[
+正例:
+   Long notwarn = 1L;   
+        ]]>
+         </example>
 	</rule>
 	
 	<rule name="UndefineMagicConstantRule"
 		message="不允许出现任何魔法值（即未经定义的常量）直接出现在代码中。"
 		class="com.alibaba.p3c.pmd.lang.java.rule.constants.UndefineMagicConstantRule">
 		<description>
-            不允许出现任何魔法值（即未经定义的常量）直接出现在代码中。
+		<![CDATA[
+不允许出现任何魔法值（即未经定义的常量）直接出现在代码中。
+        ]]>
         </description>
-		<priority>1</priority>
+		<priority>3</priority>
 
 		<example>
-      <![CDATA[ 
-	  public class Foo {        
-           private void method() {
-                  Integer i = 1;
-                  Integer k = 0;
-                  Boolean h = false;
-                  //warn
-                  if(i > 2){ 
-                  } 
-                  //ok
-                  if(i != null){ 
-                  }
-                  //ok
-                  if(h != false){ 
-                  }    
-                  for(int j=0 ; j< 10 ; i++){
-               	     //ok
-               	     if(i > 2){ 
-                     }
-                     //ok
-                     if(i != null){ 
-                     }   
-                  }     
-                  while(k < 1){
-                     //ok
-                     if(i > 2){ 
-                     }
-                     k++;
-                  }
-           }   
-      } 
-       ]]>
+        <![CDATA[    
+反例: 
+   if(key.equals("Id#taobao_1")){ 
+      //...业务逻辑
+   }    
+         ]]>
+        </example>
+        <example>
+        <![CDATA[ 
+正例: 
+   //魔法值需要有常量名称定义
+   String KEY_PRE = "Id#taobao_1";  
+   if(key.equals(KEY_PRE)){ 
+       //...业务逻辑
+   }
+      ]]>
       </example>
 	</rule>
 

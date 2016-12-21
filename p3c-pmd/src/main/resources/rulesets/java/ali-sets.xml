@@ -8,24 +8,25 @@
 		message="使用集合转数组的方法，必须使用集合的toArray(T[] array)，传入的是类型完全一样的数组，大小就是list.size()"
 		class="com.alibaba.p3c.pmd.lang.java.rule.sets.ClassCastExceptionWithToArrayRule">
 		<description>
-            使用集合转数组的方法，必须使用集合的toArray(T[] array)，传入的是类型完全一样的数组，大小就是list.size()。
+        <![CDATA[
+使用集合转数组的方法，必须使用集合的toArray(T[] array)，传入的是类型完全一样的数组，大小就是list.size()。
+        ]]>
         </description>
-		<priority>1</priority>
-
+		<priority>2</priority> 
 		<example>
-      <![CDATA[
-       //使用集合转数组的方法，必须使用集合的toArray(T[] array)，传入的是类型完全一样的数组，大小就是list.size()。
-	   public class Foo {   
-            private void processUpperEll(long aLong) {
-              // warn
-              Integer[] a = (Integer [])c.toArray();
-
-              // ok
-              Integer[] b = (Integer [])c.toArray(new Integer[c.size()]);
-             } 
-        }
-       ]]>
-      </example>
+        <![CDATA[    
+反例: 
+   //以下代码中变量c为集合     
+   Integer[] a = (Integer [])c.toArray();
+        ]]>
+        </example> 
+        <example>
+        <![CDATA[
+正例：
+   //以下代码中变量c为集合
+   Integer[] b = (Integer [])c.toArray(new Integer[c.size()]); 
+         ]]>
+        </example>
 	</rule>
 
 	<rule name="UnsupportedExceptionWithModifyAsListRule"
@@ -34,68 +35,69 @@
 		<description>
             使用工具类Arrays.asList()把数组转换成集合时，不能使用其修改集合相关的方法，它的add/remove/clear方法会抛出UnsupportedOperationException异常。
         </description>
-		<priority>1</priority>
-
+		<priority>2</priority> 
 		<example>
-      <![CDATA[
-       public class Foo {   
-            private void method(){
-			    List<String> t   = Arrays.asList("a","b","c"); 
-			    //warn
-			    t.add("22");
-			    //warn
-			    t.remove("22");
-			    //warn
-			    t.clear();
-			}
-        }
-       ]]>
-      </example>
+       <![CDATA[
+数组转换成集合，使用的是适配器模式，后台数据仍然是数组，转换过来的集合不能对原始数组的元素个数有任何改动。
+反例:
+   List<String> t   = Arrays.asList("a","b","c"); 
+   //warn
+   t.add("22");
+   //warn
+   t.remove("22");
+   //warn
+   t.clear(); 
+         ]]>
+         </example>
 	</rule>
 
     <rule name="ClassCastExceptionWithSubListToArrayListRule"
 		message="ArrayList的subList结果不可强转成ArrayList，否则会抛出ClassCastException异常。"
 		class="com.alibaba.p3c.pmd.lang.java.rule.sets.ClassCastExceptionWithSubListToArrayListRule">
 		<description>
-            ArrayList的subList结果不可强转成ArrayList，否则会抛出ClassCastException异常。
+     <![CDATA[            
+ArrayList的subList结果不可强转成ArrayList，否则会抛出ClassCastException异常。
+说明:禁止强转，如果需要用到集合特性方法，请新建一个集合，然后置入sublist,new 集合(sublist结果)。
+      ]]>  
         </description>
-		<priority>1</priority>
-
+		<priority>2</priority> 
 		<example>
-      <![CDATA[
-      public class Foo {   
-            private void method() { 
-                  List<String> list = new ArrayList<String>();
-                  list.add("22");
-                  //warn
-                  List<String> test = (ArrayList<String>) list.subList(0, 1);	   
-             } 
-      }
-       ]]>
-      </example>
+        <![CDATA[ 
+反例:
+   List<String> list = new ArrayList<String>();
+   list.add("22");
+   //warn
+   List<String> test = (ArrayList<String>) list.subList(0, 1);	 
+         ]]>
+        </example>
+        <example>
+        <![CDATA[ 
+正例:
+   List<String> list2 = new ArrayList<String>(list.subList(0, 1));
+         ]]>
+         </example>
 	</rule>
 	 
 	<rule name="ConcurrentExceptionWithModifyOriginSubListRule"
 		message="在subList场景中，高度注意对原列表的修改，会导致子列表的遍历、增加、删除均产生ConcurrentModificationException异常。"
 		class="com.alibaba.p3c.pmd.lang.java.rule.sets.ConcurrentExceptionWithModifyOriginSubListRule">
 		<description>
-            在subList场景中，高度注意对原列表的修改，会导致子列表的遍历、增加、删除均产生ConcurrentModificationException异常。
+        <![CDATA[           
+在subList场景中，高度注意对原列表的修改，会导致子列表的遍历、增加、删除均产生ConcurrentModificationException异常。
+        ]]> 
         </description>
-		<priority>1</priority>
-
+		<priority>2</priority> 
 		<example>
       <![CDATA[
-      public class Foo {   
-            private void method() { 
-                  List<String> originList = new ArrayList<String>();
-                  originList.add("22");
-                  List<String> subList = originList.subList(0, 1);
-                  //warn
-                  originList.add("22");
-             } 
-      }
+如果对于原来集合有修改操作，那么不能用使用直接subList来返回子集合,new集合(原集合.subList(x, y))。   
+反例:                
+   List<String> originList = new ArrayList<String>();
+   originList.add("22");
+   List<String> subList = originList.subList(0, 1);
+   //warn
+   originList.add("22"); 
        ]]>
-      </example>
+         </example>
 	</rule>
 	
 	
@@ -103,23 +105,37 @@
 		message="不要在foreach循环里进行元素的remove/add操作，remove元素请使用Iterator方式。"
 		class="com.alibaba.p3c.pmd.lang.java.rule.sets.DontModifyInForeachCircleRule">
 		<description>
-           不要在foreach循环里进行元素的remove/add操作，remove元素请使用Iterator方式。
+		<![CDATA[   
+不要在foreach循环里进行元素的remove/add操作，remove元素请使用Iterator方式。
+        ]]> 
         </description>
 		<priority>1</priority>
 
 		<example>
-      <![CDATA[
-      public class Foo {   
-            private void method() { 
-                  List<String> originList = new ArrayList<String>();
-                  originList.add("22");
-                  for (String item : originList) { 
-                     //warn
-                     list.add("bb");
-                  } 
-             } 
-      }
-       ]]>
+        <![CDATA[ 
+反例:   
+   List<String> originList = new ArrayList<String>();
+   originList.add("22");
+   for (String item : originList) { 
+      //warn
+      list.add("bb");
+   }  
+        ]]>
+       </example> 
+      <example>
+       <![CDATA[ 
+ 正例:
+   //返回对此set集合b中元素进行迭代的迭代器。返回元素的顺序并不是固定的。
+   Iterator<Integer> it=b.iterator();		 
+   while(it.hasNext()){                      
+      Integer temp =  it.next();             
+      //如果while(true)硬来，那么出错：java.util.NoSuchElementException 
+      if(删除元素的条件){              
+         it.remove();       
+      } 
+      //从迭代器指向的 collection 中移除迭代器返回的最后一个元素。
+   }      
+		 ]]>   
       </example>
 	</rule>
 </ruleset>
