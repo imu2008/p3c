@@ -18,9 +18,9 @@ long或者Long初始赋值时，必须使用大写的L，不能是小写的l，�
       <![CDATA[
 long或者Long初始赋值时，必须使用大写的L，不能是小写的l，小写容易跟数字1混淆，造成误解。 
 反例:  
-         Long warn = 1l; 
+   Long warn = 1l; 
 正例:
-         Long notwarn = 1L;   
+   Long notwarn = 1L;   
        ]]>
       </example>
 	</rule>
@@ -38,15 +38,15 @@ long或者Long初始赋值时，必须使用大写的L，不能是小写的l，�
 		<example>
       <![CDATA[    
 反例: 
-     if(key.equals("Id#taobao_1")){ 
-       //...业务逻辑
-     }   
+   if(key.equals("Id#taobao_1")){ 
+      //...业务逻辑
+   }   
 正例: 
-     //魔法值需要有常量名称定义
-     String KEY_PRE = "Id#taobao_1";  
-     if(key.equals(KEY_PRE)){ 
-     //...
-     }
+   //魔法值需要有常量名称定义
+   String KEY_PRE = "Id#taobao_1";  
+   if(key.equals(KEY_PRE)){ 
+   //...
+   }
       ]]>
       </example>
 	</rule>
