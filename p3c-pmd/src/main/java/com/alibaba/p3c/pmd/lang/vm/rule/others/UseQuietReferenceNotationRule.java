@@ -11,10 +11,10 @@ import net.sourceforge.pmd.lang.rule.XPathRule;
  */
 public class UseQuietReferenceNotationRule extends XPathRule {
     /**
-     * 赋值、条件判断、循环语句等，均不做判断。
+     * set语句排除，其他语句均做判断。
      */
     private static final String XPATH =
-            "//Reference[matches(@literal, \"\\$[^!]+\")]";
+            "//Reference[matches(@literal, \"\\$[^!]+\") and not(ancestor::SetDirective)]";
 
     public UseQuietReferenceNotationRule() {
         super(XPATH);

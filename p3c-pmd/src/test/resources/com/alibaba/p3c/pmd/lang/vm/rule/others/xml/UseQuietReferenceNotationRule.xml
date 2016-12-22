@@ -28,7 +28,7 @@
 		<code-ref id="not-use-quiet-reference-notation" />
 	</test-code>
 	
-	<code-fragment id="directives-is-considered"><![CDATA[
+	<code-fragment id="set-directives-is-not-considered"><![CDATA[
 #set( $email = "email" )
 #set( ${email} = "email" )
 #if( $foo )
@@ -44,8 +44,8 @@
 	</code-fragment>
 	
 	<test-code>
-		<description>Directives is considered</description>
-		<expected-problems>7</expected-problems>
-		<code-ref id="directives-is-considered" />
+		<description>SetDirectives is not considered</description>
+		<expected-problems>5</expected-problems>
+		<code-ref id="set-directives-is-not-considered" />
 	</test-code>
 </test-data>
