@@ -74,11 +74,11 @@
         </example>
     </rule>
 
-    <rule name="ClassMustHaveAuthorRule" message="所有的类都必须添加创建者和日期信息。"
+    <rule name="ClassMustHaveAuthorRule" message="所有的类都必须添加创建者信息。"
         class="com.alibaba.p3c.pmd.lang.java.rule.comments.ClassMustHaveAuthorRule">
         <description>
             <![CDATA[
-所有的类都必须添加创建者和日期信息。
+所有的类都必须添加创建者信息。
             ]]>
         </description>
         <priority>1</priority>
@@ -89,7 +89,6 @@
      * Demo类
      * 
      * @author keriezhang
-     * @date 2016年12月15日 下午4:27:31
      */
     public class CodeNoteDemo {
     }
