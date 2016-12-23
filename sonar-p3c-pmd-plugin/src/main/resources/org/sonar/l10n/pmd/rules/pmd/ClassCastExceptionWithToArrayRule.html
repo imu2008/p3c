@@ -1,13 +1,13 @@
 使用集合转数组的方法，必须使用集合的toArray(T[] array)，传入的是类型完全一样的数组，大小就是list.size()。
 
+  
+//以下代码中c为集合
+
+反例:
 <pre>
-public class Foo {   
-    private void processUpperEll(long aLong) {
-	    // warn
-	    Integer[] a = (Integer [])c.toArray();
-	
-	    // ok
-	    Integer[] b = (Integer [])c.toArray(new Integer[c.size()]);
-    } 
-}
+Integer[] a = (Integer [])c.toArray();
+</pre>
+正例：
+<pre>
+Integer[] b = (Integer [])c.toArray(new Integer[c.size()]);
 </pre>

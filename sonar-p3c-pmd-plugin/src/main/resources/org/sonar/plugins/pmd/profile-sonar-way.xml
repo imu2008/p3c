@@ -27,7 +27,9 @@
 	<rule ref="rulesets/java/ali-oop.xml/WrapperTypeEqualityRule" />
 	<rule ref="rulesets/java/ali-oop.xml/PojoMustUsePrimitiveFieldRule" />
 	<rule ref="rulesets/java/ali-oop.xml/PojoNoDefaultValueRule" />
+	<!-- 这条规则暂时取消
 	<rule ref="rulesets/java/ali-oop.xml/ConstructorNoBusinessLogicRule" />
+	 -->
 	<rule ref="rulesets/java/ali-oop.xml/PojoMustOverrideToStringRule" />
 	
 	<!-- SETS -->

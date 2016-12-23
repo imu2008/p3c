@@ -1,14 +1,25 @@
 不要在foreach循环里进行元素的remove/add操作，remove元素请使用Iterator方式。
 
+反例：
 <pre>
-public class Foo {   
-    private void method() { 
-        List<String> originList = new ArrayList<String>();
-        originList.add("22");
-        for (String item : originList) { 
-            //warn
-            list.add("bb");
-        } 
-    } 
-}
+List<String> originList = new ArrayList<String>();
+originList.add("22");
+for (String item : originList) { 
+   //warn
+   list.add("bb");
+}  
 </pre>
+
+正例：
+<pre>
+//返回对此set集合b中元素进行迭代的迭代器。返回元素的顺序并不是固定的。
+Iterator<Integer> it=b.iterator();		 
+while(it.hasNext()){                      
+   Integer temp =  it.next();             
+   //如果while(true)硬来，那么出错：java.util.NoSuchElementException 
+   if(删除元素的条件){              
+      it.remove();       
+   } 
+   //从迭代器指向的 collection 中移除迭代器返回的最后一个元素。
+} 
+</pre> 

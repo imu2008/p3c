@@ -1,18 +1,10 @@
 long或者Long初始赋值时，必须使用大写的L，不能是小写的l，小写容易跟数字1混淆，造成误解。
 
+反例:  
 <pre>
-// long或者Long初始赋值时，必须使用大写的L，不能是小写的l，小写容易跟数字1混淆，造成误解
-public class Foo { 
-    private static final long IGNORE = 666l + 666L; //warn
-        
-    private static final String notWarn = "666l"; //ok
-        
-    private static final Long notWarn = 666L; //ok
-            
-    private void processUpperEll(long aLong) {
-        long bad = (4+5*7^66l/7+890) //warn
-            & (88l + 78 * 4); //warn
-        long good = (4+5*7^66L/7+890) & (88L + 78 * 4); //ok
-    } 
-}
+Long warn = 1l;  
+</pre>
+正例:
+<pre>
+Long notwarn = 1L;  
 </pre>
