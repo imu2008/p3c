@@ -1,5 +1,12 @@
 线程池不允许使用Executors去创建，而是通过ThreadPoolExecutor的方式，这样的处理方式让写的同学更加明确线程池的运行规则，规避资源耗尽的风险。
 
+
+说明：Executors各个方法的弊端：
+1）newFixedThreadPool和newSingleThreadExecutor:
+  主要问题是堆积的请求处理队列可能会耗费非常大的内存，甚至OOM。
+2）newCachedThreadPool和newScheduledThreadPool:
+  主要问题是线程数最大数是Integer.MAX_VALUE，可能会创建数量非常多的线程，甚至OOM
+
 正例1：
 <pre>
         //org.apache.commons.lang3.concurrent.BasicThreadFactory
@@ -9,11 +16,16 @@
 
 正例2：
 <pre>
-        ThreadPoolTaskExecutor userThreadPool = new ThreadPoolTaskExecutor();
-        userThreadPool.setCorePoolSize(20);
-        userThreadPool.setMaxPoolSize(3000);
-        userThreadPool.setKeepAliveSeconds(0);
-        userThreadPool.setQueueCapacity(100);
+        ThreadFactory namedThreadFactory = new ThreadFactoryBuilder()
+            .setNameFormat("demo-pool-%d").build();
+        
+        //通用线程池
+        ExecutorService pool = new ThreadPoolExecutor(5, 200,
+             0L, TimeUnit.MILLISECONDS,
+             new LinkedBlockingQueue<Runnable>(1024), namedThreadFactory, new ThreadPoolExecutor.AbortPolicy());
+        
+        pool.execute(()-> System.out.println(Thread.currentThread().getName()));
+        pool.shutdown();//gracefully shutdown
 </pre>
 
 正例3：
@@ -23,8 +35,12 @@
             &lt;property name=&quot;corePoolSize&quot; value=&quot;10&quot; /&gt;
             &lt;property name=&quot;maxPoolSize&quot; value=&quot;100&quot; /&gt;
             &lt;property name=&quot;queueCapacity&quot; value=&quot;2000&quot; /&gt;
+			// 请引入一个已经设置过工厂名称的线程工厂对象
+			&lt;property name=&quot;threadFactory&quot; value=threadFactory  /&gt;
             &lt;property name=&quot;rejectedExecutionHandler&quot;&gt;
                 &lt;ref local=&quot;rejectedExecutionHandler&quot; /&gt;
             &lt;/property&gt;
         &lt;/bean&gt;
+		//in code
+        userThreadPool.execute(thread);
 </pre>
