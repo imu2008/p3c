@@ -18,6 +18,9 @@
 	    	if (a != null) {	// OK
 	    		// do nothing
 	    	}
+	    	if (a == 2) {	// OK
+	    		// do nothing
+	    	}
 	    }
 	}
 		]]>

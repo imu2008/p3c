@@ -30,7 +30,7 @@ public class SwitchStatementRule extends AbstractJavaRule {
     // 检查case语句中包含break, return, throw, continue
     private void checkFallThrough(ASTSwitchStatement node, Object data) {
         // 参考PMD MissingBreakInSwitch的XPth规则
-        final String XPATH = "//SwitchStatement[(count(.//BreakStatement)" +
+        final String XPATH = "../SwitchStatement[(count(.//BreakStatement)" +
                 " + count(BlockStatement//Statement/ReturnStatement)" +
                 " + count(BlockStatement//Statement/ThrowStatement)" +
                 " + count(BlockStatement//Statement/IfStatement[@Else='true' and Statement[2][ReturnStatement|ThrowStatement]]" +
@@ -39,8 +39,7 @@ public class SwitchStatementRule extends AbstractJavaRule {
                 " + count(SwitchLabel[count(following-sibling::node()) = 0])" +
                 "  < count (SwitchLabel))]";
 
-        // TODO 从自身节点匹配
-        if (node.jjtGetParent().hasDescendantMatchingXPath(XPATH)) {
+        if (node.hasDescendantMatchingXPath(XPATH)) {
             addViolation(data, node);
         }
     }

@@ -29,6 +29,8 @@
 		<code-ref id="switch-no-default-1" />
 	</test-code>
 
+    <!-- ====================================================================== -->
+
 	<code-fragment id="switch-no-default-2">
 		<![CDATA[
 	public class Foo {
@@ -58,6 +60,8 @@
 		<code-ref id="switch-no-default-1" />
 	</test-code>
 
+    <!-- ====================================================================== -->
+
 	<code-fragment id="switch-case-no-break">
 		<![CDATA[
 	public class Foo {
@@ -84,4 +88,156 @@
 		<expected-problems>1</expected-problems>
 		<code-ref id="switch-case-no-break" />
 	</test-code>
+
+    <!-- ====================================================================== -->
+
+    <code-fragment id="multi-case-no-statement">
+        <![CDATA[
+package com.tmall.epp.item.biz.item.listener;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.taobao.item.domain.ItemDO;
+import com.taobao.item.event.ItemEvent;
+import com.tmall.epp.commons.exception.BizException;
+import com.tmall.epp.commons.exception.ErrorDef;
+import com.tmall.epp.commons.exception.PredicateException;
+import com.tmall.epp.commons.util.GsonUtil;
+import com.tmall.epp.item.biz.item.builder.ItemFactory;
+import com.tmall.epp.item.biz.item.manager.QueryItemManager;
+import com.tmall.epp.item.domain.item.ItemQueryOptionKeys;
+import com.tmall.epp.item.domain.item.standard.ItemRefer;
+import com.tmall.epp.item.domain.item.standard.StandardItemDO;
+import com.tmall.epp.commons.util.CollectionUtils;
+import com.tmall.epp.item.util.ItemBizLogUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * IC商品打上"专属商城标签,去除标签,上架,下架"的Event的处理Action
+ * <p/>
+ * Created by shaofu on 16/1/8.
+ */
+public class ItemEditProcessor extends AbstractItemChangeProcessor {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ItemEditProcessor.class);
+
+    @Resource(name = "queryItemManager")
+    private QueryItemManager queryItemManager;
+
+    /**
+     * 可处理的变更商品事件的映射集合
+     */
+    private Map<ItemEvent.Type, Boolean> editEventMapping = Maps.newHashMap();
+
+    public ItemEditProcessor() {
+        editEventMapping.put(ItemEvent.Type.ITEM_EDIT, Boolean.FALSE);
+        editEventMapping.put(ItemEvent.Type.ITEM_DOWN_SHELF, Boolean.FALSE);
+        editEventMapping.put(ItemEvent.Type.ITEM_DELETE, Boolean.FALSE);
+        editEventMapping.put(ItemEvent.Type.ITEM_CC, Boolean.FALSE);
+        editEventMapping.put(ItemEvent.Type.ITEM_UP_SHELF, Boolean.FALSE);
+
+        editEventMapping.put(ItemEvent.Type.ITEM_PRICE, Boolean.FALSE);
+        editEventMapping.put(ItemEvent.Type.SKU_EDIT, Boolean.FALSE);
+        editEventMapping.put(ItemEvent.Type.SKU_DELETE, Boolean.FALSE);
+
+        /**
+         editEventMapping.put(ItemEvent.Type.ITEM_IMAGE, Boolean.FALSE);
+         editEventMapping.put(ItemEvent.Type.ITEM_DESC, Boolean.FALSE);
+         **/
+        /**
+         editEventMapping.put(ItemEvent.Type.SKU_EDIT, Boolean.FALSE);
+         editEventMapping.put(ItemEvent.Type.SKU_DELETE, Boolean.FALSE);
+         editEventMapping.put(ItemEvent.Type.SKU_PUBLISH, Boolean.FALSE);
+         editEventMapping.put(ItemEvent.Type.SKU_QUANTITY, Boolean.FALSE);
+         **/
+    }
+
+    @Override
+    public boolean matchEventType(ItemEvent.Type type) {
+        return editEventMapping.get(type) != null;
+    }
+
+    @Override
+    public void triggerCapture(ItemEvent event) {
+        ItemEvent.Type type = event.getType();
+
+//        LOG.warn("epp-item-notify(1) (unsettled,iteminfo) receive itemId(" + event.getItemId() + ") itemEvent:" + type + " sellerId:" + event.getSellerId() + " userType:" + event.getUserType() + " messageId:" + event.getMessageId() + " traceId:" + event.getTraceId());
+
+        ItemBizLogUtil.logger.warn("ITEM_BASE_INFO", "ic_notify_begin", event.getItemId(),
+                ItemBizLogUtil.logger.getMsgString(type, event.getSellerId(), event.getUserType(), event.getMessageId(), event.getTraceId()));
+
+        switch (type) {
+            /**
+             * 商品变更事件
+             */
+            case ITEM_EDIT:
+                // 商品编辑
+            case ITEM_DOWN_SHELF:
+                // 商品下架
+            case ITEM_DELETE:
+                // 商品删除
+            case ITEM_CC:
+                // 商品CC(被处罚)
+            case ITEM_UP_SHELF:
+                // 商品上架
+
+                /**
+                 case ITEM_PRICE:
+                 // 商品价格变更事件
+                 case SKU_EDIT:
+                 // SKU 变更事件
+                 case SKU_DELETE:
+                 // Sku 删除
+                 **/
+
+                /** 暂时忽略的事件类型,目前无法业务上不做处理
+                 case SKU_QUANTITY:
+                 // Sku 库存
+                 case SKU_PUBLISH:
+                 // 发布SKU
+                 case ITEM_DESC:
+                 // 描述变更
+                 **/
+
+                /**
+                 * 失败重试逻辑
+                 * todo  IC Notify Client 不支持消息回滚重试，目前自己重试1次, 需要之后改造 @少符
+                 */
+                for (int i = 0; i < 1; i++) {
+                    final StandardItemDO standardItemDO = ItemFactory.initStandardItemDO();
+                    try {
+                        resolveEditEvent(event, standardItemDO, () -> {
+                            ItemBizLogUtil.logger.info("ITEM_BASE_INFO", "push_item", event.getItemId(),
+                                    "entry standardItemDO:" + GsonUtil.toJSON(standardItemDO));
+                            try {
+                                itemServiceImpl.pushItem(standardItemDO, buildEntryInfo(event));
+                            } catch (Throwable e) {
+                                throw new PredicateException(ErrorDef.ITEM_ENTRY_FAIL, "item entry error", e);
+                            }
+                        });
+                        break;
+                    } catch (Throwable e) {
+                        ItemBizLogUtil.logger.error("ITEM_BASE_INFO", "ic_notify_error", event.getItemId(),
+                                "resolve item edit listener fail,retry = " + i + " ,standardItemDO=" + GsonUtil.toJSON(standardItemDO), e);
+                    }
+                }
+
+                ItemBizLogUtil.logger.warn("ITEM_BASE_INFO", "ic_notify_end", event.getItemId(),
+                        ItemBizLogUtil.logger.getMsgString(type, event.getSellerId(), event.getUserType(), event.getMessageId(), event.getTraceId()));
+                break;
+        }
+    }
+}
+		]]>
+    </code-fragment>
+    <test-code>
+        <description>多个连续空case语句</description>
+        <expected-problems>1</expected-problems>
+        <code-ref id="multi-case-no-statement" />
+    </test-code>
 </test-data>

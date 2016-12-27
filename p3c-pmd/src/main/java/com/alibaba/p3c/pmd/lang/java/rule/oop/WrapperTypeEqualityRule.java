@@ -19,7 +19,8 @@ public class WrapperTypeEqualityRule extends AbstractJavaRule {
     public Object visit(ASTEqualityExpression node, Object data) {
 
         // 如果"=="或"!="两边有null,则不检查包装类型
-        if (node.hasDescendantMatchingXPath("PrimaryExpression/PrimaryPrefix/Literal/NullLiteral")) {
+        if (node.hasDescendantMatchingXPath("PrimaryExpression/PrimaryPrefix/Literal/NullLiteral")
+                || node.hasDescendantMatchingXPath("PrimaryExpression/PrimaryPrefix/Literal")) {
             return super.visit(node, data);
         }
 
