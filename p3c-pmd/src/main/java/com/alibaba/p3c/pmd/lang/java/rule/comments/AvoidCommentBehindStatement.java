@@ -10,7 +10,9 @@ import java.util.Map.Entry;
 
 import net.sourceforge.pmd.lang.ast.Node;
 import net.sourceforge.pmd.lang.java.ast.ASTCompilationUnit;
+import net.sourceforge.pmd.lang.java.ast.ASTEnumConstant;
 import net.sourceforge.pmd.lang.java.ast.ASTExpression;
+import net.sourceforge.pmd.lang.java.ast.ASTFieldDeclaration;
 import net.sourceforge.pmd.lang.java.ast.AbstractJavaNode;
 import net.sourceforge.pmd.lang.java.ast.Comment;
 import net.sourceforge.pmd.lang.java.rule.comments.AbstractCommentRule;
@@ -56,8 +58,18 @@ public class AvoidCommentBehindStatement extends AbstractCommentRule {
 
         SortedMap<Integer, Node> itemsByLineNumber = new TreeMap<>();
 
-        List<ASTExpression> javaNodes = cUnit.findDescendantsOfType(ASTExpression.class);
-        CommentUtils.addNodesToSortedMap(itemsByLineNumber, javaNodes);
+        List<ASTExpression> expressionNodes = cUnit.findDescendantsOfType(ASTExpression.class);
+        CommentUtils.addNodesToSortedMap(itemsByLineNumber, expressionNodes);
+
+        // 类属性同行注释的判断
+        List<ASTFieldDeclaration> fieldNodes =
+                cUnit.findDescendantsOfType(ASTFieldDeclaration.class);
+        CommentUtils.addNodesToSortedMap(itemsByLineNumber, fieldNodes);
+
+        // 枚举字段同行注释的判断
+        List<ASTEnumConstant> enumConstantNodes =
+                cUnit.findDescendantsOfType(ASTEnumConstant.class);
+        CommentUtils.addNodesToSortedMap(itemsByLineNumber, enumConstantNodes);
 
         CommentUtils.addNodesToSortedMap(itemsByLineNumber, cUnit.getComments());
 

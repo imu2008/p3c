@@ -3,6 +3,7 @@
 
 	<code-fragment id="comments-before-code"><![CDATA[
 public class AvoidCommentBehindStatement {
+    // 上一行注释0
     private String name;
     public String getName() {
         // 上一行注释1
@@ -25,7 +26,7 @@ public class AvoidCommentBehindStatement {
 
 	<code-fragment id="comments-behind-code"><![CDATA[
 public class AvoidCommentBehindStatement {
-    private String name;
+    private String name; // 同行注释0
     public String getName() {
         return this.name; // 同行注释1
     }
@@ -37,9 +38,25 @@ public class AvoidCommentBehindStatement {
 	</code-fragment>
 	<test-code>
 		<description>Comments behind code</description>
-		<expected-problems>2</expected-problems>
-		<expected-linenumbers>4,7</expected-linenumbers>
+		<expected-problems>3</expected-problems>
+		<expected-linenumbers>2,4,7</expected-linenumbers>
 		<code-ref id="comments-behind-code" />
+	</test-code>
+
+
+	<code-fragment id="comments-behind-enum-constant"><![CDATA[
+public enum Level {
+    HIGH, // 高级
+    MEDIUM, // 中级
+    LOW // 低级
+}
+    ]]>
+	</code-fragment>
+	<test-code>
+		<description>Comments enum constant</description>
+		<expected-problems>3</expected-problems>
+		<expected-linenumbers>2,3,4</expected-linenumbers>
+		<code-ref id="comments-behind-enum-constant" />
 	</test-code>
 
 </test-data>
