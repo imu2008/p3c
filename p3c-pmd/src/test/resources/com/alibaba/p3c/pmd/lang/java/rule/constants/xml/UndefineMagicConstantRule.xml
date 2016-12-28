@@ -48,5 +48,22 @@
 		<expected-problems>1</expected-problems>
 		<code-ref id="constants-err" />
 	</test-code>
+	
+	<code-fragment id="constants-err-2"><![CDATA[
+	 public class Foo {        
+        private void method(String path) {
+	         if (null == path || !path.startsWith("/home/admin/leveldb/")
+	                || path.split("/").length <= 5) { 
+	         }
+	    }
+	 }        
+    ]]>
+	</code-fragment>
+
+	<test-code>
+		<description>UndefineMagicConstant.</description>
+		<expected-problems>1</expected-problems>
+		<code-ref id="constants-err-2" />
+	</test-code>
 
 </test-data>

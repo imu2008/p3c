@@ -3,6 +3,7 @@
  */
 package com.alibaba.p3c.pmd.lang.java.rule.constants;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.jaxen.JaxenException;
@@ -24,35 +25,41 @@ import net.sourceforge.pmd.lang.java.rule.AbstractJavaRule;
  *
  */
 public class UndefineMagicConstantRule extends AbstractJavaRule {
-    
+
+    // 魔法值去重，防止父类找子变量结点时存在重复
+    private List<ASTLiteral> currentLiterals = new ArrayList<ASTLiteral>();
+
     /**
      * 判断未定义变量是否在非循环体的if语句中
+     * 
      * @param node
      * @param data
-     */ 
+     */
     @Override
     public Object visit(ASTCompilationUnit node, Object data) {
-
+        currentLiterals.clear();
         try {
             // 找未定义变量的父节点
             List<Node> parentNodes = node.findChildNodesWithXPath("//Literal/../../../../..[not(VariableInitializer)]");
+
             for (Node parentItem : parentNodes) {
-                List<ASTLiteral> literals = parentItem.findDescendantsOfType(ASTLiteral.class); 
-                for(ASTLiteral literal: literals){
-                    if (inBlackList(literal)) {
+                List<ASTLiteral> literals = parentItem.findDescendantsOfType(ASTLiteral.class);
+                for (ASTLiteral literal : literals) {
+                    if (inBlackList(literal) && !currentLiterals.contains(literal)) {
+                        currentLiterals.add(literal);
                         addViolation(data, literal);
                     }
                 }
-                
+
             }
         } catch (JaxenException e) {
             e.printStackTrace();
         }
-        return super.visit(node, data); 
+        return super.visit(node, data);
     }
 
-   
-    
+
+
     /**
      * 判断未定义变量是否属于黑名单中
      * 
@@ -62,27 +69,26 @@ public class UndefineMagicConstantRule extends AbstractJavaRule {
     private boolean inBlackList(ASTLiteral literal) {
         String name = literal.getImage();
         int lineNum = literal.getBeginLine();
-        //name为空时，是null,bool变量，算白名单
-        if(name == null){
+        // name为空时，是null,bool变量，算白名单
+        if (name == null) {
             return false;
         }
-        //判断变量是否在非循环体的if语句中
-        ASTIfStatement ifStagtement = literal.getFirstParentOfType(ASTIfStatement.class); 
-        if(ifStagtement == null){
+        // 判断变量是否在非循环体的if语句中
+        ASTIfStatement ifStagtement = literal.getFirstParentOfType(ASTIfStatement.class);
+        if (ifStagtement == null) {
             return false;
         }
         ASTForStatement forStateMent = ifStagtement.getFirstParentOfType(ASTForStatement.class);
         ASTWhileStatement whileStateMent = ifStagtement.getFirstParentOfType(ASTWhileStatement.class);
-        if(forStateMent != null || whileStateMent != null){
+        if (forStateMent != null || whileStateMent != null) {
             return false;
-        }  
-        if(lineNum == ifStagtement.getBeginLine()){
+        }
+        if (lineNum == ifStagtement.getBeginLine()) {
             return true;
-        } 
+        }
         return false;
     }
 
-    
-  
+
 
 }
