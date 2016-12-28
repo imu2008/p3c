@@ -6,7 +6,7 @@
 		</configKey>
 	</rule>
 	<rule key="AbstractClassShouldStartWithAbstractNamingRule">
-		<priority>BLOCKER</priority>
+		<priority>CRITICAL</priority>
 		<configKey>rulesets/java/ali-naming.xml/AbstractClassShouldStartWithAbstractNamingRule
 		</configKey>
 	</rule>
@@ -26,7 +26,7 @@
 		</configKey>
 	</rule>
 	<rule key="AvoidStartWithDollarAndUnderLineNamingRule">
-		<priority>BLOCKER</priority>
+		<priority>CRITICAL</priority>
 		<configKey>rulesets/java/ali-naming.xml/AvoidStartWithDollarAndUnderLineNamingRule
 		</configKey>
 	</rule>

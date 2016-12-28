@@ -33,7 +33,7 @@
 抽象类命名使用Abstract或Base开头
             ]]>
         </description>
-        <priority>1</priority>
+        <priority>2</priority>
         <example>
             <![CDATA[
     abstract class BaseControllerDemo{
@@ -112,7 +112,7 @@
 所有编程相关的命名均不能以下划线或美元符号开始
             ]]>
         </description>
-        <priority>1</priority>
+        <priority>2</priority>
         <example>
             <![CDATA[
     所有编程相关的命名均不能以下划线或美元符号开始
