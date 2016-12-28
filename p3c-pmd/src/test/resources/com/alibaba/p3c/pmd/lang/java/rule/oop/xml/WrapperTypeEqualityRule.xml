@@ -4,12 +4,13 @@
 	<code-fragment id="wrap-type-not-use-equal">
 		<![CDATA[
 	public class Foo {
+		private static final int x = 3;
 	    public void bar() {
 	    	Integer a = 2;
 	    	int b = 2;
 	    	Integer c = 3;
 
-	    	if (a == b) {	// BAD
+	    	if (a == b) {	// OK
 	    		// do nothing
 	    	}
 	    	if (a == c) {	// BAD
@@ -18,7 +19,10 @@
 	    	if (a != null) {	// OK
 	    		// do nothing
 	    	}
-	    	if (a == 2) {	// OK
+	    	if (a == -6) {	// OK
+	    		// do nothing
+	    	}
+	    	if (a == x) {	// OK
 	    		// do nothing
 	    	}
 	    }
@@ -27,7 +31,7 @@
 	</code-fragment>
 	<test-code>
 		<description>包装类对象之间值的比较未使用equals方法</description>
-		<expected-problems>2</expected-problems>
+		<expected-problems>1</expected-problems>
 		<code-ref id="wrap-type-not-use-equal" />
 	</test-code>
 

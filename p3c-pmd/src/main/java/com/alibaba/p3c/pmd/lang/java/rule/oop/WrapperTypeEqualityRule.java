@@ -19,20 +19,20 @@ public class WrapperTypeEqualityRule extends AbstractJavaRule {
     public Object visit(ASTEqualityExpression node, Object data) {
 
         // 如果"=="或"!="两边有null,则不检查包装类型
-        if (node.hasDescendantMatchingXPath("PrimaryExpression/PrimaryPrefix/Literal/NullLiteral")
-                || node.hasDescendantMatchingXPath("PrimaryExpression/PrimaryPrefix/Literal")) {
+        if (node.hasDescendantMatchingXPath("PrimaryExpression/PrimaryPrefix/Literal")
+                || node.hasDescendantMatchingXPath("UnaryExpression")) {
             return super.visit(node, data);
         }
 
-        // "=="两边可能的类型有PrimaryExpression或UnaryExpression
+        // "=="两边可能的类型有PrimaryExpression或UnaryExpression(如a == -2)
         List<ASTPrimaryExpression> expressions = node.findChildrenOfType(ASTPrimaryExpression.class);
-
-        for (ASTPrimaryExpression expression : expressions) {
-            if (NodeUtils.isWrapperType(expression)) {
+        if (expressions.size() == 2) {
+            if (NodeUtils.isWrapperType(expressions.get(0)) &&
+                    NodeUtils.isWrapperType(expressions.get(1))) {
                 addViolation(data, node);
-                break;
             }
         }
+
         return super.visit(node, data);
     }
 
