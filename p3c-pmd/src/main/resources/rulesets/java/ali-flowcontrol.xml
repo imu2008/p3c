@@ -19,13 +19,13 @@
 
         <example>
             <![CDATA[
-switch( x ){
-    case 1 :
-    break ;
-    case 2 :
-    break ;
-    default :
-}
+    switch( x ){
+        case 1 :
+        break ;
+        case 2 :
+        break ;
+        default :
+    }
 			]]>
         </example>
     </rule>
@@ -44,9 +44,9 @@ switch( x ){
 
         <example>
             <![CDATA[
-if(flag) {
-    System.out.println("hello world");
-}
+    if(flag) {
+        System.out.println("hello world");
+    }
 			]]>
         </example>
     </rule>
