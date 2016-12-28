@@ -25,13 +25,31 @@
 	    	if (a == x) {	// OK
 	    		// do nothing
 	    	}
+	    	if (a == Integer.MAX_VALUE) {	// BAD
+	    		// do nothing
+	    	}
+	    	// PMD不能跨文件,拿不到Inner.FLAG的类型
+	    	if (a == Inner.FLAG) {
+	    		// do nothing
+	    	}
+	    	// PMD不能跨文件,拿不到Integer.valueOf("2")的类型
+	    	if (a == Integer.valueOf("2")) {
+	    		// do nothing
+	    	}
+	    	if (a == new Integer("2")) {	// BAD
+	    		// do nothing
+	    	}
+	    }
+
+	    private static class Inner {
+	    	public static final Integer FLAG = 3;
 	    }
 	}
 		]]>
 	</code-fragment>
 	<test-code>
 		<description>包装类对象之间值的比较未使用equals方法</description>
-		<expected-problems>1</expected-problems>
+		<expected-problems>3</expected-problems>
 		<code-ref id="wrap-type-not-use-equal" />
 	</test-code>
 
