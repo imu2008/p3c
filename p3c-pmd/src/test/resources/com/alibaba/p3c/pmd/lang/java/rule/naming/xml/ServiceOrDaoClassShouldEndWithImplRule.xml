@@ -35,4 +35,116 @@ public class ServiceNameRuleTestImpl implements TestDAO{
         <expected-problems>0</expected-problems>
         <code-ref id="ServiceClassNamingRule1" />
     </test-code>
+
+    <code-fragment id="ServiceClassNamingRule2">
+        <![CDATA[
+        package com.tmall.epp.mall.biz.service.message.impl;
+import com.taobao.messenger.exception.MessageException;
+import com.taobao.messenger.service.MessageSenderService;
+import com.taobao.messenger.service.common.Channel;
+import com.taobao.messenger.task.MessageTask;
+import com.taobao.messenger.task.TaskResult;
+import com.taobao.messenger.task.impl.DefaultMessageTask;
+import com.tmall.epp.mall.biz.service.message.IMessageService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.apache.commons.lang.StringUtils;
+
+import javax.annotation.Resource;
+import java.util.Map;
+
+/**
+ * Created by yangyushi on 16/5/10.
+ */
+public class WangWangMessageService implements IMessageService {
+
+    private static Logger log = LoggerFactory.getLogger(WangWangMessageService.class);
+
+    @Resource
+    private MessageSenderService messageSenderService;
+
+    private MessageTask buildMsgTask(String targetId, Map context, WangWangMsgTemplate msgTemplate) throws Exception {
+        MessageTask task = new DefaultMessageTask();
+        try {
+            task.addChannel(Channel.WANGWANG, msgTemplate.getTemplateId());
+            task.setMessageTypeId(msgTemplate.getMessageTypeId());
+            task.setSourceId(msgTemplate.getSourceId());
+            task.setContext(context);
+            if (StringUtils.isNotEmpty(targetId)) {
+                if (targetId.contains(",")) {
+                    String[] targetArr = targetId.split(",");
+                    for (String str : targetArr) {
+                        task.addTarget(str);// 设置发送目标
+                    }
+                } else {
+                    task.addTarget(targetId);// 设置发送目标
+                }
+            }
+        } catch(Exception ex) {
+            log.error("build msg task has error.", ex);
+            throw ex;
+        }
+        return task;
+    }
+
+    public boolean sendMsg(String targetId, Map context, WangWangMsgTemplate msgTemplate) {
+        try {
+            MessageTask task = buildMsgTask(targetId, context, msgTemplate);
+            TaskResult taskResult = messageSenderService.send(task);
+            if (taskResult.isSuccess()) {
+                log.info("send wangwang msg success:" + "id:" + taskResult.getTaskID());
+                return true;
+            } else {
+                log.info("send wangwang msg fail:" + "id:" + taskResult.getTaskID() + " reason:" + taskResult.getInfo()); // 强烈建议打印发送成功后消息中心返回的taskid，查询异常会用到
+                return false;
+            }
+        } catch (MessageException e) {
+            log.error("send wangwang msg has exception:", e);
+            return false;
+        } catch (Throwable t) {
+            log.error("send wangwang msg has exception:", t);
+            return false;
+        }
+    }
+
+    public static class WangWangMsgTemplate {
+
+        private int templateId;
+        private int messageTypeId;
+        private String sourceId;
+
+        public int getTemplateId() {
+            return templateId;
+        }
+
+        public void setTemplateId(int templateId) {
+            this.templateId = templateId;
+        }
+
+        public int getMessageTypeId() {
+            return messageTypeId;
+        }
+
+        public void setMessageTypeId(int messageTypeId) {
+            this.messageTypeId = messageTypeId;
+        }
+
+        public String getSourceId() {
+            return sourceId;
+        }
+
+        public void setSourceId(String sourceId) {
+            this.sourceId = sourceId;
+        }
+    }
+
+}
+    ]]>
+    </code-fragment>
+    <test-code>
+        <description>Service Class Name should be end with Impl</description>
+        <expected-problems>1</expected-problems>
+        <code-ref id="ServiceClassNamingRule2" />
+        <expected-linenumbers>19</expected-linenumbers>
+    </test-code>
 </test-data>

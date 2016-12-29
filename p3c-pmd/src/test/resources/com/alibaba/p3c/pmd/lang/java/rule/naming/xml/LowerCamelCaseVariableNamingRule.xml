@@ -77,6 +77,20 @@ public interface BizConstants {
         <expected-problems>0</expected-problems>
         <code-ref id="LowerCamelCaseVariableNamingRuleTest4" />
     </test-code>
+
+    <code-fragment id="LowerCamelCaseVariableNamingRuleTest5">
+        <![CDATA[
+        public class demoTest{
+        public static String ENV_LOCAL = "local";
+        public static String ENV_PROJECT = "project";
+        }
+    ]]>
+    </code-fragment>
+    <test-code>
+        <description>Variable name should be lowerCamelCase</description>
+        <expected-problems>2</expected-problems>
+        <code-ref id="LowerCamelCaseVariableNamingRuleTest5" />
+    </test-code>
 </test-data>
 
 

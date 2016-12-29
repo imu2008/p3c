@@ -23,4 +23,393 @@ public class RuleException extends Exception {
         <expected-problems>0</expected-problems>
         <code-ref id="ExceptionNamingRuleTest2" />
     </test-code>
+
+
+    <code-fragment id="ExceptionNamingRuleTest3">
+        <![CDATA[
+    package com.tmall.epp.item.biz.item.manager;
+
+import com.taobao.notify.remotingclient.MessageStatus;
+import com.taobao.notify.remotingclient.SendMessageCallback;
+import com.taobao.notify.remotingclient.SendResult;
+import com.tmall.epp.commons.exception.BizException;
+import com.tmall.epp.commons.exception.ErrorDef;
+import com.tmall.epp.commons.exception.PredicateException;
+import com.tmall.epp.item.biz.item.builder.ItemFactory;
+import com.tmall.epp.item.dao.ItemInfoDAO;
+import com.tmall.epp.item.dao.UnsettledItemDAO;
+import com.tmall.epp.item.po.ItemInfoPO;
+import com.tmall.epp.item.po.UnsettledItemPO;
+import com.tmall.epp.item.domain.item.input.EntryInfo;
+import com.tmall.epp.item.domain.item.standard.ItemRefer;
+import com.tmall.epp.item.domain.item.standard.StandardItemDO;
+import com.tmall.epp.item.domain.item.status.ItemChangeEvents;
+import com.tmall.epp.item.domain.item.status.VersionTypeOfItem;
+import com.tmall.epp.item.util.ItemBizLogUtil;
+import com.tmall.epp.shared.exception.DAOException;
+import com.tmall.epp.shared.message.SendNotifyManager;
+import com.tmall.epp.shared.message.type.MessageType;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionTemplate;
+
+import javax.annotation.Resource;
+
+/**
+ * Created by qinluo.ct on 16/1/19.
+ * 接收商品:新商品或商品变更信息
+ */
+@Service("receiveItemManager")
+public class ReceiveItemManager {
+
+    /**
+     * 版本迭代更新的分组大小
+     */
+    public static final int GROUP_SIZE_OF_VERSION_ITERATE = 10;
+    /**
+     * UnsetteledItem的第一个版本的初始化值
+     */
+    public static final long FIRST_VERSION_VALUE_OF_UNSETTLED_ITEM = 1L;
+    /**
+     * UnsetteledItem第一个版本的前一个版本的初始化值
+     */
+    public static final long FIRST_PRE_VERSION_VALUE_OF_UNSETTLED_ITEM = 0L;
+    /**
+     * ItemInfo的第一个版本的初始化值
+     */
+    public static final long FIRST_VERSION_VALUE_OF_ITEM_INFO = 1L;
+
+    @Resource(name = "itemInfoDAO")
+    private ItemInfoDAO itemInfoDAO;
+
+    @Resource(name = "unsettledItemDAO")
+    private UnsettledItemDAO unsettledItemDAO;
+
+    @Resource(name = "tmallEppTransactionTemplate")
+    private TransactionTemplate transactionTemplate;
+
+    @Resource(name = "queryItemManager")
+    private QueryItemManager queryItemManager;
+
+    @Resource(name = "sendNotifyManager")
+    private SendNotifyManager itemNotifyManager;
+
+    /**
+     * 接收商品:新商品或商品变更信息
+     * <p/>
+     * 查询商品最新版本信息
+     * 如果不存在,则insert itemInfo 和 unsettledItem;itemID 作为itemInfo的唯一键,保证商品不重复,失败的则抛出异常。(失败后依赖notify重试)
+     * 比较推送来的信息和最新的版本信息是否相同,如果相同则返回. (可重入的关键)
+     * 更新商品最新版本信息。version++ ,更新itemInfo 为最新版本,insert unsettledItem 版本记录; itemInfo乐观锁保证操作原子性。(失败后依赖notify重试)
+     * 操作成功，发送事务性消息
+     *
+     * @param standardItemDO
+     * @param entryInfo
+     * @throws BizException
+     */
+    public void receiveItem(StandardItemDO standardItemDO, EntryInfo entryInfo) throws BizException {
+
+        // 查找当前商品(如果94914的商品Tag被删除,理论上需要将商品下架,Later,少符)
+        StandardItemDO latestVersionStandardItem = queryItemManager.getLatestItem(standardItemDO.getBaseInfo().getItemId());
+
+        // 设置商品变更事件类型
+        setEventType(latestVersionStandardItem, standardItemDO);
+
+        // 初次加入商品
+        if (latestVersionStandardItem == null) {
+            addItem(standardItemDO, entryInfo);
+            return;
+        }
+
+        // 如果商品无变更内容，则返回(TODO 理论上不应该直接返回,因为有可能某些和Customer相关的内容的变更发生,而这些发生不会存储在我们的unsettled_item中,不能够直接return过去的)
+        if (!ItemFactory.notEquals(latestVersionStandardItem, standardItemDO)) {
+            ItemBizLogUtil.logger.warn("ITEM_BASE_INFO", "receive_item", standardItemDO.getBaseInfo().getItemId(),
+                    "latestVersionStandardItem and input standardItem is equals: latest version=" + latestVersionStandardItem.getItemVersion());
+            return;
+        }
+
+        // Tag删除等逻辑触发的相关处理,可能需要将商品下架,目前不做处理,之前推送的商品将不会被处理,直接挂在那边了(Later,真正有需要的情况下再去讨论具体的实施策略,少符)
+
+        // 设置版本+1
+        incrementItemVersion(standardItemDO, latestVersionStandardItem);
+
+        // 保存最新版本
+        updateItem(standardItemDO, entryInfo);
+    }
+
+    /**
+     * 新增商品入库
+     * 转换 ItemInfoPO , UnsettledItemPO
+     * 插入 itemInfo 商品记录
+     * 插入 unsettledItem 版本记录
+     * 发送事务消息
+     *
+     * @param standardItemDO
+     * @param entryInfo
+     * @throws BizException
+     */
+    public void addItem(StandardItemDO standardItemDO, EntryInfo entryInfo) throws BizException {
+        //初始版本
+        long itemId = standardItemDO.getBaseInfo().getItemId();
+        standardItemDO.getItemVersion().setVersion(FIRST_VERSION_VALUE_OF_UNSETTLED_ITEM);
+        standardItemDO.getItemVersion().setPreVersion(FIRST_PRE_VERSION_VALUE_OF_UNSETTLED_ITEM);
+        standardItemDO.getItemVersion().setVersionTypeOfItem(VersionTypeOfItem.BASE_VESION);
+
+        ItemInfoPO itemInfoPO = ItemFactory.convertToItemInfoPO(standardItemDO);
+        itemInfoPO.setVersion(FIRST_VERSION_VALUE_OF_ITEM_INFO);
+
+        UnsettledItemPO unsettledItemPO = fillUnSettledItemPO(standardItemDO, entryInfo);
+
+        SendResult sendResult = itemNotifyManager.sendObjectMessage(MessageType.ITEM_UNSETTLED_INSERT, standardItemDO, new SendMessageCallback() {
+            @Override
+            public Object doInTransaction(MessageStatus messageStatus) {
+                addItemToDBTranscation(itemInfoPO, unsettledItemPO);
+                return null;
+            }
+        });
+
+        if (sendResult.isSuccess()) {
+            ItemBizLogUtil.logger.warn("ITEM_BASE_INFO", "add_item_send_success", itemId,
+                    "addItem send notify msg item-unsettled-insert success,msgId="
+                            + sendResult.getMessageId() + ",itemId=" + itemId);
+            return;
+        }
+
+        //记录下出错的情况
+        ItemBizLogUtil.logger.error("ITEM_BASE_INFO", "add_item_send_error", itemId,
+                "addItem send notify msg item-unsettled-insert error,msgId="
+                        + sendResult.getMessageId() + ",itemId=" + itemId, sendResult.getRuntimeException());
+
+        if (sendResult.getRuntimeException() != null) {
+            throw new BizException(ErrorDef.ITEM_ENTRY_FAIL,
+                    "addItem error ! msgId=" + sendResult.getMessageId() + ",itemId=" + itemId,
+                    sendResult.getRuntimeException());
+        } else {
+            throw new BizException(ErrorDef.ITEM_QUERY_FAIL,
+                    "addItem error; ! msgId=" + sendResult.getMessageId() + ",itemId=" + itemId + ","
+                            + sendResult.getErrorMessage());
+        }
+
+
+    }
+
+    private void addItemToDBTranscation(ItemInfoPO itemInfoPO, UnsettledItemPO unsettledItemPO) throws PredicateException {
+        // 事务插入
+        Exception exception = transactionTemplate.execute(new TransactionCallback<Exception>() {
+            @Override
+            public Exception doInTransaction(TransactionStatus status) {
+                try {
+                    itemInfoDAO.addItemInfo(itemInfoPO);
+
+                    unsettledItemDAO.insertUnsettledItem(unsettledItemPO);
+                } catch (DAOException e) {
+                    status.setRollbackOnly();
+
+                    ItemBizLogUtil.logger.error("ITEM_BASE_INFO", "add_item_todb_error", itemInfoPO.getItemId(),
+                            "Error operate db: " + itemInfoPO + " " + unsettledItemPO, e);
+                    return e;
+                }
+                return null;
+            }
+        });
+
+        if (exception != null) {
+            throw new PredicateException(ErrorDef.ITEM_ENTRY_FAIL, "insert item db error", exception);
+        }
+    }
+
+
+    private void incrementItemVersion(StandardItemDO standardItemDO, StandardItemDO other) {
+        standardItemDO.getItemVersion().setPreVersion(other.getItemVersion().getVersion());
+        standardItemDO.getItemVersion().setVersion(standardItemDO.getItemVersion().getPreVersion() + 1);
+
+        // 版本类型
+        long iteratedGroup = standardItemDO.getItemVersion().getVersion() % GROUP_SIZE_OF_VERSION_ITERATE;
+        standardItemDO.getItemVersion().setVersionTypeOfItem(VersionTypeOfItem.type((byte) iteratedGroup));
+    }
+
+    /**
+     * 将当前EntryInfo等信息填充到PO对象中,并且将DB中的序列ID回填到StandardItemDO对象中
+     *
+     * @param standardItemDO
+     * @param entryInfo
+     * @return
+     * @throws BizException
+     */
+    private UnsettledItemPO fillUnSettledItemPO(StandardItemDO standardItemDO, EntryInfo entryInfo) throws BizException {
+        UnsettledItemPO unsettledItemPO = ItemFactory.convertStandardItemDOToPO(standardItemDO);
+
+        fillEntryInfoToPO(entryInfo, unsettledItemPO);
+
+        fillVersionInfoToPO(standardItemDO, unsettledItemPO);
+
+        try {
+            long distributedUniqueId = unsettledItemDAO.createDistributedUniqueId(standardItemDO.getBaseInfo().getItemId());
+
+            fillUniqueId(standardItemDO, unsettledItemPO, distributedUniqueId);
+        } catch (DAOException e) {
+            throw new BizException(ErrorDef.ITEM_ENTRY_FAIL, "generate unsettledId error", e);
+        }
+
+        return unsettledItemPO;
+    }
+
+    /**
+     * 将唯一键ID补充到PO与DO中,DO对象后续会直接给外部回调使用,需要回填
+     *
+     * @param standardItemDO
+     * @param unsettledItemPO
+     * @param distributedUniqueId
+     */
+    private void fillUniqueId(StandardItemDO standardItemDO, UnsettledItemPO unsettledItemPO, long distributedUniqueId) {
+        // 设置当前id为sequence生成的id
+        unsettledItemPO.setId(distributedUniqueId);
+        // Import(回调该序列ID,因为外部会直接使用到该DO对象)
+        standardItemDO.getBaseInfo().setId(distributedUniqueId);
+    }
+
+    /**
+     * 将StandardItemDO中的version信息补充到PO中
+     *
+     * @param standardItemDO
+     * @param unsettledItemPO
+     */
+    private void fillVersionInfoToPO(StandardItemDO standardItemDO, UnsettledItemPO unsettledItemPO) {
+        if (standardItemDO.getItemVersion() != null) {
+            unsettledItemPO.setVersion(standardItemDO.getItemVersion().getVersion());
+            unsettledItemPO.setPreVersion(standardItemDO.getItemVersion().getPreVersion());
+            unsettledItemPO.setVersionType(standardItemDO.getItemVersion().getVersionTypeOfItem().getType());
+        }
+    }
+
+    /**
+     * 将EntryInfo信息补充到PO中
+     *
+     * @param entryInfo
+     * @param unsettledItemPO
+     */
+    private void fillEntryInfoToPO(EntryInfo entryInfo, UnsettledItemPO unsettledItemPO) {
+        unsettledItemPO.setEntryStatus(entryInfo.getEntryStatusOfUnsettledItem().getStatus());
+        unsettledItemPO.setEntryUser(entryInfo.getUserName());
+    }
+
+    /**
+     * 保存更新的商品
+     * 转换 ItemInfoPO , UnsettledItemPO
+     * 更新 itemInfo 最新版本
+     * 插入 unsettledItem 版本记录
+     * 发送事务消息
+     *
+     * @param standardItemDO
+     * @param entryInfo
+     * @throws BizException
+     */
+    private void updateItem(StandardItemDO standardItemDO, EntryInfo entryInfo) throws BizException {
+
+        long itemId = standardItemDO.getBaseInfo().getItemId();
+        ItemInfoPO itemInfoPO = ItemFactory.convertToItemInfoPO(standardItemDO);
+
+        UnsettledItemPO unsettledItemPO = fillUnSettledItemPO(standardItemDO, entryInfo);
+
+        // 发送消息,这里还是insert的message type(Later,确定是否ok的说)
+        SendResult sendResult = itemNotifyManager.sendObjectMessage(MessageType.ITEM_UNSETTLED_INSERT, standardItemDO, new SendMessageCallback() {
+            @Override
+            public Object doInTransaction(MessageStatus messageStatus) {
+                updateItemToDOTransacation(itemInfoPO, unsettledItemPO);
+                return null;
+            }
+        });
+
+        if (sendResult.isSuccess()) {
+            ItemBizLogUtil.logger.warn("ITEM_BASE_INFO", "update_item_send_success", itemId,
+                    "updateItem send notify msg item-unsettled-insert success,msgId="
+                            + sendResult.getMessageId() + ",itemId=" + itemId);
+            return;
+        }
+
+        //记录下出错的情况
+        ItemBizLogUtil.logger.error("ITEM_BASE_INFO", "update_item_send_error", itemId,
+                "addItem send notify msg item-unsettled-insert error,msgId="
+                        + sendResult.getMessageId() + ",itemId=" + itemId, sendResult.getRuntimeException());
+
+        if (sendResult.getRuntimeException() != null) {
+            throw new BizException(ErrorDef.ITEM_ENTRY_FAIL,
+                    "updateItem error ! msgId=" + sendResult.getMessageId() + ",itemId=" + itemId,
+                    sendResult.getRuntimeException());
+        } else {
+            throw new BizException(ErrorDef.ITEM_QUERY_FAIL,
+                    "updateItem error; ! msgId=" + sendResult.getMessageId() + ",itemId=" + itemId + ","
+                            + sendResult.getErrorMessage());
+        }
+    }
+
+
+    private void updateItemToDOTransacation(ItemInfoPO itemInfoPO, UnsettledItemPO unsettledItemPO) {
+        Exception exception = this.transactionTemplate.execute(new TransactionCallback<Exception>() {
+            @Override
+            public Exception doInTransaction(TransactionStatus status) {
+
+                try {
+                    itemInfoDAO.updateItemInfo(itemInfoPO);
+
+                    unsettledItemDAO.insertUnsettledItem(unsettledItemPO);
+                } catch (DAOException e) {
+                    status.setRollbackOnly();
+                    ItemBizLogUtil.logger.error("ITEM_BASE_INFO", "update_item_todb_error", itemInfoPO.getItemId(),
+                            "Error operate db: " + itemInfoPO + " " + unsettledItemPO, e);
+                    return e;
+                }
+                return null;
+            }
+        });
+
+        if (exception != null) {
+            throw new PredicateException(ErrorDef.ITEM_ENTRY_FAIL, "update item db error", exception);
+        }
+    }
+
+
+    private void setEventType(StandardItemDO latestVersionStandardItem, StandardItemDO standardItemDO) {
+        ItemRefer itemRefer = standardItemDO.getItemRefer();
+
+        // 初次发布
+        if (latestVersionStandardItem == null) {
+            itemRefer.setItemChangeEvents(ItemChangeEvents.PUBLISH);
+            ItemBizLogUtil.logger.warn("ITEM_BASE_INFO", "item_event_type", standardItemDO.getBaseInfo().getItemId(),
+                    "[ITEM EVENT PUBLISH] add ItemInfo");
+            return;
+        }
+
+        // 上架
+        if (!latestVersionStandardItem.getBaseInfo().isOnline() && standardItemDO.getBaseInfo().isOnline()) {
+            itemRefer.setItemChangeEvents(ItemChangeEvents.UP_SHELF);
+            ItemBizLogUtil.logger.warn("ITEM_BASE_INFO", "item_event_type", standardItemDO.getBaseInfo().getItemId(),
+                    "[ITEM EVENT UP_SHELF] itemId="+standardItemDO.getBaseInfo().getItemId()+";old status="+latestVersionStandardItem.getBaseInfo().getItemStatus()+";new status="+standardItemDO.getBaseInfo().getItemStatus());
+            return;
+        }
+
+        // 下架
+        if (latestVersionStandardItem.getBaseInfo().isOnline() && !standardItemDO.getBaseInfo().isOnline()) {
+            itemRefer.setItemChangeEvents(ItemChangeEvents.DOWN_SHELF);
+            ItemBizLogUtil.logger.warn("ITEM_BASE_INFO", "item_event_type", standardItemDO.getBaseInfo().getItemId(),
+                    "[ITEM EVENT DOWN_SHELF] itemId="+standardItemDO.getBaseInfo().getItemId()+";old status="+latestVersionStandardItem.getBaseInfo().getItemStatus()+";new status="+standardItemDO.getBaseInfo().getItemStatus());
+            return;
+        }
+
+        // 默认push
+        itemRefer.setItemChangeEvents(ItemChangeEvents.PUBLISH);
+        ItemBizLogUtil.logger.warn("ITEM_BASE_INFO", "item_event_type", standardItemDO.getBaseInfo().getItemId(),
+                "[ITEM EVENT PUBLISH] item update");
+    }
+
+}
+    ]]>
+    </code-fragment>
+    <test-code>
+        <description>Exception class name should end with Exception</description>
+        <expected-problems>0</expected-problems>
+        <code-ref id="ExceptionNamingRuleTest3" />
+    </test-code>
+
 </test-data>
