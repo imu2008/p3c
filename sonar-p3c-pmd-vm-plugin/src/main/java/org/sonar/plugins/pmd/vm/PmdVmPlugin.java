@@ -17,16 +17,23 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.pmd;
+package org.sonar.plugins.pmd.vm;
 
 import com.google.common.collect.ImmutableList;
 
 import org.sonar.api.SonarPlugin;
 import org.sonar.api.config.PropertyDefinition;
+import org.sonar.plugins.pmd.vm.PmdVmExecutor;
+import org.sonar.plugins.pmd.vm.PmdVmProfileExporter;
+import org.sonar.plugins.pmd.vm.PmdVmProfileImporter;
+import org.sonar.plugins.pmd.vm.PmdVmRulesDefinition;
+import org.sonar.plugins.pmd.vm.PmdVmSensor;
+import org.sonar.plugins.pmd.vm.PmdVmViolationRecorder;
+import org.sonar.plugins.pmd.vm.Vm;
 
 import java.util.List;
 
-public class PmdPlugin extends SonarPlugin {
+public class PmdVmPlugin extends SonarPlugin {
 
   @Override
   public List getExtensions() {
@@ -36,14 +43,14 @@ public class PmdPlugin extends SonarPlugin {
         .name("Generate XML Report")
         .hidden()
         .build(),
-      PmdSensor.class,
+      Vm.class,
+      PmdVmSensor.class,
       PmdConfiguration.class,
-      PmdExecutor.class,
-      PmdRulesDefinition.class,
-      PmdUnitTestsRulesDefinition.class,
-      PmdProfileExporter.class,
-      PmdProfileImporter.class,
-      PmdViolationRecorder.class);
+      PmdVmExecutor.class,
+      PmdVmRulesDefinition.class,
+      PmdVmProfileExporter.class,
+      PmdVmProfileImporter.class,
+      PmdVmViolationRecorder.class);
   }
 
 }

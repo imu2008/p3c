@@ -17,33 +17,19 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.pmd;
+package org.sonar.plugins.pmd.vm;
 
-import com.google.common.collect.ImmutableList;
+import org.junit.Test;
 
-import org.sonar.api.SonarPlugin;
-import org.sonar.api.config.PropertyDefinition;
+import static org.fest.assertions.Assertions.assertThat;
 
-import java.util.List;
+public class PmdVmPluginTest {
 
-public class PmdPlugin extends SonarPlugin {
+  private PmdVmPlugin plugin = new PmdVmPlugin();
 
-  @Override
-  public List getExtensions() {
-    return ImmutableList.of(
-      PropertyDefinition.builder(PmdConfiguration.PROPERTY_GENERATE_XML)
-        .defaultValue("false")
-        .name("Generate XML Report")
-        .hidden()
-        .build(),
-      PmdSensor.class,
-      PmdConfiguration.class,
-      PmdExecutor.class,
-      PmdRulesDefinition.class,
-      PmdUnitTestsRulesDefinition.class,
-      PmdProfileExporter.class,
-      PmdProfileImporter.class,
-      PmdViolationRecorder.class);
+  @Test
+  public void should_contain_both_rule_repositories() {
+    assertThat(plugin.getExtensions()).contains(PmdVmRulesDefinition.class);
   }
 
 }

@@ -17,33 +17,25 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.pmd;
+package org.sonar.plugins.pmd.vm;
 
-import com.google.common.collect.ImmutableList;
+import org.junit.Test;
 
-import org.sonar.api.SonarPlugin;
-import org.sonar.api.config.PropertyDefinition;
+import java.lang.reflect.Constructor;
 
-import java.util.List;
+import static org.fest.assertions.Assertions.assertThat;
 
-public class PmdPlugin extends SonarPlugin {
-
-  @Override
-  public List getExtensions() {
-    return ImmutableList.of(
-      PropertyDefinition.builder(PmdConfiguration.PROPERTY_GENERATE_XML)
-        .defaultValue("false")
-        .name("Generate XML Report")
-        .hidden()
-        .build(),
-      PmdSensor.class,
-      PmdConfiguration.class,
-      PmdExecutor.class,
-      PmdRulesDefinition.class,
-      PmdUnitTestsRulesDefinition.class,
-      PmdProfileExporter.class,
-      PmdProfileImporter.class,
-      PmdViolationRecorder.class);
+public class PmdVersionTest {
+  @Test
+  public void should_get_pmd_version() {
+    assertThat(PmdVersion.getVersion()).isNotEmpty();
   }
 
+  @Test
+  public void private_constructor() throws Exception {
+    Constructor constructor = PmdVersion.class.getDeclaredConstructor();
+    assertThat(constructor.isAccessible()).isFalse();
+    constructor.setAccessible(true);
+    constructor.newInstance();
+  }
 }

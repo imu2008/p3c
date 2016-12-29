@@ -17,33 +17,25 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.pmd;
+package org.sonar.plugins.pmd.vm;
 
-import com.google.common.collect.ImmutableList;
+public final class PmdConstants {
+  public static final String PLUGIN_NAME = "PMD-VM";
+  public static final String PLUGIN_KEY = "pmd-vm";
+  public static final String XPATH_CLASS = "net.sourceforge.pmd.lang.rule.XPathRule";
+  public static final String XPATH_EXPRESSION_PARAM = "xpath";
+  public static final String XPATH_MESSAGE_PARAM = "message";
 
-import org.sonar.api.SonarPlugin;
-import org.sonar.api.config.PropertyDefinition;
+  /**
+   * Key of the java version used for sources
+   */
+  public static final String JAVA_SOURCE_VERSION = "sonar.java.source";
 
-import java.util.List;
+  /**
+   * Default value for property {@link #JAVA_SOURCE_VERSION}.
+   */
+  public static final String JAVA_SOURCE_VERSION_DEFAULT_VALUE = "1.5";
 
-public class PmdPlugin extends SonarPlugin {
-
-  @Override
-  public List getExtensions() {
-    return ImmutableList.of(
-      PropertyDefinition.builder(PmdConfiguration.PROPERTY_GENERATE_XML)
-        .defaultValue("false")
-        .name("Generate XML Report")
-        .hidden()
-        .build(),
-      PmdSensor.class,
-      PmdConfiguration.class,
-      PmdExecutor.class,
-      PmdRulesDefinition.class,
-      PmdUnitTestsRulesDefinition.class,
-      PmdProfileExporter.class,
-      PmdProfileImporter.class,
-      PmdViolationRecorder.class);
+  private PmdConstants() {
   }
-
 }

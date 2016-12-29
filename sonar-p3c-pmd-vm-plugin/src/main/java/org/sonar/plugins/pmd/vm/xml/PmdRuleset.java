@@ -17,33 +17,43 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.pmd;
+package org.sonar.plugins.pmd.vm.xml;
 
-import com.google.common.collect.ImmutableList;
-
-import org.sonar.api.SonarPlugin;
-import org.sonar.api.config.PropertyDefinition;
-
+import java.util.ArrayList;
 import java.util.List;
 
-public class PmdPlugin extends SonarPlugin {
+public class PmdRuleset {
 
-  @Override
-  public List getExtensions() {
-    return ImmutableList.of(
-      PropertyDefinition.builder(PmdConfiguration.PROPERTY_GENERATE_XML)
-        .defaultValue("false")
-        .name("Generate XML Report")
-        .hidden()
-        .build(),
-      PmdSensor.class,
-      PmdConfiguration.class,
-      PmdExecutor.class,
-      PmdRulesDefinition.class,
-      PmdUnitTestsRulesDefinition.class,
-      PmdProfileExporter.class,
-      PmdProfileImporter.class,
-      PmdViolationRecorder.class);
+  private String description;
+
+  private List<PmdRule> rules = new ArrayList<PmdRule>();
+
+  public PmdRuleset() {
+    // no description
+  }
+
+  public PmdRuleset(String description) {
+    this.description = description;
+  }
+
+  public List<PmdRule> getPmdRules() {
+    return rules;
+  }
+
+  public void setRules(List<PmdRule> rules) {
+    this.rules = rules;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public void addRule(PmdRule rule) {
+    rules.add(rule);
   }
 
 }

@@ -17,13 +17,12 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.pmd;
+package org.sonar.plugins.pmd.vm;
 
 import com.google.common.base.CharMatcher;
 import com.google.common.collect.Lists;
 
 import org.fest.assertions.Condition;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.invocation.InvocationOnMock;
@@ -37,8 +36,8 @@ import org.sonar.api.rules.RuleQuery;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.api.server.rule.RulesDefinition.Param;
 import org.sonar.api.utils.ValidationMessages;
-import org.sonar.plugins.pmd.xml.PmdProperty;
-import org.sonar.plugins.pmd.xml.PmdRule;
+import org.sonar.plugins.pmd.vm.xml.PmdProperty;
+import org.sonar.plugins.pmd.vm.xml.PmdRule;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -53,18 +52,18 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class PmdProfileExporterTest {
+public class PmdVmProfileExporterTest {
 
   private static final CharMatcher EOLS = CharMatcher.anyOf("\n\r");
 
-  PmdProfileExporter exporter = new PmdProfileExporter();
+  PmdVmProfileExporter exporter = new PmdVmProfileExporter();
 
   @org.junit.Rule
   public ExpectedException thrown = ExpectedException.none();
 
   @Test
   public void should_export_pmd_profile_on_writer() {
-    String importedXml = PmdTestUtils.getResourceContent("/org/sonar/plugins/pmd/export_simple.xml");
+    String importedXml = PmdTestUtils.getResourceContent("/org/sonar/plugins/pmd/vm/export_simple.xml");
 
     StringWriter stringWriter = new StringWriter();
     exporter.exportProfile(importProfile(importedXml), stringWriter);
@@ -77,7 +76,7 @@ public class PmdProfileExporterTest {
     thrown.expect(IllegalStateException.class);
     thrown.expectMessage("An exception occurred while generating the PMD configuration file from profile: null");
 
-    String importedXml = PmdTestUtils.getResourceContent("/org/sonar/plugins/pmd/export_simple.xml");
+    String importedXml = PmdTestUtils.getResourceContent("/org/sonar/plugins/pmd/vm/export_simple.xml");
 
     Writer writer = mock(Writer.class);
     doThrow(new IOException("test exception")).when(writer).write(anyString());
@@ -86,24 +85,25 @@ public class PmdProfileExporterTest {
 
   @Test
   public void should_export_pmd_profile() {
-    String importedXml = PmdTestUtils.getResourceContent("/org/sonar/plugins/pmd/export_simple.xml");
+    String importedXml = PmdTestUtils.getResourceContent("/org/sonar/plugins/pmd/vm/export_simple.xml");
+    RulesProfile importProfile = importProfile(importedXml);
 
-    String exportedXml = exporter.exportProfile(PmdConstants.REPOSITORY_KEY, importProfile(importedXml));
+    String exportedXml = exporter.exportProfile(PmdVmRulesDefinition.REPOSITORY_KEY, importProfile);
     assertThat(exportedXml).satisfies(equalsIgnoreEOL(importedXml));
   }
 
   @Test
   public void should_export_empty_configuration_as_xml() {
-    String exportedXml = exporter.exportProfile(PmdConstants.REPOSITORY_KEY, RulesProfile.create());
+    String exportedXml = exporter.exportProfile(PmdVmRulesDefinition.REPOSITORY_KEY, RulesProfile.create());
 
     assertThat(exportedXml).satisfies(equalsIgnoreEOL("<?xml version=\"1.0\" encoding=\"UTF-8\"?><ruleset />"));
   }
 
   @Test
   public void should_export_xPath_rule() {
-    Rule rule = Rule.create(PmdConstants.REPOSITORY_KEY, "MyOwnRule", "This is my own xpath rule.")
+    Rule rule = Rule.create(PmdVmRulesDefinition.REPOSITORY_KEY, "MyOwnRule", "This is my own xpath rule.")
       .setConfigKey(PmdConstants.XPATH_CLASS)
-      .setRepositoryKey(PmdConstants.REPOSITORY_KEY);
+      .setRepositoryKey(PmdVmRulesDefinition.REPOSITORY_KEY);
     rule.createParameter(PmdConstants.XPATH_EXPRESSION_PARAM);
     rule.createParameter(PmdConstants.XPATH_MESSAGE_PARAM);
 
@@ -112,9 +112,9 @@ public class PmdProfileExporterTest {
     xpath.setParameter(PmdConstants.XPATH_EXPRESSION_PARAM, "//FieldDeclaration");
     xpath.setParameter(PmdConstants.XPATH_MESSAGE_PARAM, "This is bad");
 
-    String exportedXml = exporter.exportProfile(PmdConstants.REPOSITORY_KEY, profile);
+    String exportedXml = exporter.exportProfile(PmdVmRulesDefinition.REPOSITORY_KEY, profile);
 
-    assertThat(exportedXml).satisfies(equalsIgnoreEOL(PmdTestUtils.getResourceContent("/org/sonar/plugins/pmd/export_xpath_rules.xml")));
+    assertThat(exportedXml).satisfies(equalsIgnoreEOL(PmdTestUtils.getResourceContent("/org/sonar/plugins/pmd/vm/export_xpath_rules.xml")));
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -154,12 +154,12 @@ public class PmdProfileExporterTest {
   }
 
   static RulesProfile importProfile(String configuration) {
-    PmdRulesDefinition definition = new PmdRulesDefinition();
+    PmdVmRulesDefinition definition = new PmdVmRulesDefinition();
     RulesDefinition.Context context = new RulesDefinition.Context();
     definition.define(context);
-    RulesDefinition.Repository repository = context.repository(PmdConstants.REPOSITORY_KEY);
+    RulesDefinition.Repository repository = context.repository(PmdVmRulesDefinition.REPOSITORY_KEY);
     RuleFinder ruleFinder = createRuleFinder(repository.rules());
-    PmdProfileImporter importer = new PmdProfileImporter(ruleFinder);
+    PmdVmProfileImporter importer = new PmdVmProfileImporter(ruleFinder);
 
     return importer.importProfile(new StringReader(configuration), ValidationMessages.create());
   }

@@ -1,0 +1,23 @@
+<sqale>
+	<chc>
+		<key>MAINTAINABILITY</key>
+		<name>maintainability</name>
+		<chc>
+			<key>READABILITY</key>
+			<name>readability</name>
+			<chc>
+				<rule-repo>pmd-vm</rule-repo>
+				<rule-key>UseQuietReferenceNotationRule</rule-key>
+				<prop>
+					<key>remediationFunction</key>
+					<txt>CONSTANT_ISSUE</txt>
+				</prop>
+				<prop>
+					<key>offset</key>
+					<val>10</val>
+					<txt>min</txt>
+				</prop>
+			</chc>
+		</chc>
+	</chc>
+</sqale>

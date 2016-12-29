@@ -1,0 +1,11 @@
+<p>
+后台输送给页面的变量必须加$!{var}——中间的感叹号。
+</p>
+<p>
+说明：如果var=null或者不存在，那么${var}会直接显示在页面上。
+</p>
+
+<pre>
+&lt;input type=&quot;text&quot; name=&quot;email&quot; value=&quot;$!email&quot;/&gt;
+&lt;input type=&quot;text&quot; name=&quot;email&quot; value=&quot;$!{email}&quot;/&gt;
+</pre>

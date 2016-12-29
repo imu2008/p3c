@@ -17,33 +17,31 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.pmd;
+package org.sonar.plugins.pmd.vm;
 
-import com.google.common.collect.ImmutableList;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.EnumHashBiMap;
+import org.sonar.api.rules.RulePriority;
 
-import org.sonar.api.SonarPlugin;
-import org.sonar.api.config.PropertyDefinition;
+import static com.google.common.collect.ImmutableMap.of;
 
-import java.util.List;
+public final class PmdLevelUtils {
+  private static final BiMap<RulePriority, String> LEVELS_PER_PRIORITY = EnumHashBiMap.create(of(
+      RulePriority.BLOCKER, "1",
+      RulePriority.CRITICAL, "2",
+      RulePriority.MAJOR, "3",
+      RulePriority.MINOR, "4",
+      RulePriority.INFO, "5"));
 
-public class PmdPlugin extends SonarPlugin {
-
-  @Override
-  public List getExtensions() {
-    return ImmutableList.of(
-      PropertyDefinition.builder(PmdConfiguration.PROPERTY_GENERATE_XML)
-        .defaultValue("false")
-        .name("Generate XML Report")
-        .hidden()
-        .build(),
-      PmdSensor.class,
-      PmdConfiguration.class,
-      PmdExecutor.class,
-      PmdRulesDefinition.class,
-      PmdUnitTestsRulesDefinition.class,
-      PmdProfileExporter.class,
-      PmdProfileImporter.class,
-      PmdViolationRecorder.class);
+  private PmdLevelUtils() {
+    // only static methods
   }
 
+  public static RulePriority fromLevel(String level) {
+    return LEVELS_PER_PRIORITY.inverse().get(level);
+  }
+
+  public static String toLevel(RulePriority priority) {
+    return LEVELS_PER_PRIORITY.get(priority);
+  }
 }

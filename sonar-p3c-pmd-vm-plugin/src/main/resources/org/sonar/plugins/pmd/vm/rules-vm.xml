@@ -1,0 +1,8 @@
+<rules>
+	<!-- Others -->
+	<rule key="UseQuietReferenceNotationRule">
+		<priority>CRITICAL</priority>
+		<configKey>rulesets/vm/ali-others.xml/UseQuietReferenceNotationRule
+		</configKey>
+	</rule>
+</rules>

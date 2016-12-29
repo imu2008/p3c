@@ -17,33 +17,42 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.pmd;
+package org.sonar.plugins.pmd.vm.xml;
 
-import com.google.common.collect.ImmutableList;
+public class PmdProperty {
 
-import org.sonar.api.SonarPlugin;
-import org.sonar.api.config.PropertyDefinition;
+  private String name;
 
-import java.util.List;
+  private String value;
 
-public class PmdPlugin extends SonarPlugin {
+  private String cdataValue;
 
-  @Override
-  public List getExtensions() {
-    return ImmutableList.of(
-      PropertyDefinition.builder(PmdConfiguration.PROPERTY_GENERATE_XML)
-        .defaultValue("false")
-        .name("Generate XML Report")
-        .hidden()
-        .build(),
-      PmdSensor.class,
-      PmdConfiguration.class,
-      PmdExecutor.class,
-      PmdRulesDefinition.class,
-      PmdUnitTestsRulesDefinition.class,
-      PmdProfileExporter.class,
-      PmdProfileImporter.class,
-      PmdViolationRecorder.class);
+  public PmdProperty(String name, String value) {
+    this.name = name;
+    this.value = value;
   }
 
+  public String getName() {
+    return name;
+  }
+
+  public String getValue() {
+    return value;
+  }
+
+  public String getCdataValue() {
+    return cdataValue;
+  }
+
+  public boolean isCdataValue(){
+    return cdataValue != null;
+  }
+
+  public void setValue(String value) {
+    this.value = value;
+  }
+
+  public void setCdataValue(String cdataValue) {
+    this.cdataValue = cdataValue;
+  }
 }
