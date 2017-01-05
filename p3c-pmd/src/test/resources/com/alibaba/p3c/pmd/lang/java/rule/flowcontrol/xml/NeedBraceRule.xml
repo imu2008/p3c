@@ -58,7 +58,11 @@
 	    	boolean flag;
 	    	if (a > 0) {
 	    		// do nothing
-	    	} else
+	    	}
+
+	    	 else
+
+
 	    		flag = true;
 	    }
 	}
@@ -67,32 +71,8 @@
 	<test-code>
 		<description>定位到else行号</description>
 		<expected-problems>1</expected-problems>
+		<!-- AST中拿不到else本身的行号,因此将错误标记在else下边的语句上 -->
+		<expected-linenumbers>12</expected-linenumbers>
 		<code-ref id="else-line-no"/>
 	</test-code>
-    
-    
-    
-    
-    <code-fragment id="else-no-brace2">
-        <![CDATA[
-    public class Example {
-	  public void fn() {
-        if(group.workNos!=null){
-            if("%".equals(workNo)){
-                group.setCanViewAllData(true);
-                group.workNos=null;                
-            }
-            else
-                group.workNos.add(workNo);
-        }
-      }
-   }
-]]>
-    </code-fragment>
-    <test-code>
-        <description>else语句未使用{}</description>
-        <expected-problems>1</expected-problems>
-        <code-ref id="else-no-brace2"/>
-        <expected-linenumbers>8</expected-linenumbers>
-    </test-code>
 </test-data>
