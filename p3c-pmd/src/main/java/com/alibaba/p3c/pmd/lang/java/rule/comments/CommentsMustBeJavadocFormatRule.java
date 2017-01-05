@@ -159,8 +159,8 @@ public class CommentsMustBeJavadocFormatRule extends AbstractCommentRule {
             return false;
         }
 
-        boolean isNotWithinNode2 = !(n1.getEndLine() < n2.getEndLine()
-                || n1.getEndLine() == n2.getEndLine() && n1.getEndColumn() < n2.getEndColumn());
+        // 上一节点的行后注释，不作为本节点的注释，缩小了检测范围
+        boolean isNotWithinNode2 = n1.getEndLine() > n2.getEndLine();
 
         boolean isNotSameClass = node.getFirstParentOfType(ASTClassOrInterfaceBody.class) != n2
                 .getFirstParentOfType(ASTClassOrInterfaceBody.class);

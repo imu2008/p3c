@@ -1,6 +1,10 @@
+<p>
 在subList场景中，高度注意对原列表的修改，会导致子列表的遍历、增加、删除均产生ConcurrentModificationException异常。
+</p>
+<p>
+如果对于原来集合有修改操作，那么不能用使用直接subList来返回子集合,new集合(原集合.subList(x, y))。
+</p>
 
-如果对于原来集合有修改操作，那么不能用使用直接subList来返回子集合,new集合(原集合.subList(x, y))。   
 反例:   
 <pre>           
 List<String> originList = new ArrayList<String>();

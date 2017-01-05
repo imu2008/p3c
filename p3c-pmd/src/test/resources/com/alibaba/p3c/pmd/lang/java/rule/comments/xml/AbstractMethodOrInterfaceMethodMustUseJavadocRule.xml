@@ -139,4 +139,43 @@ public interface AbstractClassOrInterfaceMethodMustUseJavadoc {
 		<expected-problems>0</expected-problems>
 		<code-ref id="method-in-interface-with-full-comment" />
 	</test-code>
+
+
+	<code-fragment id="interface-ignore-methods-in-inner-enums-or-classes"><![CDATA[
+public interface InterfaceTest {
+   int test();
+   
+   int test2();
+   
+   public enum CmdbAttributeName {
+       schema("schema"), planId("planId");
+
+       private String prototype;
+
+       CmdbAttributeName(String prototype){
+           this.prototype = prototype;
+       }
+
+       public String getPrototype() {
+           return this.prototype;
+       }
+   }
+   
+   public class InnerClass {
+       public void classTest() {
+       };
+   }
+   
+   
+   String getName(String username);
+}
+    ]]>
+	</code-fragment>
+	<test-code>
+		<description>Interface ignore methods in inner enums or classes.
+		</description>
+		<expected-problems>3</expected-problems>
+		<expected-linenumbers>2,4,26</expected-linenumbers>
+		<code-ref id="interface-ignore-methods-in-inner-enums-or-classes" />
+	</test-code>
 </test-data>

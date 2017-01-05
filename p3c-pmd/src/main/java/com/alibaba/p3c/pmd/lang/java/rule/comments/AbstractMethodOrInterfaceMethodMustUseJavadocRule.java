@@ -1,8 +1,12 @@
 package com.alibaba.p3c.pmd.lang.java.rule.comments;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import org.jaxen.JaxenException;
+
+import net.sourceforge.pmd.lang.ast.Node;
 import net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceDeclaration;
 import net.sourceforge.pmd.lang.java.ast.ASTCompilationUnit;
 import net.sourceforge.pmd.lang.java.ast.ASTMethodDeclaration;
@@ -22,6 +26,9 @@ import net.sourceforge.pmd.lang.java.rule.comments.AbstractCommentRule;
  */
 public class AbstractMethodOrInterfaceMethodMustUseJavadocRule extends AbstractCommentRule {
 
+    private static final String METHOD_IN_INTERFACE_XPATH =
+            "./ClassOrInterfaceBody/ClassOrInterfaceBodyDeclaration/MethodDeclaration";
+
     @Override
     public Object visit(ASTClassOrInterfaceDeclaration decl, Object data) {
         if (decl.isAbstract()) {
@@ -40,9 +47,16 @@ public class AbstractMethodOrInterfaceMethodMustUseJavadocRule extends AbstractC
         }
 
         if (decl.isInterface()) {
-            List<ASTMethodDeclaration> methods =
-                    decl.findDescendantsOfType(ASTMethodDeclaration.class);
-            for (ASTMethodDeclaration method : methods) {
+            List<Node> methodNodes = new ArrayList<>();
+            try {
+                methodNodes = decl.findChildNodesWithXPath(METHOD_IN_INTERFACE_XPATH);
+            } catch (JaxenException e) {
+                throw new RuntimeException("XPath expression " + METHOD_IN_INTERFACE_XPATH
+                        + " failed: " + e.getLocalizedMessage(), e);
+            }
+
+            for (Node node : methodNodes) {
+                ASTMethodDeclaration method = (ASTMethodDeclaration) node;
                 Comment comment = method.comment();
                 if (null == comment || !(comment instanceof FormalComment)) {
                     addViolationWithMessage(data, method, "所有的接口方法必须要用javadoc注释");

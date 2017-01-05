@@ -112,4 +112,20 @@ public class PMDProjectPropertyPage extends PropertyPage {
 		<code-ref id="non-javadoc-comments-before-package-and-import" />
 	</test-code>
 
+	<code-fragment id="ignore-comments-behind-statements"><![CDATA[
+public class CommentsMustBeJavadocFormat {
+    private String name; //行后注释，本规则中不报javadoc格式的错误，避免每次都报两个问题
+    private Integer age;
+    public void getName() {
+    }
+}
+    ]]>
+	</code-fragment>
+	<test-code>
+		<description>Ignore comments behind statements.
+		</description>
+		<expected-problems>0</expected-problems>
+		<code-ref id="ignore-comments-behind-statements" />
+	</test-code>
+
 </test-data>
