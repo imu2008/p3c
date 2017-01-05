@@ -17,6 +17,7 @@
         <code-ref id="if-no-brace"/>
     </test-code>
 
+	<!-- ====================================================================== -->
 
     <code-fragment id="else-no-brace">
         <![CDATA[
@@ -46,4 +47,26 @@
         <expected-problems>4</expected-problems>
         <code-ref id="else-no-brace"/>
     </test-code>
+
+	<!-- ====================================================================== -->
+
+	<code-fragment id="else-line-no">
+		<![CDATA[
+	public class Example {
+	    public void fn() {
+	    	int a;
+	    	boolean flag;
+	    	if (a > 0) {
+	    		// do nothing
+	    	} else
+	    		flag = true;
+	    }
+	}
+		]]>
+	</code-fragment>
+	<test-code>
+		<description>定位到else行号</description>
+		<expected-problems>1</expected-problems>
+		<code-ref id="else-line-no"/>
+	</test-code>
 </test-data>

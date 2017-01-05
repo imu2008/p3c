@@ -21,7 +21,7 @@ public class NeedBraceRule extends AbstractJavaRule {
             ASTStatement elseStms = node.findChildrenOfType(ASTStatement.class).get(1);
 
             if (!elseStms.hasDecendantOfAnyType(ASTBlock.class, ASTIfStatement.class)) {
-                addViolation(data, node);
+                addViolation(data, elseStms);
             }
         } else {
             if (!node.hasDescendantMatchingXPath("Statement/Block")) {
