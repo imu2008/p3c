@@ -6,7 +6,7 @@
 
 	<groupId>com.alibaba.p3c</groupId>
 	<artifactId>sonar-p3c-pmd-plugin</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<packaging>sonar-plugin</packaging>
 
 	<name>SonarQube PMD Plugin</name>
