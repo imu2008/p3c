@@ -3,6 +3,7 @@
 	<test-code>
 		<description>AvoidUseTimer</description>
 		<expected-problems>3</expected-problems>
+		<expected-linenumbers>13,16,17</expected-linenumbers>
 		<code><![CDATA[
 
 package com.alibaba.idea.pmd.test.concurrent;
