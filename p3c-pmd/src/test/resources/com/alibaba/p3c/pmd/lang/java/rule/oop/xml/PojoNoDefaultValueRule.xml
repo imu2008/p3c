@@ -26,6 +26,7 @@
 	<test-code>
 		<description>POJO属性包含默认值</description>
 		<expected-problems>3</expected-problems>
+		<expected-linenumbers>12,3,5</expected-linenumbers>
 		<code-ref id="pojo-field-has-default-value" />
 	</test-code>
 
@@ -82,6 +83,7 @@
 	<test-code>
 		<description>static, transient, public属性不检查</description>
 		<expected-problems>2</expected-problems>
+		<expected-linenumbers>12,3</expected-linenumbers>
 		<code-ref id="pojo-feild-exclusion" />
 	</test-code>
 

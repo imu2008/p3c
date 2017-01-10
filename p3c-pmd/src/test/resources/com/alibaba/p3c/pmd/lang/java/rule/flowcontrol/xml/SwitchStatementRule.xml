@@ -26,6 +26,7 @@
 	<test-code>
 		<description>外层switch语句没有default分支</description>
 		<expected-problems>1</expected-problems>
+		<expected-linenumbers>4</expected-linenumbers>
 		<code-ref id="switch-no-default-1" />
 	</test-code>
 
@@ -57,7 +58,8 @@
 	<test-code>
 		<description>嵌套的switch语句没有default分支</description>
 		<expected-problems>1</expected-problems>
-		<code-ref id="switch-no-default-1" />
+		<expected-linenumbers>9</expected-linenumbers>
+		<code-ref id="switch-no-default-2" />
 	</test-code>
 
     <!-- ====================================================================== -->
@@ -86,6 +88,7 @@
 	<test-code>
 		<description>case语句没有break</description>
 		<expected-problems>1</expected-problems>
+		<expected-linenumbers>4</expected-linenumbers>
 		<code-ref id="switch-case-no-break" />
 	</test-code>
 
@@ -238,6 +241,7 @@ public class ItemEditProcessor extends AbstractItemChangeProcessor {
     <test-code>
         <description>多个连续空case语句</description>
         <expected-problems>1</expected-problems>
+		<expected-linenumbers>79</expected-linenumbers>
         <code-ref id="multi-case-no-statement" />
     </test-code>
 </test-data>

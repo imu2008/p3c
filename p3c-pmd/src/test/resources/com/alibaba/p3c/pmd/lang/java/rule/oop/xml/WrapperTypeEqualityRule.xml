@@ -50,6 +50,7 @@
 	<test-code>
 		<description>包装类对象之间值的比较未使用equals方法</description>
 		<expected-problems>3</expected-problems>
+		<expected-linenumbers>11,23,34</expected-linenumbers>
 		<code-ref id="wrap-type-not-use-equal" />
 	</test-code>
 

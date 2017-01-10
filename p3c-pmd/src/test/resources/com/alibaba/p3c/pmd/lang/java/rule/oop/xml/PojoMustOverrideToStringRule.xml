@@ -27,6 +27,7 @@
 	<test-code>
 		<description>POJO未Override toString()</description>
 		<expected-problems>2</expected-problems>
+		<expected-linenumbers>1,6</expected-linenumbers>
 		<code-ref id="pojo-not-override-tostring" />
 	</test-code>
 
