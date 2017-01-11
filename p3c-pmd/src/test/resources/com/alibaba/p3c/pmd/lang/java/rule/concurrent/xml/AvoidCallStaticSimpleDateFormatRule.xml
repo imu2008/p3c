@@ -3,6 +3,7 @@
     <test-code>
         <description>AvoidCallStaticSimpleDateFormatRule</description>
         <expected-problems>4</expected-problems>
+        <expected-linenumbers>33,25,21,48</expected-linenumbers>
         <code><![CDATA[
 package com.alibaba.idea.pmd.rule.calendar;
 

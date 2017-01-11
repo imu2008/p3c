@@ -17,7 +17,7 @@ public class Foo {
 	<test-code>
 		<description>构造函数有控制语句</description>
 		<expected-problems>1</expected-problems>
-
+		<expected-linenumbers>4</expected-linenumbers>
 		<code-ref id="constructor-has-if" />
 	</test-code>
 
@@ -49,6 +49,7 @@ public class Foo {
 	<test-code>
 		<description>构造函数有三元表达式</description>
 		<expected-problems>1</expected-problems>
+		<expected-linenumbers>10</expected-linenumbers>
 		<code-ref id="constructor-has-ternary" />
 	</test-code>
 

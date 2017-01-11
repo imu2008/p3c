@@ -26,6 +26,7 @@
 	<test-code>
 		<description>字符串字面量在equals方法右边</description>
 		<expected-problems>3</expected-problems>
+		<expected-linenumbers>6,10,14</expected-linenumbers>
 		<code-ref id="literal-in-right-of-equals" />
 	</test-code>
 
@@ -50,6 +51,7 @@
 	<test-code>
 		<description>常量在equals方法右边</description>
 		<expected-problems>1</expected-problems>
+		<expected-linenumbers>8</expected-linenumbers>
 		<code-ref id="constant-in-right-of-equals" />
 	</test-code>
 
