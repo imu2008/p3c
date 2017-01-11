@@ -9,14 +9,17 @@ public class CamelClassNameRuleTest {
     class CamelclassNameRuleTestDO{}
     class CamelclassNameRuleTestDODO{}
     class CamelclassNameRuleTestdo{}
+    class CamelclassNameRuleTestBO{}
+    class CamelclassNameRuleTestBo{}
+    class CamelclassNameRuleTestbO{}
 }
     ]]>
     </code-fragment>
     <test-code>
         <description>Class Name Should Camel</description>
-        <expected-problems>3</expected-problems>
+        <expected-problems>4</expected-problems>
         <code-ref id="CamelClassNaming" />
-        <expected-linenumbers>4,5,7</expected-linenumbers>
+        <expected-linenumbers>4,5,7,11</expected-linenumbers>
     </test-code>
 
 
