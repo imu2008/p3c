@@ -20,8 +20,13 @@ public class ClassMustHaveAuthorRule extends AbstractCommentRule {
 
     @Override
     public Object visit(ASTClassOrInterfaceDeclaration decl, Object data) {
-        // 排除内部类
+        // 排除嵌套类
         if (decl.isNested()) {
+            return super.visit(decl, data);
+        }
+
+        // 排除内部类
+        if (!decl.isPublic()) {
             return super.visit(decl, data);
         }
 
