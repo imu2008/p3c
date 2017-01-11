@@ -8,16 +8,13 @@ import java.util.Map.Entry;
 import com.alibaba.p3c.pmd.lang.java.rule.util.CommentUtils;
 
 import net.sourceforge.pmd.lang.ast.Node;
-import net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceBody;
 import net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceBodyDeclaration;
 import net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceDeclaration;
 import net.sourceforge.pmd.lang.java.ast.ASTCompilationUnit;
 import net.sourceforge.pmd.lang.java.ast.ASTConstructorDeclaration;
 import net.sourceforge.pmd.lang.java.ast.ASTEnumDeclaration;
 import net.sourceforge.pmd.lang.java.ast.ASTFieldDeclaration;
-import net.sourceforge.pmd.lang.java.ast.ASTImportDeclaration;
 import net.sourceforge.pmd.lang.java.ast.ASTMethodDeclaration;
-import net.sourceforge.pmd.lang.java.ast.ASTPackageDeclaration;
 import net.sourceforge.pmd.lang.java.ast.AbstractJavaAccessNode;
 import net.sourceforge.pmd.lang.java.ast.AbstractJavaNode;
 import net.sourceforge.pmd.lang.java.ast.Comment;
@@ -91,9 +88,8 @@ public class CommentsMustBeJavadocFormatRule extends AbstractCommentRule {
             if (value instanceof AbstractJavaNode) {
                 AbstractJavaNode node = (AbstractJavaNode) value;
 
-                // maybe the last comment is within the last node
-                if (lastComment != null && isCommentNotWithin(lastComment, lastNode, node)
-                        && isCommentBefore(lastComment, node)) {
+                // 检测评论是否在类、属性、方法、枚举的上一行
+                if (lastComment != null && isCommentOneLineBefore(lastComment, lastNode, node)) {
                     node.comment(lastComment);
                     lastComment = null;
                 }
@@ -110,16 +106,6 @@ public class CommentsMustBeJavadocFormatRule extends AbstractCommentRule {
         SortedMap<Integer, Node> itemsByLineNumber = new TreeMap<>();
 
         CommentUtils.addNodesToSortedMap(itemsByLineNumber, cUnit.getComments());
-
-        // 排除package前面的注释
-        List<ASTPackageDeclaration> packageDecl =
-                cUnit.findDescendantsOfType(ASTPackageDeclaration.class);
-        CommentUtils.addNodesToSortedMap(itemsByLineNumber, packageDecl);
-
-        // 排除import前面的注释
-        List<ASTImportDeclaration> importDecl =
-                cUnit.findDescendantsOfType(ASTImportDeclaration.class);
-        CommentUtils.addNodesToSortedMap(itemsByLineNumber, importDecl);
 
         List<ASTClassOrInterfaceDeclaration> classDecl =
                 cUnit.findDescendantsOfType(ASTClassOrInterfaceDeclaration.class);
@@ -142,36 +128,20 @@ public class CommentsMustBeJavadocFormatRule extends AbstractCommentRule {
         return itemsByLineNumber;
     }
 
-    private boolean isCommentNotWithin(Comment n1, Node n2, Node node) {
-        if (n1 == null || n2 == null || node == null) {
-            return true;
-        }
-
-        // 如果上一个节点是package或import声明，则评论必然不是包含在上一个节点中的
-        if (n2 instanceof ASTPackageDeclaration || n2 instanceof ASTImportDeclaration) {
-            return true;
-        }
-
-        // 对于匿名类中的方法，不做javadoc格式约定，匿名类加javadoc注释不会给IDE自动提示带来好处
-        ASTClassOrInterfaceBodyDeclaration nodeClassDecl =
+    private boolean isCommentOneLineBefore(Comment lastComment, Node lastNode, Node node) {
+        ASTClassOrInterfaceBodyDeclaration parentClass =
                 node.getFirstParentOfType(ASTClassOrInterfaceBodyDeclaration.class);
-        if (nodeClassDecl.isAnonymousInnerClass()) {
+
+        // 如果节点在匿名类内部，一概不做检查
+        if (parentClass != null && parentClass.isAnonymousInnerClass()) {
             return false;
         }
 
-        // 上一节点的行后注释，不作为本节点的注释，缩小了检测范围
-        boolean isNotWithinNode2 = n1.getEndLine() > n2.getEndLine();
+        // 如果上一行注释，与上一个节点结尾在同一行，不作为本节点的注释
+        if (lastNode != null && lastNode.getEndLine() == lastComment.getEndLine()) {
+            return false;
+        }
 
-        boolean isNotSameClass = node.getFirstParentOfType(ASTClassOrInterfaceBody.class) != n2
-                .getFirstParentOfType(ASTClassOrInterfaceBody.class);
-
-        boolean isNodeWithinNode2 = (node.getEndLine() < n2.getEndLine()
-                || node.getEndLine() == n2.getEndLine() && node.getEndColumn() < n2.getEndColumn());
-        return isNotWithinNode2 || isNotSameClass || isNodeWithinNode2;
-    }
-
-    private boolean isCommentBefore(Comment n1, Node n2) {
-        return n1.getEndLine() < n2.getBeginLine()
-                || n1.getEndLine() == n2.getBeginLine() && n1.getEndColumn() < n2.getBeginColumn();
+        return lastComment.getEndLine() + 1 == node.getBeginLine();
     }
 }
