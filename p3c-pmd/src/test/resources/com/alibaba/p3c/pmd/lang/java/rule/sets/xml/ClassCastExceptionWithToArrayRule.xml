@@ -28,6 +28,7 @@
 	<test-code>
 		<description>sets-ClassCastExceptionWithToArray-warn.</description>
 		<expected-problems>1</expected-problems>
+		<expected-linenumbers>3</expected-linenumbers>
 		<code-ref id="sets-ClassCastExceptionWithToArray-warn" />
 	</test-code>
 

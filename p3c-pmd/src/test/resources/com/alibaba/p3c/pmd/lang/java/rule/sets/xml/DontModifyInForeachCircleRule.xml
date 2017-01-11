@@ -39,6 +39,7 @@
 	<test-code>
 		<description>sets-ConcurrentExceptionWithModifyOriginSubListRule-warn.</description>
 		<expected-problems>3</expected-problems>
+		<expected-linenumbers>6,7,8</expected-linenumbers>
 		<code-ref id="sets-warn" />
 	</test-code>
 

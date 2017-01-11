@@ -30,6 +30,7 @@
 	<test-code>
 		<description>sets-ClassCastExceptionWithSubListToArrayListRule-warn.</description>
 		<expected-problems>1</expected-problems>
+		<expected-linenumbers>5</expected-linenumbers>
 		<code-ref id="sets-warn" />
 	</test-code>
 

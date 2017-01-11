@@ -45,6 +45,7 @@
 	<test-code>
 		<description>sets-UnsupportedExceptionWithModifyAsListRule-warn.</description>
 		<expected-problems>4</expected-problems>
+		<expected-linenumbers>5,6,7,17</expected-linenumbers>
 		<code-ref id="sets-UnsupportedExceptionWithModifyAsListRule-warn" />
 	</test-code>
 

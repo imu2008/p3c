@@ -46,6 +46,7 @@
 	<test-code>
 		<description>UndefineMagicConstant.</description>
 		<expected-problems>1</expected-problems>
+		<expected-linenumbers>6</expected-linenumbers>
 		<code-ref id="constants-err" />
 	</test-code>
 	
@@ -63,6 +64,7 @@
 	<test-code>
 		<description>UndefineMagicConstant.</description>
 		<expected-problems>1</expected-problems>
+		<expected-linenumbers>3</expected-linenumbers>
 		<code-ref id="constants-err-2" />
 	</test-code>
 

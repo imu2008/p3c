@@ -33,6 +33,7 @@
 	<test-code>
 		<description>constants with lowercase l.</description>
 		<expected-problems>3</expected-problems>
+		<expected-linenumbers>2,5,6</expected-linenumbers>
 		<code-ref id="constants-lowercase-l" />
 	</test-code>
 
