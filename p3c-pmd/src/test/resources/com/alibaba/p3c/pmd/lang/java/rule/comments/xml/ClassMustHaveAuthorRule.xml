@@ -9,6 +9,7 @@ public class ClassMustHaveAuthorRule {}
 	<test-code>
 		<description>Class without author.</description>
 		<expected-problems>1</expected-problems>
+		<expected-linenumbers>1</expected-linenumbers>
 		<code-ref id="class-without-author" />
 	</test-code>
 
@@ -36,6 +37,7 @@ public class ClassMustHaveAuthorRule {}
 	<test-code>
 		<description>Class with date.</description>
 		<expected-problems>1</expected-problems>
+		<expected-linenumbers>4</expected-linenumbers>
 		<code-ref id="class-with-date" />
 	</test-code>
 	

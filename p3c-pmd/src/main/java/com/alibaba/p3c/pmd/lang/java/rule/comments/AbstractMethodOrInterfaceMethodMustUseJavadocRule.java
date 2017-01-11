@@ -29,6 +29,10 @@ public class AbstractMethodOrInterfaceMethodMustUseJavadocRule extends AbstractC
     private static final String METHOD_IN_INTERFACE_XPATH =
             "./ClassOrInterfaceBody/ClassOrInterfaceBodyDeclaration/MethodDeclaration";
 
+    private static final Pattern EMPTY_CONTENT_PATTERN =
+            Pattern.compile("[/*\\n\\r\\s]+(@.*)?", Pattern.DOTALL);
+    private static final Pattern RETURN_PATTERN = Pattern.compile(".*@return.*", Pattern.DOTALL);
+
     @Override
     public Object visit(ASTClassOrInterfaceDeclaration decl, Object data) {
         if (decl.isAbstract()) {
@@ -73,8 +77,7 @@ public class AbstractMethodOrInterfaceMethodMustUseJavadocRule extends AbstractC
         String commentContent = comment.getImage();
 
         // 指出该方法做什么事情，实现什么功能
-        Pattern emptyContentPattern = Pattern.compile("[/*\\n\\r\\s]+(@.*)?", Pattern.DOTALL);
-        if (emptyContentPattern.matcher(commentContent).matches()) {
+        if (EMPTY_CONTENT_PATTERN.matcher(commentContent).matches()) {
             addViolationWithMessage(data, method, "需要指出该方法做什么事情，实现什么功能");
         }
 
@@ -92,8 +95,7 @@ public class AbstractMethodOrInterfaceMethodMustUseJavadocRule extends AbstractC
         }
 
         // 返回值必须要有javadoc注释
-        Pattern returnPattern = Pattern.compile(".*@return.*", Pattern.DOTALL);
-        if (!method.isVoid() && !returnPattern.matcher(commentContent).matches()) {
+        if (!method.isVoid() && !RETURN_PATTERN.matcher(commentContent).matches()) {
             addViolationWithMessage(data, method, "返回值缺少javadoc注释");
         }
 

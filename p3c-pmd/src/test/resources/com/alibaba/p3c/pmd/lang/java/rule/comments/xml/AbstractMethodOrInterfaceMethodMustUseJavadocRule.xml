@@ -83,6 +83,7 @@ public interface AbstractClassOrInterfaceMethodMustUseJavadoc {
 		<description>Method in interface with non-javadoc comment.
 		</description>
 		<expected-problems>1</expected-problems>
+		<expected-linenumbers>2</expected-linenumbers>
 		<code-ref id="method-in-interface-without-comment" />
 	</test-code>
 
@@ -97,6 +98,7 @@ public interface AbstractClassOrInterfaceMethodMustUseJavadoc {
 	<test-code>
 		<description>Void method with empty javadoc.</description>
 		<expected-problems>1</expected-problems>
+		<expected-linenumbers>4</expected-linenumbers>
 		<code-ref id="void-method-in-interface-with-part-of-comment" />
 	</test-code>
 
@@ -113,6 +115,7 @@ public interface AbstractClassOrInterfaceMethodMustUseJavadoc {
 			function, return, parameters and exceptions.
 		</description>
 		<expected-problems>6</expected-problems>
+		<expected-linenumbers>4</expected-linenumbers>
 		<code-ref id="method-in-interface-with-part-of-comment" />
 	</test-code>
 
