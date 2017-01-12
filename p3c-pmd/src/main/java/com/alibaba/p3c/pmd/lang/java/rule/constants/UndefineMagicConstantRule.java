@@ -4,6 +4,7 @@
 package com.alibaba.p3c.pmd.lang.java.rule.constants;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.jaxen.JaxenException;
@@ -28,6 +29,9 @@ public class UndefineMagicConstantRule extends AbstractJavaRule {
 
     // 魔法值去重，防止父类找子变量结点时存在重复
     private List<ASTLiteral> currentLiterals = new ArrayList<ASTLiteral>();
+
+    // 允许未定义变量白名单,需不断补充
+    private final static List<String> LITERAL_WHITE_LIST = Arrays.asList("0", "1", "\"\"", "0.0", "1.0", "-1", "0L", "1L");
 
     /**
      * 判断未定义变量是否在非循环体的if语句中
@@ -72,6 +76,12 @@ public class UndefineMagicConstantRule extends AbstractJavaRule {
         // name为空时，是null,bool变量，算白名单
         if (name == null) {
             return false;
+        }
+        // 变量名称白名单过滤
+        for (String whiteItem : LITERAL_WHITE_LIST) { 
+            if (whiteItem.equals(name)) {
+                return false; 
+            } 
         }
         // 判断变量是否在非循环体的if语句中
         ASTIfStatement ifStagtement = literal.getFirstParentOfType(ASTIfStatement.class);

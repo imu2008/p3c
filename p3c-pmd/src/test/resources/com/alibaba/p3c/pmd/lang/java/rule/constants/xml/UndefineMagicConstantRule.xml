@@ -20,11 +20,19 @@
                   Integer i = 1;
                   Integer k = 0;
                   Boolean h = false;
+                  Long m = 2L;
+                  String n = "";
                   if(i > 2){ 
-                  } 
+                  }
+                  if(i > 1){ 
+                  }
+                  if(m > 1L){
+                  }  
                   if(i != null){ 
                   }
                   if(h != false){ 
+                  }
+                  if(n.equals("")){
                   }    
                   for(int j=0 ; j< 10 ; i++){
                	     if(i > 2){
@@ -46,7 +54,7 @@
 	<test-code>
 		<description>UndefineMagicConstant.</description>
 		<expected-problems>1</expected-problems>
-		<expected-linenumbers>6</expected-linenumbers>
+		<expected-linenumbers>8</expected-linenumbers>
 		<code-ref id="constants-err" />
 	</test-code>
 	
