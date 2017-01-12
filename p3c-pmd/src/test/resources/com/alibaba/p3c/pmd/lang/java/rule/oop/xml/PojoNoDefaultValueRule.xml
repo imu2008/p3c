@@ -63,7 +63,7 @@
 
 	<code-fragment id="pojo-feild-exclusion">
 		<![CDATA[
-	public class FooDAO {
+	public class FooBO {
 		private static final String HELLO = "Hello";	// OK
 		private String tom = ""; 	// BAD
 		private String jerry;		// OK
