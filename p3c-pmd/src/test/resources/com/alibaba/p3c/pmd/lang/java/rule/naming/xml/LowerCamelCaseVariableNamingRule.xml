@@ -5,6 +5,9 @@
     private String abC;
     private String AbC;
     private String abCd;
+    private void f(){
+        String s = "test";
+    }
 }
     ]]>
     </code-fragment>
@@ -23,7 +26,7 @@
     ]]>
     </code-fragment>
     <test-code>
-        <description>Variable name should be lowerCamelCase</description>
+        <description>Variable name should be lowerCamelCase1</description>
         <expected-problems>0</expected-problems>
         <code-ref id="LowerCamelCaseVariableNamingRuleTest1" />
     </test-code>
@@ -37,7 +40,7 @@ public interface PluginConstants {
     ]]>
     </code-fragment>
     <test-code>
-        <description>Variable name should be lowerCamelCase</description>
+        <description>Variable name should be lowerCamelCase2</description>
         <expected-problems>0</expected-problems>
         <code-ref id="LowerCamelCaseVariableNamingRuleTest2" />
     </test-code>
@@ -54,7 +57,7 @@ public class PluginConstants {
     ]]>
     </code-fragment>
     <test-code>
-        <description>Variable name should be lowerCamelCase</description>
+        <description>Variable name should be lowerCamelCase3</description>
         <expected-problems>2</expected-problems>
         <code-ref id="LowerCamelCaseVariableNamingRuleTest3" />
         <expected-linenumbers>2,3</expected-linenumbers>
@@ -73,7 +76,7 @@ public interface BizConstants {
     ]]>
     </code-fragment>
     <test-code>
-        <description>Variable name should be lowerCamelCase</description>
+        <description>Variable name should be lowerCamelCase4</description>
         <expected-problems>0</expected-problems>
         <code-ref id="LowerCamelCaseVariableNamingRuleTest4" />
     </test-code>
@@ -87,9 +90,25 @@ public interface BizConstants {
     ]]>
     </code-fragment>
     <test-code>
-        <description>Variable name should be lowerCamelCase</description>
-        <expected-problems>2</expected-problems>
+        <description>Variable name should be lowerCamelCase5</description>
+        <expected-problems>0</expected-problems>
         <code-ref id="LowerCamelCaseVariableNamingRuleTest5" />
+    </test-code>
+
+
+    <code-fragment id="LowerCamelCaseVariableNamingRuleTest6">
+        <![CDATA[
+        public class FinalVariableTest{
+        public static String ENV_LOCAL = "local";
+        public static String ENV_PROJECT = "project";
+        private final int MAX_LENGTH =  5;
+        }
+    ]]>
+    </code-fragment>
+    <test-code>
+        <description>Variable name should be lowerCamelCase6</description>
+        <expected-problems>0</expected-problems>
+        <code-ref id="LowerCamelCaseVariableNamingRuleTest6" />
     </test-code>
 </test-data>
 

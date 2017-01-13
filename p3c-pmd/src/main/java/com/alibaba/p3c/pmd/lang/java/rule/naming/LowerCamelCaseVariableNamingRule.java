@@ -1,11 +1,12 @@
 package com.alibaba.p3c.pmd.lang.java.rule.naming;
 
-
 import net.sourceforge.pmd.lang.java.ast.ASTFieldDeclaration;
 import net.sourceforge.pmd.lang.java.ast.ASTMethodDeclarator;
 import net.sourceforge.pmd.lang.java.ast.ASTVariableDeclaratorId;
 import net.sourceforge.pmd.lang.java.rule.AbstractJavaRule;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -13,26 +14,29 @@ import java.util.regex.Pattern;
  */
 public class LowerCamelCaseVariableNamingRule extends AbstractJavaRule {
     
-    Pattern pattern = Pattern.compile("^[a-z][a-z0-9]*([A-Z][a-z0-9]*)*(DO|DTO|VO|DAO)?$");
-
-
+    private Pattern pattern = Pattern.compile("^[a-z][a-z0-9]*([A-Z][a-z0-9]*)*(DO|DTO|VO|DAO)?$");
+    private static final List<String> WHITE_LIST = new ArrayList<>();
+    static {
+        WHITE_LIST.add("DAOImpl");
+    }
+    
     @Override
-    public Object visit(ASTVariableDeclaratorId node, Object data) {
-        //常量命名不适用于该规则
+    public Object visit(final ASTVariableDeclaratorId node, Object data) {
+        // 常量命名不适用于该规则
         ASTFieldDeclaration astFieldDeclaration = node.getFirstParentOfType(ASTFieldDeclaration.class);
-        if (astFieldDeclaration != null && astFieldDeclaration.isFinal() && astFieldDeclaration.isStatic()) {
-
+        if (astFieldDeclaration != null && (astFieldDeclaration.isFinal() || astFieldDeclaration.isStatic())) {
             return super.visit(node, data);
         }
-        
+
+        // 变量命名违反了小写开头的驼峰命名法
         if (!(pattern.matcher(node.getImage()).matches())) {
             addViolation(data, node);
         }
         return super.visit(node, data);
     }
-
+    
     @Override
-
+    
     public Object visit(ASTMethodDeclarator node, Object data) {
         if (!(pattern.matcher(node.getImage()).matches())) {
             addViolation(data, node);

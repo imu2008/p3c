@@ -28,6 +28,7 @@
     private  static final long serialVersionUID = 1L;
     //Log除外
     private static final Logger logger = new Logger();
+    private static final Log log = new Log();
        public void f() {
          int il = 0;
     }
