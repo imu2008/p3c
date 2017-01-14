@@ -1,11 +1,12 @@
 package com.alibaba.p3c.pmd.lang.java.rule.comments;
 
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import java.util.Map.Entry;
 
 import com.alibaba.p3c.pmd.lang.java.rule.util.CommentUtils;
+import com.alibaba.p3c.pmd.lang.java.util.ViolationUtils;
 
 import net.sourceforge.pmd.lang.ast.Node;
 import net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceBodyDeclaration;
@@ -71,7 +72,7 @@ public class CommentsMustBeJavadocFormatRule extends AbstractCommentRule {
     private void checkComment(AbstractJavaAccessNode decl, Object data) {
         Comment comment = decl.comment();
         if (comment instanceof SingleLineComment || comment instanceof MultiLineComment) {
-            addViolation(data, decl);
+            ViolationUtils.addViolationWithPrecisePosition(this, decl, data);
         }
     }
 
@@ -86,7 +87,7 @@ public class CommentsMustBeJavadocFormatRule extends AbstractCommentRule {
             Node value = entry.getValue();
 
             if (value instanceof AbstractJavaNode) {
-                AbstractJavaNode node = (AbstractJavaNode) value;
+                AbstractJavaNode node = (AbstractJavaNode)value;
 
                 // 检测评论是否在类、属性、方法、枚举的上一行
                 if (lastComment != null && isCommentOneLineBefore(lastComment, lastNode, node)) {
@@ -96,7 +97,7 @@ public class CommentsMustBeJavadocFormatRule extends AbstractCommentRule {
 
                 lastNode = node;
             } else if (value instanceof Comment) {
-                lastComment = (Comment) value;
+                lastComment = (Comment)value;
             }
         }
     }
@@ -108,18 +109,16 @@ public class CommentsMustBeJavadocFormatRule extends AbstractCommentRule {
         CommentUtils.addNodesToSortedMap(itemsByLineNumber, cUnit.getComments());
 
         List<ASTClassOrInterfaceDeclaration> classDecl =
-                cUnit.findDescendantsOfType(ASTClassOrInterfaceDeclaration.class);
+            cUnit.findDescendantsOfType(ASTClassOrInterfaceDeclaration.class);
         CommentUtils.addNodesToSortedMap(itemsByLineNumber, classDecl);
 
         List<ASTFieldDeclaration> fields = cUnit.findDescendantsOfType(ASTFieldDeclaration.class);
         CommentUtils.addNodesToSortedMap(itemsByLineNumber, fields);
 
-        List<ASTMethodDeclaration> methods =
-                cUnit.findDescendantsOfType(ASTMethodDeclaration.class);
+        List<ASTMethodDeclaration> methods = cUnit.findDescendantsOfType(ASTMethodDeclaration.class);
         CommentUtils.addNodesToSortedMap(itemsByLineNumber, methods);
 
-        List<ASTConstructorDeclaration> constructors =
-                cUnit.findDescendantsOfType(ASTConstructorDeclaration.class);
+        List<ASTConstructorDeclaration> constructors = cUnit.findDescendantsOfType(ASTConstructorDeclaration.class);
         CommentUtils.addNodesToSortedMap(itemsByLineNumber, constructors);
 
         List<ASTEnumDeclaration> enumDecl = cUnit.findDescendantsOfType(ASTEnumDeclaration.class);
@@ -130,7 +129,7 @@ public class CommentsMustBeJavadocFormatRule extends AbstractCommentRule {
 
     private boolean isCommentOneLineBefore(Comment lastComment, Node lastNode, Node node) {
         ASTClassOrInterfaceBodyDeclaration parentClass =
-                node.getFirstParentOfType(ASTClassOrInterfaceBodyDeclaration.class);
+            node.getFirstParentOfType(ASTClassOrInterfaceBodyDeclaration.class);
 
         // 如果节点在匿名类内部，一概不做检查
         if (parentClass != null && parentClass.isAnonymousInnerClass()) {

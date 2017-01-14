@@ -1,14 +1,12 @@
 package com.alibaba.p3c.pmd.lang.java.rule;
 
-import com.alibaba.p3c.pmd.fix.FixClassTypeResolver;
-import com.alibaba.p3c.pmd.lang.java.enums.PojoSurfixEnum;
-import com.alibaba.p3c.pmd.lang.java.rule.concurrent.ThreadShouldSetNameRule;
+import java.util.List;
+
 import com.alibaba.p3c.pmd.lang.java.util.PojoUtils;
+
 import net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceDeclaration;
 import net.sourceforge.pmd.lang.java.ast.ASTCompilationUnit;
 import net.sourceforge.pmd.lang.java.rule.AbstractJavaRule;
-
-import java.util.List;
 
 /**
  * POJO类所需规则的基类

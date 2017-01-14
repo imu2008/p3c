@@ -35,7 +35,7 @@ public class PojoMustUsePrimitiveFieldRule extends AbstractPojoRule {
                         Class type = field.getType();
                         // TODO 在文本件内能找到名称的才进行检查,为null时是跨文件的就无能为力了
                         if (type != null && type.isPrimitive()) {
-                            addViolation(data, field);
+                            addViolation(data, field.getFirstDescendantOfType(ASTType.class));
                         }
                     }
                 }
