@@ -65,4 +65,37 @@
 		<code-ref id="pojo-override-tostring" />
 	</test-code>
 
+	<!-- ====================================================================== -->
+
+	<code-fragment id="lombok-pojo">
+		<![CDATA[
+	import lombok.Data;
+
+	@Data
+	public class FooDO {
+		private String tom;
+	}
+		]]>
+	</code-fragment>
+	<test-code>
+		<description>Lombok方式无需Override toString()</description>
+		<expected-problems>0</expected-problems>
+		<code-ref id="lombok-pojo" />
+	</test-code>
+
+	<!-- ====================================================================== -->
+
+	<code-fragment id="lombok-pojo-2">
+		<![CDATA[
+	@lombok.Data
+	public class FooDO {
+		private String tom;
+	}
+		]]>
+	</code-fragment>
+	<test-code>
+		<description>Lombok方式无需Override toString()</description>
+		<expected-problems>0</expected-problems>
+		<code-ref id="lombok-pojo-2" />
+	</test-code>
 </test-data>

@@ -39,9 +39,16 @@ public class PojoMustOverrideToStringRule extends AbstractPojoRule {
             "[not(ancestor::Expression/ConditionalAndExpression//EqualityExpression[@Image='!=']//NullLiteral)]" +
             "[not(ancestor::Expression/ConditionalOrExpression//EqualityExpression[@Image='==']//NullLiteral)]";
 
+    private static final String LOMBOK_XPATH ="../Annotation/MarkerAnnotation/Name[(@Image='Data' and " +
+            "//ImportDeclaration[@ImportedName='lombok.Data']) or (@Image='lombok.Data')]";
+
     @Override
     public Object visit(ASTClassOrInterfaceDeclaration node, Object data) {
         if (isPojo(node)) {
+            if (withLombokAnnotation(node)) {
+                return super.visit(node, data);
+            }
+
             if (!node.hasDescendantMatchingXPath(XPATH)) {
                 addViolation(data, node);
             } else {
@@ -69,5 +76,10 @@ public class PojoMustOverrideToStringRule extends AbstractPojoRule {
 
         }
         return super.visit(node, data);
+    }
+
+    // 是否是lombok @Data注解类
+    private boolean withLombokAnnotation(ASTClassOrInterfaceDeclaration node) {
+        return node.hasDescendantMatchingXPath(LOMBOK_XPATH);
     }
 }
