@@ -18,6 +18,7 @@ public class ClassNamingShouldBeCamelRule extends AbstractJavaRule {
     private static final List<String> WHITE_LIST = new ArrayList<>();
     static {
         WHITE_LIST.add("DAOImpl");
+        WHITE_LIST.add("YunOS");
     }
     
     // public ClassNamingShouldBeCamelRule() {
