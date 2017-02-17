@@ -21,6 +21,10 @@ public class UseQuietReferenceNotationRule extends AbstractVmRule {
      */
     private static final Pattern ALLOW_FILE_PATTERN = Pattern.compile(".*(template|velocity).*");
 
+    private static final String UT_FILE_NAME = "n/a";
+    private static final String MACRO_NAME = "macro";
+    private static final String QUIET_REFERENCE_NOTATION = "$!";
+
     @Override
     public Object visit(ASTReference node, Object data) {
 
@@ -29,7 +33,7 @@ public class UseQuietReferenceNotationRule extends AbstractVmRule {
         String sourceCodeFilename = ruleContext.getSourceCodeFilename();
 
         // 文件名既不为n/a（单元测试），又不包含template、velocity，则排除。
-        if (!"n/a".equals(sourceCodeFilename) && !ALLOW_FILE_PATTERN.matcher(sourceCodeFilename).matches()) {
+        if (!UT_FILE_NAME.equals(sourceCodeFilename) && !ALLOW_FILE_PATTERN.matcher(sourceCodeFilename).matches()) {
             return super.visit(node, data);
         }
 
@@ -42,7 +46,7 @@ public class UseQuietReferenceNotationRule extends AbstractVmRule {
         boolean hasMacroParent = false;
 
         for (ASTDirective directiveParent : directiveParents) {
-            if ("macro".equals(directiveParent.getDirectiveName())) {
+            if (MACRO_NAME.equals(directiveParent.getDirectiveName())) {
                 hasMacroParent = true;
                 break;
             }
@@ -51,7 +55,7 @@ public class UseQuietReferenceNotationRule extends AbstractVmRule {
         // 既不在set语句下，也不在macro语句下，添加错误消息
         if (!hasSetParent && !hasMacroParent) {
             String literal = node.literal();
-            if (!literal.startsWith("$!")) {
+            if (!literal.startsWith(QUIET_REFERENCE_NOTATION)) {
                 addViolation(data, node);
             }
         }
