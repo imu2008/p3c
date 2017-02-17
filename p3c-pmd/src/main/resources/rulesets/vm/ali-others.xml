@@ -13,7 +13,7 @@
 说明：如果var=null或者不存在，那么${var}会直接显示在页面上。
             ]]>
         </description>
-        <priority>2</priority>
+        <priority>3</priority>
         <example>
 <![CDATA[
     <input type="text" name="email" value="$!email"/>

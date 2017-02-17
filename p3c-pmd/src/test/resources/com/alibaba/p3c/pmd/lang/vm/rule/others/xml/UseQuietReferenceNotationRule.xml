@@ -49,4 +49,20 @@
 		<expected-linenumbers>3,7,7,8,11</expected-linenumbers>
 		<code-ref id="set-directives-is-not-considered" />
 	</test-code>
+
+
+	<code-fragment id="macro-directives-is-not-considered"><![CDATA[
+#macro( tablerows $color $somelist )
+	#foreach( $something in $somelist )
+		<tr><td bgcolor=$color>$something</td></tr>
+	#end
+#end
+    ]]>
+	</code-fragment>
+
+	<test-code>
+		<description>Macro is not considered</description>
+		<expected-problems>0</expected-problems>
+		<code-ref id="macro-directives-is-not-considered" />
+	</test-code>
 </test-data>
