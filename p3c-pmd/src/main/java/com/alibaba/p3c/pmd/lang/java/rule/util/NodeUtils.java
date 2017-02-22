@@ -26,7 +26,12 @@ public class NodeUtils {
         }
         return parent == ancestor;
     }
-    // TODO 临时实现,需要根据PMD API优化
+
+    /**
+     * TODO 临时实现,需要根据PMD API优化
+     * @param expression
+     * @return
+     */
     public static boolean isWrapperType(ASTPrimaryExpression expression) {
         return TypeHelper.isA(expression, Integer.class)
                 || TypeHelper.isA(expression, Long.class)

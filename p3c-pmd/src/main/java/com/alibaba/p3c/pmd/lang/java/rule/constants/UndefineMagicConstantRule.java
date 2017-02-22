@@ -27,10 +27,14 @@ import net.sourceforge.pmd.lang.java.rule.AbstractJavaRule;
  */
 public class UndefineMagicConstantRule extends AbstractJavaRule {
 
-    // 魔法值去重，防止父类找子变量结点时存在重复
+    /**
+     * 魔法值去重，防止父类找子变量结点时存在重复
+     */
     private List<ASTLiteral> currentLiterals = new ArrayList<ASTLiteral>();
 
-    // 允许未定义变量白名单,需不断补充
+    /**
+     * 允许未定义变量白名单,需不断补充
+     */
     private final static List<String> LITERAL_WHITE_LIST = Arrays.asList("0", "1", "\"\"", "0.0", "1.0", "-1", "0L", "1L");
 
     /**

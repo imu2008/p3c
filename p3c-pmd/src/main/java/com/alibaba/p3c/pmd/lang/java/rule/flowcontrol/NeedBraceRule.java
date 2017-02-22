@@ -12,6 +12,8 @@ import net.sourceforge.pmd.lang.java.rule.AbstractJavaRule;
  * @author zenghou.fw
  */
 public class NeedBraceRule extends AbstractJavaRule {
+    private static final String STATEMENT_BLOCK = "Statement/Block";
+
     // switch语句没有{}编译不通过,因此不作检查
 
     @Override
@@ -24,7 +26,7 @@ public class NeedBraceRule extends AbstractJavaRule {
                 addViolation(data, elseStms);
             }
         } else {
-            if (!node.hasDescendantMatchingXPath("Statement/Block")) {
+            if (!node.hasDescendantMatchingXPath(STATEMENT_BLOCK)) {
                 addViolation(data, node);
             }
         }
@@ -34,7 +36,7 @@ public class NeedBraceRule extends AbstractJavaRule {
 
     @Override
     public Object visit(ASTForStatement node, Object data) {
-        if (!node.hasDescendantMatchingXPath("Statement/Block")) {
+        if (!node.hasDescendantMatchingXPath(STATEMENT_BLOCK)) {
             addViolation(data, node);
         }
         return super.visit(node, data);
@@ -42,7 +44,7 @@ public class NeedBraceRule extends AbstractJavaRule {
 
     @Override
     public Object visit(ASTWhileStatement node, Object data) {
-        if (!node.hasDescendantMatchingXPath("Statement/Block")) {
+        if (!node.hasDescendantMatchingXPath(STATEMENT_BLOCK)) {
             addViolation(data, node);
         }
         return super.visit(node, data);

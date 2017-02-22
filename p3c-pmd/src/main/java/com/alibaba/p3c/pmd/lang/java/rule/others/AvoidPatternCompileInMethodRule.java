@@ -10,7 +10,9 @@ import net.sourceforge.pmd.lang.rule.XPathRule;
  *
  */
 public class AvoidPatternCompileInMethodRule extends XPathRule {
-    // 不允许方法里的Pattern.compile的参数是字面量，参数是变量或表达式不会违反该规则
+    /**
+     * 不允许方法里的Pattern.compile的参数是字面量，参数是变量或表达式不会违反该规则
+     */
     private static final String XPATH = "//MethodDeclaration//PrimaryExpression["
             + "PrimaryPrefix/Name[@Image='Pattern.compile'] and "
             + "PrimarySuffix/Arguments/ArgumentList/Expression/"

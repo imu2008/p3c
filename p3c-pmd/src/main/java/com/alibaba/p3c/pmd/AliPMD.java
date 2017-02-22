@@ -13,7 +13,7 @@ import java.util.List;
  * @author keriezhang
  *
  */
-public class AliPMD {
+public class AliPmd {
     public static void main(String[] args) {
         List<String> list = new ArrayList<>();
 

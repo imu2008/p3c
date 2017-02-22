@@ -36,6 +36,8 @@ import java.util.concurrent.ThreadFactory;
  */
 public class AvoidManuallyCreateThreadRule extends AbstractAliRule {
 
+    private static final String METHOD_NEW_THREAD = "newThread";
+
     @Override
     public Object visit(ASTAllocationExpression node, Object data) {
         if (node.getType() != Thread.class) {
@@ -98,7 +100,7 @@ public class AvoidManuallyCreateThreadRule extends AbstractAliRule {
         if (!returnThread(methodDeclaration)) {
             return false;
         }
-        if (!"newThread".equals(methodDeclaration.getMethodName())) {
+        if (!METHOD_NEW_THREAD.equals(methodDeclaration.getMethodName())) {
             return false;
         }
         List<ASTFormalParameter> parameters = methodDeclaration.getFirstDescendantOfType(ASTFormalParameters.class)

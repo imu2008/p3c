@@ -33,7 +33,11 @@ public abstract class AbstractPojoRule extends AbstractJavaRule {
         return data;
     }
 
-    // java文件中是否包含POJO
+    /**
+     * java文件中是否包含POJO
+     * @param node
+     * @return
+     */
     private boolean hasPojoInJavaFile(ASTCompilationUnit node) {
         List<ASTClassOrInterfaceDeclaration> klasses = node.findDescendantsOfType(
                 ASTClassOrInterfaceDeclaration.class);

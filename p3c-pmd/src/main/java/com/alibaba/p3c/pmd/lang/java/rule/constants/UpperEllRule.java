@@ -14,14 +14,15 @@ import net.sourceforge.pmd.lang.java.rule.AbstractJavaRule;
  *
  */
 public class UpperEllRule extends AbstractJavaRule {
- 
+    private static final String LOWERCASE_L = "l";
+
     @Override
     public Object visit(ASTLiteral node, Object data) {
         // 当前节点值
         String image = node.getImage();
         // 当前节点值类型如果是整型且以l结尾，则收集当前违规代码
         if (image != null && node.isLongLiteral()) {
-            if (image.endsWith("l")) {
+            if (image.endsWith(LOWERCASE_L)) {
                 addViolation(data, node);
             }
         }

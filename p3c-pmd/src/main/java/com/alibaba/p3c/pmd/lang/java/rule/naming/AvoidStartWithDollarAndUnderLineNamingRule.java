@@ -10,9 +10,12 @@ import net.sourceforge.pmd.lang.java.rule.AbstractJavaRule;
  * 1.1 【强制】所有编程相关的命名均不能以下划线或美元符号开始；
  */
 public class AvoidStartWithDollarAndUnderLineNamingRule extends AbstractJavaRule {
+    private static final String DOLLAR = "$";
+    private static final String UNDERSCORE = "_";
+
     @Override
     public Object visit(ASTClassOrInterfaceDeclaration node, Object data) {
-        if (node.getImage().startsWith("$") || node.getImage().startsWith("_") ) {
+        if (node.getImage().startsWith(DOLLAR) || node.getImage().startsWith(UNDERSCORE) ) {
             addViolation(data, node);
         }
         return super.visit(node, data);
@@ -20,7 +23,7 @@ public class AvoidStartWithDollarAndUnderLineNamingRule extends AbstractJavaRule
 
     @Override
     public Object visit(ASTVariableDeclaratorId node, Object data) {
-        if (node.getImage().startsWith("$") || node.getImage().startsWith("_")) {
+        if (node.getImage().startsWith(DOLLAR) || node.getImage().startsWith(UNDERSCORE)) {
             addViolation(data, node);
         }
         return super.visit(node, data);
@@ -28,7 +31,7 @@ public class AvoidStartWithDollarAndUnderLineNamingRule extends AbstractJavaRule
 
     @Override
     public Object visit(ASTMethodDeclarator node, Object data) {
-        if (node.getImage().startsWith("$") || node.getImage().startsWith("_")) {
+        if (node.getImage().startsWith(DOLLAR) || node.getImage().startsWith(UNDERSCORE)) {
             addViolation(data, node);
         }
         return super.visit(node, data);

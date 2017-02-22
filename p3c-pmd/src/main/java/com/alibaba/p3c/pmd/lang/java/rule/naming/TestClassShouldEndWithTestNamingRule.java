@@ -11,7 +11,8 @@ import java.util.List;
  * 测试类命名以它要测试的类的名称开始，以Test结尾
  */
 public class TestClassShouldEndWithTestNamingRule extends AbstractJUnitRule {
-    
+    private static final String TEST_SUFFIX = "Test";
+
     @Override
     public Object visit(ASTClassOrInterfaceDeclaration node, Object data) {
         if (node.isAbstract() || node.isInterface() || node.isNested()) {
@@ -29,7 +30,7 @@ public class TestClassShouldEndWithTestNamingRule extends AbstractJUnitRule {
             }
         }
         
-        if ((testsFound) && (!(node.getImage().endsWith("Test")))) {
+        if ((testsFound) && (!(node.getImage().endsWith(TEST_SUFFIX)))) {
             addViolation(data, node);
         }
 

@@ -3,6 +3,16 @@
  */
 package com.alibaba.p3c.pmd.fix;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import com.alibaba.p3c.pmd.lang.java.util.NumberConstants;
+
 import net.sourceforge.pmd.lang.ast.Node;
 import net.sourceforge.pmd.lang.java.ast.ASTAdditiveExpression;
 import net.sourceforge.pmd.lang.java.ast.ASTAllocationExpression;
@@ -54,24 +64,14 @@ import net.sourceforge.pmd.lang.java.ast.TypeNode;
 import net.sourceforge.pmd.lang.java.typeresolution.ClassTypeResolver;
 import net.sourceforge.pmd.lang.java.typeresolution.PMDASMClassLoader;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 //
 // Helpful reading:
 // http://www.janeg.ca/scjp/oper/promotions.html
 // http://java.sun.com/docs/books/jls/second_edition/html/conversions.doc.html
 //
 
-
 /**
- * 1. 自定义type resolver，修复PMD在对象构造方法中传入匿名类时不能正确解析类型的问题
- * 2. 把匿名类的类型设置为 父亲类型
+ * 1. 自定义type resolver，修复PMD在对象构造方法中传入匿名类时不能正确解析类型的问题 2. 把匿名类的类型设置为 父亲类型
  *
  * @author caikang.ck(骏烈)
  * @email caikang.ck@alibaba-inc.com
@@ -82,19 +82,23 @@ public class FixClassTypeResolver extends ClassTypeResolver {
 
     private static final Map<String, Class<?>> PRIMITIVE_TYPES;
     private static final Map<String, String> JAVA_LANG;
+    private static final char DOT = '.';
+    private static final String DOT_STRING = ".";
+    private static final String EXCLAMATION = "!";
 
     static {
-        // Note: Assumption here that primitives come from same parent ClassLoader regardless of what ClassLoader we are passed
+        // Note: Assumption here that primitives come from same parent
+        // ClassLoader regardless of what ClassLoader we are passed
         Map<String, Class<?>> thePrimitiveTypes = new HashMap<>();
         thePrimitiveTypes.put("void", Void.TYPE);
-        thePrimitiveTypes.put("boolean", Boolean.TYPE);
-        thePrimitiveTypes.put("byte", Byte.TYPE);
-        thePrimitiveTypes.put("char", Character.TYPE);
-        thePrimitiveTypes.put("short", Short.TYPE);
-        thePrimitiveTypes.put("int", Integer.TYPE);
-        thePrimitiveTypes.put("long", Long.TYPE);
-        thePrimitiveTypes.put("float", Float.TYPE);
-        thePrimitiveTypes.put("double", Double.TYPE);
+        thePrimitiveTypes.put(boolean.class.getName(), Boolean.TYPE);
+        thePrimitiveTypes.put(byte.class.getName(), Byte.TYPE);
+        thePrimitiveTypes.put(char.class.getName(), Character.TYPE);
+        thePrimitiveTypes.put(short.class.getName(), Short.TYPE);
+        thePrimitiveTypes.put(int.class.getName(), Integer.TYPE);
+        thePrimitiveTypes.put(long.class.getName(), Long.TYPE);
+        thePrimitiveTypes.put(float.class.getName(), Float.TYPE);
+        thePrimitiveTypes.put(double.class.getName(), Double.TYPE);
         PRIMITIVE_TYPES = Collections.unmodifiableMap(thePrimitiveTypes);
 
         Map<String, String> theJavaLang = new HashMap<>();
@@ -148,7 +152,8 @@ public class FixClassTypeResolver extends ClassTypeResolver {
         pmdClassLoader = PMDASMClassLoader.getInstance(classLoader);
     }
 
-    // FUTURE ASTCompilationUnit should not be a TypeNode.  Clean this up accordingly.
+    // FUTURE ASTCompilationUnit should not be a TypeNode. Clean this up
+    // accordingly.
     @Override
     public Object visit(ASTCompilationUnit node, Object data) {
         String className = null;
@@ -222,20 +227,22 @@ public class FixClassTypeResolver extends ClassTypeResolver {
 
     @Override
     public Object visit(ASTName node, Object data) {
-		/*
-		 * Only doing this for nodes where getNameDeclaration is null this means
-		 * it's not a named node, i.e. Static reference or Annotation Doing this
-		 * for memory - TODO: Investigate if there is a valid memory concern or
-		 * not
-		 */
+        /*
+         * Only doing this for nodes where getNameDeclaration is null this means
+         * it's not a named node, i.e. Static reference or Annotation Doing this
+         * for memory - TODO: Investigate if there is a valid memory concern or
+         * not
+         */
         if (node.getNameDeclaration() == null) {
-            // Skip these scenarios as there is no type to populate in these cases:
+            // Skip these scenarios as there is no type to populate in these
+            // cases:
             // 1) Parent is a PackageDeclaration, which is not a type
             // 2) Parent is a ImportDeclaration, this is handled elsewhere.
-            if (!(node.jjtGetParent() instanceof ASTPackageDeclaration || node.jjtGetParent() instanceof ASTImportDeclaration)) {
+            if (!(node.jjtGetParent() instanceof ASTPackageDeclaration
+                || node.jjtGetParent() instanceof ASTImportDeclaration)) {
                 String name = node.getImage();
-                if (name.indexOf('.') != -1) {
-                    name = name.substring(0, name.indexOf('.'));
+                if (name.indexOf(DOT) != -1) {
+                    name = name.substring(0, name.indexOf(DOT));
                 }
                 populateType(node, name);
             }
@@ -304,7 +311,7 @@ public class FixClassTypeResolver extends ClassTypeResolver {
     @Override
     public Object visit(ASTConditionalExpression node, Object data) {
         super.visit(node, data);
-        //noinspection StatementWithEmptyBody
+        // noinspection StatementWithEmptyBody
         if (node.isTernary()) {
             // TODO Rules for Ternary are complex
         } else {
@@ -315,13 +322,13 @@ public class FixClassTypeResolver extends ClassTypeResolver {
 
     @Override
     public Object visit(ASTConditionalOrExpression node, Object data) {
-        populateType(node, "boolean");
+        populateType(node, boolean.class.getName());
         return super.visit(node, data);
     }
 
     @Override
     public Object visit(ASTConditionalAndExpression node, Object data) {
-        populateType(node, "boolean");
+        populateType(node, boolean.class.getName());
         return super.visit(node, data);
     }
 
@@ -348,19 +355,19 @@ public class FixClassTypeResolver extends ClassTypeResolver {
 
     @Override
     public Object visit(ASTEqualityExpression node, Object data) {
-        populateType(node, "boolean");
+        populateType(node, boolean.class.getName());
         return super.visit(node, data);
     }
 
     @Override
     public Object visit(ASTInstanceOfExpression node, Object data) {
-        populateType(node, "boolean");
+        populateType(node, boolean.class.getName());
         return super.visit(node, data);
     }
 
     @Override
     public Object visit(ASTRelationalExpression node, Object data) {
-        populateType(node, "boolean");
+        populateType(node, boolean.class.getName());
         return super.visit(node, data);
     }
 
@@ -410,8 +417,8 @@ public class FixClassTypeResolver extends ClassTypeResolver {
     @Override
     public Object visit(ASTUnaryExpressionNotPlusMinus node, Object data) {
         super.visit(node, data);
-        if ("!".equals(node.getImage())) {
-            populateType(node, "boolean");
+        if (EXCLAMATION.equals(node.getImage())) {
+            populateType(node, boolean.class.getName());
         } else {
             rollupTypeUnary(node);
         }
@@ -438,7 +445,8 @@ public class FixClassTypeResolver extends ClassTypeResolver {
         if (node.jjtGetNumChildren() == 1) {
             rollupTypeUnary(node);
         } else {
-            // TODO OMG, this is complicated.  PrimaryExpression, PrimaryPrefix and PrimarySuffix are all related.
+            // TODO OMG, this is complicated. PrimaryExpression, PrimaryPrefix
+            // and PrimarySuffix are all related.
         }
         return data;
     }
@@ -449,7 +457,8 @@ public class FixClassTypeResolver extends ClassTypeResolver {
         if (node.getImage() == null) {
             rollupTypeUnary(node);
         } else {
-            // TODO OMG, this is complicated.  PrimaryExpression, PrimaryPrefix and PrimarySuffix are all related.
+            // TODO OMG, this is complicated. PrimaryExpression, PrimaryPrefix
+            // and PrimarySuffix are all related.
         }
         return data;
     }
@@ -457,7 +466,8 @@ public class FixClassTypeResolver extends ClassTypeResolver {
     @Override
     public Object visit(ASTPrimarySuffix node, Object data) {
         super.visit(node, data);
-        // TODO OMG, this is complicated.  PrimaryExpression, PrimaryPrefix and PrimarySuffix are all related.
+        // TODO OMG, this is complicated. PrimaryExpression, PrimaryPrefix and
+        // PrimarySuffix are all related.
         return data;
     }
 
@@ -469,7 +479,7 @@ public class FixClassTypeResolver extends ClassTypeResolver {
 
     @Override
     public Object visit(ASTBooleanLiteral node, Object data) {
-        populateType(node, "boolean");
+        populateType(node, boolean.class.getName());
         return super.visit(node, data);
     }
 
@@ -480,17 +490,17 @@ public class FixClassTypeResolver extends ClassTypeResolver {
             rollupTypeUnary(node);
         } else {
             if (node.isIntLiteral()) {
-                populateType(node, "int");
+                populateType(node, int.class.getName());
             } else if (node.isLongLiteral()) {
-                populateType(node, "long");
+                populateType(node, long.class.getName());
             } else if (node.isFloatLiteral()) {
-                populateType(node, "float");
+                populateType(node, float.class.getName());
             } else if (node.isDoubleLiteral()) {
-                populateType(node, "double");
+                populateType(node, double.class.getName());
             } else if (node.isCharLiteral()) {
-                populateType(node, "char");
+                populateType(node, char.class.getName());
             } else if (node.isStringLiteral()) {
-                populateType(node, "java.lang.String");
+                populateType(node, String.class.getName());
             } else {
                 throw new IllegalStateException("PMD error, unknown literal type!");
             }
@@ -502,25 +512,39 @@ public class FixClassTypeResolver extends ClassTypeResolver {
     public Object visit(ASTAllocationExpression node, Object data) {
         super.visit(node, data);
 
-        if (node.jjtGetNumChildren() >= 2 && node.jjtGetChild(1) instanceof ASTArrayDimsAndInits
-                || node.jjtGetNumChildren() >= 3 && node.jjtGetChild(2) instanceof ASTArrayDimsAndInits) {
+        if (node.jjtGetNumChildren() >= NumberConstants.INTEGER_SIZE_OR_LENGTH_2
+            && node.jjtGetChild(1) instanceof ASTArrayDimsAndInits
+            || node.jjtGetNumChildren() >= NumberConstants.INTEGER_SIZE_OR_LENGTH_3
+                && node.jjtGetChild(NumberConstants.INDEX_2) instanceof ASTArrayDimsAndInits) {
             //
-            // Classes for Array types cannot be found directly using reflection.
-            // As far as I can tell you have to create an array instance of the necessary
-            // dimensionality, and then ask for the type from the instance.  OMFG that's ugly.
+            // Classes for Array types cannot be found directly using
+            // reflection.
+            // As far as I can tell you have to create an array instance of the
+            // necessary
+            // dimensionality, and then ask for the type from the instance. OMFG
+            // that's ugly.
             //
 
-            // TODO Need to create utility method to allow array type creation which will use
+            // TODO Need to create utility method to allow array type creation
+            // which will use
             // caching to avoid repeated object creation.
             // TODO Modify Parser to tell us array dimensions count.
-            // TODO Parser seems to do some work to handle arrays in certain case already.
-            // Examine those to figure out what's going on, make sure _all_ array scenarios
-            // are ultimately covered.  Appears to use a Dimensionable interface to handle
-            // only a part of the APIs (not bump), but is implemented several times, so
-            // look at refactoring to eliminate duplication.  Dimensionable is also used
-            // on AccessNodes for some scenarios, need to account for that.  Might be
-            // missing some TypeNode candidates we can add to the AST and have to deal
-            // with here (e.g. FormalParameter)?  Plus some existing usages may be
+            // TODO Parser seems to do some work to handle arrays in certain
+            // case already.
+            // Examine those to figure out what's going on, make sure _all_
+            // array scenarios
+            // are ultimately covered. Appears to use a Dimensionable interface
+            // to handle
+            // only a part of the APIs (not bump), but is implemented several
+            // times, so
+            // look at refactoring to eliminate duplication. Dimensionable is
+            // also used
+            // on AccessNodes for some scenarios, need to account for that.
+            // Might be
+            // missing some TypeNode candidates we can add to the AST and have
+            // to deal
+            // with here (e.g. FormalParameter)? Plus some existing usages may
+            // be
             // incorrect.
         } else {
             rollupTypeUnary(node);
@@ -556,7 +580,10 @@ public class FixClassTypeResolver extends ClassTypeResolver {
         return data;
     }
 
-    // Roll up the type based on type of the first child node.
+    /**
+     * Roll up the type based on type of the first child node.
+     * @param typeNode type node
+     */
     private void rollupTypeUnary(TypeNode typeNode) {
         Node node = typeNode;
         if (node.jjtGetNumChildren() >= 1) {
@@ -567,7 +594,11 @@ public class FixClassTypeResolver extends ClassTypeResolver {
         }
     }
 
-    // Roll up the type based on type of the first child node using Unary Numeric Promotion per JLS 5.6.1
+    /**
+     * Roll up the type based on type of the first child node using Unary
+     * Numeric Promotion per JLS 5.6.1
+     * @param typeNode type node
+     */
     private void rollupTypeUnaryNumericPromotion(TypeNode typeNode) {
         Node node = typeNode;
         if (node.jjtGetNumChildren() >= 1) {
@@ -575,9 +606,9 @@ public class FixClassTypeResolver extends ClassTypeResolver {
             if (child instanceof TypeNode) {
                 Class<?> type = ((TypeNode)child).getType();
                 if (type != null) {
-                    if ("byte".equals(type.getName()) || "short".equals(type.getName())
-                            || "char".equals(type.getName())) {
-                        populateType(typeNode, "int");
+                    if (byte.class.getName().equals(type.getName()) || short.class.getName().equals(type.getName())
+                        || char.class.getName().equals(type.getName())) {
+                        populateType(typeNode, int.class.getName());
                     } else {
                         typeNode.setType(((TypeNode)child).getType());
                     }
@@ -586,36 +617,43 @@ public class FixClassTypeResolver extends ClassTypeResolver {
         }
     }
 
-    // Roll up the type based on type of the first and second child nodes using Binary Numeric Promotion per JLS 5.6.2
+    /**
+     * Roll up the type based on type of the first and second child nodes using
+     * Binary Numeric Promotion per JLS 5.6.2
+     * @param typeNode type node
+     */
     private void rollupTypeBinaryNumericPromotion(TypeNode typeNode) {
         Node node = typeNode;
-        if (node.jjtGetNumChildren() >= 2) {
+        if (node.jjtGetNumChildren() >= NumberConstants.INTEGER_SIZE_OR_LENGTH_2) {
             Node child1 = node.jjtGetChild(0);
             Node child2 = node.jjtGetChild(1);
             if (child1 instanceof TypeNode && child2 instanceof TypeNode) {
                 Class<?> type1 = ((TypeNode)child1).getType();
                 Class<?> type2 = ((TypeNode)child2).getType();
                 if (type1 != null && type2 != null) {
-                    // Yeah, String is not numeric, but easiest place to handle it, only affects ASTAdditiveExpression
-                    if ("java.lang.String".equals(type1.getName()) || "java.lang.String".equals(type2.getName())) {
-                        populateType(typeNode, "java.lang.String");
-                    } else if ("boolean".equals(type1.getName()) || "boolean".equals(type2.getName())) {
-                        populateType(typeNode, "boolean");
-                    } else if ("double".equals(type1.getName()) || "double".equals(type2.getName())) {
-                        populateType(typeNode, "double");
-                    } else if ("float".equals(type1.getName()) || "float".equals(type2.getName())) {
-                        populateType(typeNode, "float");
-                    } else if ("long".equals(type1.getName()) || "long".equals(type2.getName())) {
-                        populateType(typeNode, "long");
+                    // Yeah, String is not numeric, but easiest place to handle
+                    // it, only affects ASTAdditiveExpression
+                    if (String.class.getName().equals(type1.getName()) || String.class.getName().equals(type2.getName())) {
+                        populateType(typeNode, String.class.getName());
+                    } else if (boolean.class.getName().equals(type1.getName()) || boolean.class.getName().equals(type2.getName())) {
+                        populateType(typeNode, boolean.class.getName());
+                    } else if (double.class.getName().equals(type1.getName()) || double.class.getName().equals(type2.getName())) {
+                        populateType(typeNode, double.class.getName());
+                    } else if (float.class.getName().equals(type1.getName()) || float.class.getName().equals(type2.getName())) {
+                        populateType(typeNode, float.class.getName());
+                    } else if (long.class.getName().equals(type1.getName()) || long.class.getName().equals(type2.getName())) {
+                        populateType(typeNode, long.class.getName());
                     } else {
-                        populateType(typeNode, "int");
+                        populateType(typeNode, int.class.getName());
                     }
                 } else if (type1 != null || type2 != null) {
-                    // If one side is known to be a String, then the result is a String
-                    // Yeah, String is not numeric, but easiest place to handle it, only affects ASTAdditiveExpression
-                    if (type1 != null && "java.lang.String".equals(type1.getName())
-                            || type2 != null && "java.lang.String".equals(type2.getName())) {
-                        populateType(typeNode, "java.lang.String");
+                    // If one side is known to be a String, then the result is a
+                    // String
+                    // Yeah, String is not numeric, but easiest place to handle
+                    // it, only affects ASTAdditiveExpression
+                    if (type1 != null && String.class.getName().equals(type1.getName())
+                        || type2 != null && String.class.getName().equals(type2.getName())) {
+                        populateType(typeNode, String.class.getName());
                     }
                 }
             }
@@ -634,11 +672,11 @@ public class FixClassTypeResolver extends ClassTypeResolver {
             }
             if (qualifiedName != null) {
                 try {
-					/*
-					 * TODO - the map right now contains just class names. if we
-					 * use a map of classname/class then we don't have to hit
-					 * the class loader for every type - much faster
-					 */
+                    /*
+                     * TODO - the map right now contains just class names. if we
+                     * use a map of classname/class then we don't have to hit
+                     * the class loader for every type - much faster
+                     */
                     myType = pmdClassLoader.loadClass(qualifiedName);
                 } catch (ClassNotFoundException e) {
                     myType = processOnDemand(qualifiedName);
@@ -649,17 +687,17 @@ public class FixClassTypeResolver extends ClassTypeResolver {
                 }
             }
         }
-        if (myType == null && qualifiedName != null && qualifiedName.contains(".")) {
+        if (myType == null && qualifiedName != null && qualifiedName.contains(DOT_STRING)) {
             // try if the last part defines a inner class
-            String qualifiedNameInner = qualifiedName.substring(0, qualifiedName.lastIndexOf('.'))
-                    + "$" + qualifiedName.substring(qualifiedName.lastIndexOf('.') + 1);
+            String qualifiedNameInner = qualifiedName.substring(0, qualifiedName.lastIndexOf(DOT)) + "$"
+                + qualifiedName.substring(qualifiedName.lastIndexOf(DOT) + 1);
             try {
                 myType = pmdClassLoader.loadClass(qualifiedNameInner);
             } catch (Exception e) {
                 // ignored
             }
         }
-        if (myType == null && qualifiedName != null && !qualifiedName.contains(".")) {
+        if (myType == null && qualifiedName != null && !qualifiedName.contains(DOT_STRING)) {
             // try again with java.lang....
             try {
                 myType = pmdClassLoader.loadClass("java.lang." + qualifiedName);
@@ -679,7 +717,8 @@ public class FixClassTypeResolver extends ClassTypeResolver {
     public boolean classNameExists(String fullyQualifiedClassName) {
         try {
             pmdClassLoader.loadClass(fullyQualifiedClassName);
-            return true; //Class found
+            // Class found
+            return true;
         } catch (ClassNotFoundException e) {
             return false;
         } catch (NoClassDefFoundError e) {
@@ -709,14 +748,16 @@ public class FixClassTypeResolver extends ClassTypeResolver {
     private String getClassName(ASTCompilationUnit node) {
         ASTClassOrInterfaceDeclaration classDecl = node.getFirstDescendantOfType(ASTClassOrInterfaceDeclaration.class);
         if (classDecl == null) {
-            return null; // Happens if this compilation unit only contains an enum
+            // Happens if this compilation unit only contains an
+            // enum
+            return null;
         }
         if (node.declarationsAreInDefaultPackage()) {
             return classDecl.getImage();
         }
         ASTPackageDeclaration pkgDecl = node.getPackageDeclaration();
         importedOnDemand.add(pkgDecl.getPackageNameImage());
-        return pkgDecl.getPackageNameImage() + "." + classDecl.getImage();
+        return pkgDecl.getPackageNameImage() + DOT_STRING + classDecl.getImage();
     }
 
     /**

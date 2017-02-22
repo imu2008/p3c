@@ -78,7 +78,11 @@ public class PojoMustOverrideToStringRule extends AbstractPojoRule {
         return super.visit(node, data);
     }
 
-    // 是否是lombok @Data注解类
+    /**
+     * 是否是lombok @Data注解类
+     * @param node
+     * @return
+     */
     private boolean withLombokAnnotation(ASTClassOrInterfaceDeclaration node) {
         return node.hasDescendantMatchingXPath(LOMBOK_XPATH);
     }

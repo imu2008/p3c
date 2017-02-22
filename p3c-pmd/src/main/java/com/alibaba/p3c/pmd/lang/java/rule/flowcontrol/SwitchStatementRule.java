@@ -10,7 +10,6 @@ import net.sourceforge.pmd.lang.java.rule.AbstractJavaRule;
  * @author zenghou.fw
  */
 public class SwitchStatementRule extends AbstractJavaRule {
-
     @Override
     public Object visit(ASTSwitchStatement node, Object data) {
         checkDefault(node, data);
@@ -20,17 +19,26 @@ public class SwitchStatementRule extends AbstractJavaRule {
         return super.visit(node, data);
     }
 
-    // 检查switch语句中包含default分支
+    /**
+     * 检查switch语句中包含default分支
+     * @param node
+     * @param data
+     */
     private void checkDefault(ASTSwitchStatement node, Object data) {
-        if (! node.hasDescendantMatchingXPath("SwitchLabel[@Default='true']")) {
+        final String switchCheckXpath = "SwitchLabel[@Default='true']";
+        if (!node.hasDescendantMatchingXPath(switchCheckXpath)) {
             addViolation(data, node);
         }
     }
 
-    // 检查case语句中包含break, return, throw, continue
+    /**
+     * 检查case语句中包含break, return, throw, continue
+     * @param node
+     * @param data
+     */
     private void checkFallThrough(ASTSwitchStatement node, Object data) {
         // 参考PMD MissingBreakInSwitch的XPth规则
-        final String XPATH = "../SwitchStatement[(count(.//BreakStatement)" +
+        final String xpath = "../SwitchStatement[(count(.//BreakStatement)" +
                 " + count(BlockStatement//Statement/ReturnStatement)" +
                 " + count(BlockStatement//Statement/ThrowStatement)" +
                 " + count(BlockStatement//Statement/IfStatement[@Else='true' and Statement[2][ReturnStatement|ThrowStatement]]" +
@@ -39,7 +47,7 @@ public class SwitchStatementRule extends AbstractJavaRule {
                 " + count(SwitchLabel[count(following-sibling::node()) = 0])" +
                 "  < count (SwitchLabel))]";
 
-        if (node.hasDescendantMatchingXPath(XPATH)) {
+        if (node.hasDescendantMatchingXPath(xpath)) {
             addViolation(data, node);
         }
     }
