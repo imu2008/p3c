@@ -94,6 +94,33 @@
 
     <!-- ====================================================================== -->
 
+	<code-fragment id="default-no-break">
+		<![CDATA[
+	public class Foo {
+	    public void bar() {
+	    	int i;
+	    	switch (i) {
+	    	    case 0:
+	    	    	int j =1;
+	    	    	break;
+	    	    case 1:
+	    	    case 2:
+	    	    	continue;
+	    	    default:    // OK,default忽略break检查
+	    	}
+	    }
+	}
+		]]>
+	</code-fragment>
+	<test-code>
+		<description>default语句没有break</description>
+		<expected-problems>0</expected-problems>
+		<code-ref id="default-no-break" />
+	</test-code>
+
+	<!-- ====================================================================== -->
+
+
     <code-fragment id="multi-case-no-statement">
         <![CDATA[
 package com.tmall.epp.item.biz.item.listener;

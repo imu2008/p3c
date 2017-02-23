@@ -45,7 +45,7 @@ public class SwitchStatementRule extends AbstractJavaRule {
                 "/Statement[1][ReturnStatement|ThrowStatement])" +
                 " + count(SwitchLabel[name(following-sibling::node()) = 'SwitchLabel'])" +
                 " + count(SwitchLabel[count(following-sibling::node()) = 0])" +
-                "  < count (SwitchLabel))]";
+                "  < count (SwitchLabel[@Default != 'true']))]";
 
         if (node.hasDescendantMatchingXPath(xpath)) {
             addViolation(data, node);
