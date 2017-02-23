@@ -10,6 +10,7 @@ import net.sourceforge.pmd.lang.java.ast.ASTFieldDeclaration;
 import net.sourceforge.pmd.lang.java.ast.ASTFormalParameter;
 import net.sourceforge.pmd.lang.java.ast.ASTFormalParameters;
 import net.sourceforge.pmd.lang.java.ast.ASTImplementsList;
+import net.sourceforge.pmd.lang.java.ast.ASTInitializer;
 import net.sourceforge.pmd.lang.java.ast.ASTLambdaExpression;
 import net.sourceforge.pmd.lang.java.ast.ASTMethodDeclaration;
 import net.sourceforge.pmd.lang.java.ast.ASTResultType;
@@ -43,7 +44,7 @@ public class AvoidManuallyCreateThreadRule extends AbstractAliRule {
         if (node.getType() != Thread.class) {
             return super.visit(node, data);
         }
-        if (isAddShutdownHook(node)) {
+        if (isAddShutdownHook(node) || isInStaticInitializer(node)) {
             return super.visit(node, data);
         }
         //lambda 表达式直接过了
@@ -82,6 +83,12 @@ public class AvoidManuallyCreateThreadRule extends AbstractAliRule {
         Token token = (Token) blockStatement.jjtGetFirstToken();
         return Runtime.class.getSimpleName().equals(token.image);
     }
+
+    private boolean isInStaticInitializer(ASTAllocationExpression node) {
+        ASTInitializer initializer = node.getFirstParentOfType(ASTInitializer.class);
+        return initializer != null && initializer.isStatic();
+    }
+
 
     private boolean threadFactoryVariable(ASTAllocationExpression node) {
         ASTMethodDeclaration methodDeclaration = node.getFirstParentOfType(ASTMethodDeclaration.class);

@@ -3,7 +3,7 @@
     <test-code>
         <description>AvoidManuallyCreateThreadRule</description>
         <expected-problems>3</expected-problems>
-        <expected-linenumbers>17,20,24</expected-linenumbers>
+        <expected-linenumbers>19,22,26</expected-linenumbers>
         <code><![CDATA[
 
 package com.alibaba.idea.pmd.test.concurrent;
@@ -21,7 +21,9 @@ import java.util.concurrent.TimeUnit;
  * @since 2016/11/15
  */
 public class ThreadCreateTest {
-
+    static {
+        new Thread();
+    }
     private Thread thread = new Thread();
 
     private Thread createThread(){
