@@ -1,10 +1,8 @@
 package com.alibaba.p3c.pmd.lang.java.rule.naming;
 
 import com.alibaba.p3c.pmd.lang.java.util.ViolationUtils;
-
 import net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceType;
 import net.sourceforge.pmd.lang.java.ast.ASTFieldDeclaration;
-import net.sourceforge.pmd.lang.java.ast.ASTVariableDeclaratorId;
 import net.sourceforge.pmd.lang.java.rule.AbstractJavaRule;
 import org.apache.commons.lang3.StringUtils;
 
@@ -18,6 +16,7 @@ public class ConstantFieldShouldBeUpperCaseRule extends AbstractJavaRule {
     private static final String LOGGER_NAME_TYPE = "Logger";
     private static final String LOG_NAME_TYPE = "Log";
     private static final String SERIAL_VERSION_UID = "serialVersionUID";
+    private static final String SERVICE_SUFFIX = "Service";
     private static final Set<String> LOG_VARIABLE_TYPE_SET = new HashSet<>();
     private static final Set<String> WHITE_LIST = new HashSet<>();
     static {
@@ -38,7 +37,7 @@ public class ConstantFieldShouldBeUpperCaseRule extends AbstractJavaRule {
             }
             //常量检查中的白名单判断，如serialVersionUID
             String constantName = node.jjtGetChild(1).jjtGetChild(0).getImage();
-            if (StringUtils.isEmpty(constantName) || WHITE_LIST.contains(constantName)) {
+            if (StringUtils.isEmpty(constantName) || WHITE_LIST.contains(constantName)||constantName.endsWith(SERVICE_SUFFIX)) {
                 return super.visit(node, data);
             }
             //常量必须要大写

@@ -14,7 +14,7 @@ public class ClassNamingShouldBeCamelRule extends AbstractJavaRule {
     /**
      * 对命名的合法性做校验的正则表达式，类命名结尾可以是DO|DTO|VO|DAO|BO|DAOImpl|YunOS这样的特殊标志，也可以是一个大写的字母
      */
-    public static Pattern PATTERN = Pattern.compile("^([A-Z][a-z0-9]+)+(([A-Z])|(DO|DTO|VO|DAO|BO|DAOImpl|YunOS))?$");
+    public static Pattern PATTERN = Pattern.compile("^I?([A-Z][a-z0-9]+)+(([A-Z])|(DO|DTO|VO|DAO|BO|DAOImpl|YunOS))?$");
 
     @Override
     public Object visit(ASTClassOrInterfaceDeclaration node, Object data) {

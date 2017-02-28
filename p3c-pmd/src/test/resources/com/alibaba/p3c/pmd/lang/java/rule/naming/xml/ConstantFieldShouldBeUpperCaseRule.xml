@@ -8,6 +8,8 @@
     private static final Logger logger = new Logger();
     //常量命名需要全部大写，单词间用下划线隔开
     private static final boolean success = true;
+    private static final Integer xxxService = 1;
+    private static final Integer xxxxservice = 1;
        public void f() {
          int il = 0;
     }
@@ -16,9 +18,9 @@
     </code-fragment>
     <test-code>
         <description>Constant name should be upper case</description>
-        <expected-problems>1</expected-problems>
+        <expected-problems>2</expected-problems>
         <code-ref id="ConstantFieldNamingRule" />
-        <expected-linenumbers>7</expected-linenumbers>
+        <expected-linenumbers>7,9</expected-linenumbers>
     </test-code>
 
     <code-fragment id="ConstantFieldNamingRule1">
