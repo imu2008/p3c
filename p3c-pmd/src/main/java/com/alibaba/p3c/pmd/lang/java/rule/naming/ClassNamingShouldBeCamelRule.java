@@ -3,8 +3,6 @@ package com.alibaba.p3c.pmd.lang.java.rule.naming;
 import net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceDeclaration;
 import net.sourceforge.pmd.lang.java.rule.AbstractJavaRule;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -13,27 +11,15 @@ import java.util.regex.Pattern;
  *
  */
 public class ClassNamingShouldBeCamelRule extends AbstractJavaRule {
-    private Pattern pattern = Pattern.compile("^([A-Z][a-z0-9]+)+(DO|DTO|VO|DAO|BO)?$");
-    
-    private static final List<String> WHITE_LIST = new ArrayList<>();
-    static {
-        WHITE_LIST.add("DAOImpl");
-        WHITE_LIST.add("YunOS");
-    }
-    
-    // public ClassNamingShouldBeCamelRule() {
-    // super(XPATH);
-    // }
+    /**
+     * 对命名的合法性做校验的正则表达式，类命名结尾可以是DO|DTO|VO|DAO|BO|DAOImpl|YunOS这样的特殊标志，也可以是一个大写的字母
+     */
+    public static Pattern PATTERN = Pattern.compile("^([A-Z][a-z0-9]+)+(([A-Z])|(DO|DTO|VO|DAO|BO|DAOImpl|YunOS))?$");
+
     @Override
     public Object visit(ASTClassOrInterfaceDeclaration node, Object data) {
-        if (pattern.matcher(node.getImage()).matches()) {
+        if (PATTERN.matcher(node.getImage()).matches()) {
             return super.visit(node, data);
-        }
-        // 白名单判断
-        for (String s : WHITE_LIST) {
-            if (node.getImage().endsWith(s)) {
-                return super.visit(node, data);
-            }
         }
         addViolation(data, node);
         

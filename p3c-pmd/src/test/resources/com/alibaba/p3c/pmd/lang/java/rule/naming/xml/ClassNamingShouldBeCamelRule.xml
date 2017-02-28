@@ -14,6 +14,7 @@ public class CamelClassNameRuleTest {
     class CamelclassNameRuleTestbO{}
     class CamelclassNameRuleTestYunOS{}
     class CamelclassNameRuleTestyunOS{}
+    class CamelclassNameRuleTestDDO{}
 }
     ]]>
     </code-fragment>
@@ -21,7 +22,7 @@ public class CamelClassNameRuleTest {
         <description>Class Name Should Camel</description>
         <expected-problems>5</expected-problems>
         <code-ref id="CamelClassNaming" />
-        <expected-linenumbers>4,5,7,11,13</expected-linenumbers>
+        <expected-linenumbers>4,5,7,13,14</expected-linenumbers>
     </test-code>
 
 
