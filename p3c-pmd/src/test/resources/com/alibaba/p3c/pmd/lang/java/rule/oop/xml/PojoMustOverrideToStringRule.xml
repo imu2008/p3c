@@ -98,4 +98,38 @@
 		<expected-problems>0</expected-problems>
 		<code-ref id="lombok-pojo-2" />
 	</test-code>
+
+	<!-- ====================================================================== -->
+
+	<code-fragment id="lombok-pojo-3">
+		<![CDATA[
+	import lombok.*;
+	@Data
+	public class FooDO {
+		private String tom;
+	}
+		]]>
+	</code-fragment>
+	<test-code>
+		<description>import lombok.*方式</description>
+		<expected-problems>0</expected-problems>
+		<code-ref id="lombok-pojo-3" />
+	</test-code>
+
+	<!-- ====================================================================== -->
+
+	<code-fragment id="lombok-pojo-4">
+		<![CDATA[
+	import lombok.*;
+	@ToString
+	public class FooDO {
+		private String tom;
+	}
+		]]>
+	</code-fragment>
+	<test-code>
+		<description>lombok.ToString</description>
+		<expected-problems>0</expected-problems>
+		<code-ref id="lombok-pojo-4" />
+	</test-code>
 </test-data>
