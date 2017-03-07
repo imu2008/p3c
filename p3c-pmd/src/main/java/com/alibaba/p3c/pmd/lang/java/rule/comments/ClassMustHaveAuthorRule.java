@@ -2,9 +2,7 @@ package com.alibaba.p3c.pmd.lang.java.rule.comments;
 
 import java.util.regex.Pattern;
 
-import net.sourceforge.pmd.lang.java.ast.ASTClassOrInterfaceDeclaration;
-import net.sourceforge.pmd.lang.java.ast.ASTCompilationUnit;
-import net.sourceforge.pmd.lang.java.ast.Comment;
+import net.sourceforge.pmd.lang.java.ast.*;
 import net.sourceforge.pmd.lang.java.rule.comments.AbstractCommentRule;
 
 /**
@@ -30,6 +28,42 @@ public class ClassMustHaveAuthorRule extends AbstractCommentRule {
             return super.visit(decl, data);
         }
 
+        checkAuthorComment(decl, data);
+
+        return super.visit(decl, data);
+    }
+
+    @Override
+    public Object visit(ASTEnumDeclaration decl, Object data) {
+        // 排除内部枚举
+        if (!decl.isPublic()) {
+            return super.visit(decl, data);
+        }
+
+        // 排除内部定义的枚举，内部定义枚举已在所属类上表明author
+        ASTClassOrInterfaceDeclaration parent = decl.getFirstParentOfType(ASTClassOrInterfaceDeclaration.class);
+        if (parent != null) {
+            return super.visit(decl, data);
+        }
+
+        checkAuthorComment(decl, data);
+
+        return super.visit(decl, data);
+    }
+
+    @Override
+    public Object visit(ASTCompilationUnit cUnit, Object data) {
+        assignCommentsToDeclarations(cUnit);
+
+        return super.visit(cUnit, data);
+    }
+
+    /**
+     * 检查节点是否包含author注释
+     * @param decl 节点名称
+     * @param data ruleContext
+     */
+    public void checkAuthorComment(AbstractJavaNode decl, Object data) {
         Comment comment = decl.comment();
         if (null == comment) {
             addViolation(data, decl);
@@ -40,13 +74,5 @@ public class ClassMustHaveAuthorRule extends AbstractCommentRule {
                 addViolation(data, decl);
             }
         }
-        return super.visit(decl, data);
-    }
-
-    @Override
-    public Object visit(ASTCompilationUnit cUnit, Object data) {
-        assignCommentsToDeclarations(cUnit);
-
-        return super.visit(cUnit, data);
     }
 }

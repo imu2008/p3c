@@ -72,4 +72,75 @@ public class Outer_Demo {
 		<code-ref id="class-with-inner-class" />
 	</test-code>
 
+	<code-fragment id="enum-without-author"><![CDATA[
+public enum Day {
+    SUNDAY, MONDAY, TUESDAY, WEDNESDAY,
+    THURSDAY, FRIDAY, SATURDAY
+}
+    ]]>
+	</code-fragment>
+	<test-code>
+		<description>Enum without author</description>
+		<expected-problems>1</expected-problems>
+		<expected-linenumbers>1</expected-linenumbers>
+		<code-ref id="enum-without-author" />
+	</test-code>
+
+	<code-fragment id="enum-with-author"><![CDATA[
+/**
+ * @author keriezhang
+ * @date 2016年12月14日 上午11:24:59
+ */
+public enum Day {
+    SUNDAY, MONDAY, TUESDAY, WEDNESDAY,
+    THURSDAY, FRIDAY, SATURDAY
+}
+    ]]>
+	</code-fragment>
+	<test-code>
+		<description>Enum with author</description>
+		<expected-problems>0</expected-problems>
+		<code-ref id="enum-with-author" />
+	</test-code>
+
+	<code-fragment id="enum-in-class"><![CDATA[
+/**
+ * @author keriezhang
+ * @date 2016年12月14日 上午11:24:59
+ */
+public class Vehicle {
+    private String id;
+    private String name;
+    enum color {
+        RED, GREEN, ANY;
+    }
+}
+    ]]>
+	</code-fragment>
+	<test-code>
+		<description>Enum in class</description>
+		<expected-problems>0</expected-problems>
+		<code-ref id="enum-in-class" />
+	</test-code>
+
+	<code-fragment id="enum-in-interface"><![CDATA[
+/**
+ * @author keriezhang
+ * @date 2016年12月14日 上午11:24:59
+ */
+public interface Vehicle {
+    public Number getNumber();
+    public void method2();
+    public enum color {
+        RED, GREEN, ANY;
+    }
+}
+    ]]>
+	</code-fragment>
+	<test-code>
+		<description>Enum in interface</description>
+		<expected-problems>0</expected-problems>
+		<code-ref id="enum-in-interface" />
+	</test-code>
+
 </test-data>

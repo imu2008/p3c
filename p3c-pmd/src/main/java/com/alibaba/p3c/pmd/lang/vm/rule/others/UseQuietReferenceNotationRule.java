@@ -1,10 +1,9 @@
 package com.alibaba.p3c.pmd.lang.vm.rule.others;
 
 import net.sourceforge.pmd.RuleContext;
+import net.sourceforge.pmd.lang.ast.Node;
+import net.sourceforge.pmd.lang.rule.XPathRule;
 import net.sourceforge.pmd.lang.vm.ast.ASTDirective;
-import net.sourceforge.pmd.lang.vm.ast.ASTReference;
-import net.sourceforge.pmd.lang.vm.ast.ASTSetDirective;
-import net.sourceforge.pmd.lang.vm.rule.AbstractVmRule;
 
 import java.util.List;
 import java.util.regex.Pattern;
@@ -15,7 +14,7 @@ import java.util.regex.Pattern;
  * @author keriezhang
  * @date 2016年12月14日 上午11:24:59
  */
-public class UseQuietReferenceNotationRule extends AbstractVmRule {
+public class UseQuietReferenceNotationRule extends XPathRule {
     /**
      * 执行扫描的文件路径
      */
@@ -23,43 +22,50 @@ public class UseQuietReferenceNotationRule extends AbstractVmRule {
 
     private static final String UT_FILE_NAME = "n/a";
     private static final String MACRO_NAME = "macro";
-    private static final String QUIET_REFERENCE_NOTATION = "$!";
+
+    /**
+     * 仅当reference在两段文本之间时做判断，自动排除了set语句、括号中间的变量
+     */
+    private static final String XPATH =
+            "//Reference[matches(@literal, \"^\\$[^!]+\") and ./preceding-sibling::Text and ./following-sibling::Text]";
+
+    public UseQuietReferenceNotationRule() {
+        super(XPATH);
+    }
 
     @Override
-    public Object visit(ASTReference node, Object data) {
-
+    public void evaluate(Node node, RuleContext ctx) {
         // 排除template和velocity目录以外的文件
-        RuleContext ruleContext = (RuleContext) data;
-        String sourceCodeFilename = ruleContext.getSourceCodeFilename();
+        String sourceCodeFilename = ctx.getSourceCodeFilename();
 
         // 文件名既不为n/a（单元测试），又不包含template、velocity，则排除。
         if (!UT_FILE_NAME.equals(sourceCodeFilename) && !ALLOW_FILE_PATTERN.matcher(sourceCodeFilename).matches()) {
-            return super.visit(node, data);
+            return;
         }
 
-        // 排除set语句
-        List<ASTSetDirective> setParents = node.getParentsOfType(ASTSetDirective.class);
-        boolean hasSetParent = !setParents.isEmpty();
+        // 排除宏定义下的reference
+        if (checkMacro(node)) {
+            return;
+        }
 
-        // 排除macro宏定义
+        super.evaluate(node, ctx);
+    }
+
+    /**
+     * 检测节点是否包含在宏定义中
+     * @param node 节点
+     * @return true/false
+     */
+    private boolean checkMacro(Node node) {
         List<ASTDirective> directiveParents = node.getParentsOfType(ASTDirective.class);
-        boolean hasMacroParent = false;
 
         for (ASTDirective directiveParent : directiveParents) {
             if (MACRO_NAME.equals(directiveParent.getDirectiveName())) {
-                hasMacroParent = true;
-                break;
+                return true;
             }
         }
 
-        // 既不在set语句下，也不在macro语句下，添加错误消息
-        if (!hasSetParent && !hasMacroParent) {
-            String literal = node.literal();
-            if (!literal.startsWith(QUIET_REFERENCE_NOTATION)) {
-                addViolation(data, node);
-            }
-        }
-
-        return super.visit(node, data);
+        return false;
     }
+
 }
