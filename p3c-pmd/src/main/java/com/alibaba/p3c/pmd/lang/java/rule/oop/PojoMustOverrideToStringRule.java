@@ -1,13 +1,9 @@
 package com.alibaba.p3c.pmd.lang.java.rule.oop;
 
-import com.alibaba.p3c.pmd.lang.java.enums.PojoSurfixEnum;
 import com.alibaba.p3c.pmd.lang.java.rule.AbstractPojoRule;
 import com.alibaba.p3c.pmd.lang.java.util.PojoUtils;
-import net.sourceforge.pmd.lang.ast.Node;
 import net.sourceforge.pmd.lang.java.ast.*;
 import org.jaxen.JaxenException;
-
-import java.util.List;
 
 /**
  * 【强制】POJO类必须写toString方法。使用工具类source> generate toString时，
@@ -49,7 +45,7 @@ public class PojoMustOverrideToStringRule extends AbstractPojoRule {
     @Override
     public Object visit(ASTClassOrInterfaceDeclaration node, Object data) {
         if (isPojo(node)) {
-            if (withLombokAnnotation(node)) {
+            if (node.isAbstract() || withLombokAnnotation(node)) {
                 return super.visit(node, data);
             }
 
