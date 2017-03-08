@@ -20,15 +20,16 @@ import org.jaxen.JaxenException;
 
 /**
  * 【强制】所有的抽象方法（包括接口中的方法）必须要用javadoc注释、除了返回值、参数、异常说明外，还必须指出该方法做什么事情，实现什么功能。
- * 
+ *
  * @author keriezhang
  * @date 2016年12月14日 上午11:08:18
- *
  */
 public class AbstractMethodOrInterfaceMethodMustUseJavadocRule extends AbstractCommentRule {
 
     private static final String METHOD_IN_INTERFACE_XPATH =
         "./ClassOrInterfaceBody/ClassOrInterfaceBodyDeclaration/MethodDeclaration";
+    private static final String METHOD_VARIABLE_DECLARATOR_XPATH
+        = "./MethodDeclarator/FormalParameters/FormalParameter/VariableDeclaratorId";
 
     private static final Pattern EMPTY_CONTENT_PATTERN = Pattern.compile("[/*\\n\\r\\s]+(@.*)?", Pattern.DOTALL);
     private static final Pattern RETURN_PATTERN = Pattern.compile(".*@return.*", Pattern.DOTALL);
@@ -81,8 +82,16 @@ public class AbstractMethodOrInterfaceMethodMustUseJavadocRule extends AbstractC
         }
 
         // 参数必须要有javadoc注释
-        List<ASTVariableDeclaratorId> params = method.findDescendantsOfType(ASTVariableDeclaratorId.class);
-        for (ASTVariableDeclaratorId param : params) {
+        List<Node> variableDeclaratorIds;
+        try {
+            variableDeclaratorIds = method.findChildNodesWithXPath(METHOD_VARIABLE_DECLARATOR_XPATH);
+        } catch (JaxenException e) {
+            throw new RuntimeException(
+                "XPath expression " + METHOD_VARIABLE_DECLARATOR_XPATH + " failed: " + e.getLocalizedMessage(), e);
+        }
+
+        for (Node variableDeclaratorId : variableDeclaratorIds) {
+            ASTVariableDeclaratorId param = (ASTVariableDeclaratorId)variableDeclaratorId;
             String paramName = param.getImage();
             Pattern paramNamePattern = Pattern.compile(".*@param\\s+" + paramName + ".*", Pattern.DOTALL);
 

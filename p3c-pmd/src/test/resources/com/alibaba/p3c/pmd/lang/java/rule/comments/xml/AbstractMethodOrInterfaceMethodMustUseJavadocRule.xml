@@ -181,4 +181,52 @@ public interface InterfaceTest {
 		<expected-linenumbers>2,4,26</expected-linenumbers>
 		<code-ref id="interface-ignore-methods-in-inner-enums-or-classes" />
 	</test-code>
+
+	<code-fragment id="java8-interface"><![CDATA[
+public interface Stage {
+    /**
+     * test
+     */
+	void test();
+
+    /**
+     * 执行该Stage
+     *
+     * @param context 执行责任链过程的上下文
+     */
+    void process(PipeLineContext context);
+
+    /**
+     * 责任链中该阶段是否可以被跳过，默认可以被跳过
+     * 如果遇到一些参数返回、或发送metaq消息的阶段是不能被跳过的，可以重写这个方法，返回false
+     * @return  boolean  true表示可以被跳过，false表示不能被跳过
+     */
+    default boolean isCanSkip() {
+        return true;
+    }
+
+    /**
+     * 根据异常获取具体的异常信息，不直接使用e.getMessage()的原因是，
+     * 当出现UndeclaredThrowableException时会出现e.getMessage()为空
+     * @param e 异常
+     * @return  异常消息
+     */
+    default  String getExceptionMsg(Exception e) {
+        if (StringUtils.isNotBlank(e.getMessage())) {
+            return e.getMessage();
+        }
+        String exMsg = null;
+        if (e.getCause() != null) {
+            exMsg =  e.getCause().getMessage();
+        }
+        return StringUtils.isNotBlank(exMsg)?exMsg: ErrorMsg.UNKNOWN_SYSTEM_ERROR;
+    }
+}
+    ]]>
+	</code-fragment>
+	<test-code>
+		<description>Java8 Interface</description>
+		<expected-problems>0</expected-problems>
+		<code-ref id="java8-interface" />
+	</test-code>
 </test-data>
