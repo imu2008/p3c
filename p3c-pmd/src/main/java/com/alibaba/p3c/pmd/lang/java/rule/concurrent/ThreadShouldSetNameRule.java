@@ -1,5 +1,13 @@
 package com.alibaba.p3c.pmd.lang.java.rule.concurrent;
 
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.RejectedExecutionHandler;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+
 import com.alibaba.p3c.pmd.lang.java.rule.AbstractAliRule;
 
 import net.sourceforge.pmd.lang.java.ast.ASTAllocationExpression;
@@ -9,14 +17,6 @@ import net.sourceforge.pmd.lang.java.ast.ASTExpression;
 import net.sourceforge.pmd.lang.java.ast.ASTLambdaExpression;
 import net.sourceforge.pmd.lang.java.ast.ASTName;
 import net.sourceforge.pmd.lang.java.ast.ASTVariableDeclaratorId;
-
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.RejectedExecutionHandler;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * 【强制】创建线程或线程池时请指定有意义的线程名称，方便出错时回溯。
@@ -51,7 +51,7 @@ public class ThreadShouldSetNameRule extends AbstractAliRule {
         if (ThreadPoolExecutor.class == node.getType()) {
             return checkThreadPoolExecutor(node, data);
         }
-        if (ScheduledExecutorService.class == node.getType()) {
+        if (ScheduledThreadPoolExecutor.class == node.getType()) {
             return checkSchedulePoolExecutor(node, data);
         }
         return super.visit(node, data);
@@ -62,14 +62,13 @@ public class ThreadShouldSetNameRule extends AbstractAliRule {
         return super.visit(node, data);
     }
 
-
     private Object checkThreadPoolExecutor(ASTAllocationExpression node, Object data) {
         ASTArgumentList argumentList = node.getFirstDescendantOfType(ASTArgumentList.class);
         if (argumentList.jjtGetNumChildren() < ARGUMENT_LENGTH_6) {
             addViolation(data, node);
             return super.visit(node, data);
         }
-        if (!checkThreadFactoryArgument((ASTExpression) argumentList.jjtGetChild(ARGUMENT_LENGTH_6 - INDEX_1))) {
+        if (!checkThreadFactoryArgument((ASTExpression)argumentList.jjtGetChild(ARGUMENT_LENGTH_6 - INDEX_1))) {
             addViolation(data, node);
         }
         return super.visit(node, data);
@@ -81,7 +80,7 @@ public class ThreadShouldSetNameRule extends AbstractAliRule {
             addViolation(data, node);
             return super.visit(node, data);
         }
-        if (!checkThreadFactoryArgument((ASTExpression) argumentList.jjtGetChild(ARGUMENT_LENGTH_2 - INDEX_1))) {
+        if (!checkThreadFactoryArgument((ASTExpression)argumentList.jjtGetChild(ARGUMENT_LENGTH_2 - INDEX_1))) {
             addViolation(data, node);
         }
         return super.visit(node, data);
@@ -98,12 +97,12 @@ public class ThreadShouldSetNameRule extends AbstractAliRule {
         ASTLambdaExpression lambdaExpression = expression.getFirstDescendantOfType(ASTLambdaExpression.class);
         if (lambdaExpression != null) {
             List<ASTVariableDeclaratorId> variableDeclaratorIds =
-                    lambdaExpression.findChildrenOfType(ASTVariableDeclaratorId.class);
+                lambdaExpression.findChildrenOfType(ASTVariableDeclaratorId.class);
             if (variableDeclaratorIds == null || variableDeclaratorIds.size() != SINGLE_LENGTH) {
                 return false;
             }
-        } else if (expression.getType() != null && RejectedExecutionHandler.class
-                .isAssignableFrom(expression.getType())) {
+        } else if (expression.getType() != null
+            && RejectedExecutionHandler.class.isAssignableFrom(expression.getType())) {
             return false;
         }
         return true;

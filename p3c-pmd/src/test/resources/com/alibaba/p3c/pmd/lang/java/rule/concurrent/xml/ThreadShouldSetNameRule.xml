@@ -47,6 +47,25 @@ public class ThreadNameTest implements ThreadFactory{
     </test-code>
     <test-code>
         <description>right</description>
+        <expected-problems>1</expected-problems>
+        <expected-linenumbers>11</expected-linenumbers>
+        <code><![CDATA[
+package com.alibaba;
+
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+
+/**
+ * @author caikang
+ * @date 2017/3/7
+ */
+public class TestScheduledExecutorService {
+    public static final ScheduledExecutorService EXECUTOR_SERVICE = new ScheduledThreadPoolExecutor(3);
+}
+        ]]></code>
+    </test-code>
+    <test-code>
+        <description>right</description>
         <expected-problems>0</expected-problems>
         <code><![CDATA[
 package com.alibaba.idea.pmd.test.thread;
