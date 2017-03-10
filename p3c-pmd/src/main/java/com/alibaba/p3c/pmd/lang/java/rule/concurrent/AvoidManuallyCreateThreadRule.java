@@ -57,7 +57,7 @@ public class AvoidManuallyCreateThreadRule extends AbstractAliRule {
             return addViolationAndReturn(node, data);
         }
         //通过Lambda方式定义一个ThreadFactory字段
-        if (node.getDataFlowNode() == null) {
+        if (node.getDataFlowNode() == null && node.getFirstParentOfType(ASTLambdaExpression.class) != null) {
             if (fieldDeclaration == null || fieldDeclaration.getType() != ThreadFactory.class) {
                 return addViolationAndReturn(node, data);
             }
