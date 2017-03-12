@@ -10,17 +10,7 @@
           since="1.6"
           message="类名使用UpperCamelCase风格，必须遵从驼峰形式，但以下情形例外：（领域模型的相关命名）DO / BO / DTO / VO / DAO等"
           class="com.alibaba.p3c.pmd.lang.java.rule.naming.ClassNamingShouldBeCamelRule">
-        <description>
-            <![CDATA[
-    类名使用UpperCamelCase风格，必须遵从驼峰形式，但以下情形例外：（领域模型的相关命名）DO / BO / DTO / VO / DAO等
-            ]]>
-        </description>
         <priority>3</priority>
-        <example>
-            <![CDATA[
-    类名使用UpperCamelCase风格，必须遵从驼峰形式，但以下情形例外：（领域模型的相关命名）DO / BO / DTO / VO / DAO等
-            ]]>
-        </example>
     </rule>
 
     <rule name="AbstractClassShouldStartWithAbstractNamingRule"
@@ -28,11 +18,6 @@
           since="1.4"
           message="抽象类命名使用Abstract或Base开头"
           class="com.alibaba.p3c.pmd.lang.java.rule.naming.AbstractClassShouldStartWithAbstractNamingRule">
-        <description>
-            <![CDATA[
-抽象类命名使用Abstract或Base开头
-            ]]>
-        </description>
         <priority>2</priority>
         <example>
             <![CDATA[
@@ -50,11 +35,6 @@
           since="1.6"
           message="异常类命名使用Exception结尾"
           class="com.alibaba.p3c.pmd.lang.java.rule.naming.ExceptionClassShouldEndWithExceptionRule">
-        <description>
-            <![CDATA[
-异常类命名使用Exception结尾
-            ]]>
-        </description>
         <priority>2</priority>
         <example>
             <![CDATA[
@@ -70,11 +50,6 @@
           since="1.6"
           message="测试类命名以它要测试的类的名称开始，以Test结尾"
           class="com.alibaba.p3c.pmd.lang.java.rule.naming.TestClassShouldEndWithTestNamingRule">
-        <description>
-            <![CDATA[
-测试类命名以它要测试的类的名称开始，以Test结尾
-            ]]>
-        </description>
         <priority>3</priority>
         <example>
             <![CDATA[
@@ -89,17 +64,7 @@
           since="1.6"
           message="方法名、参数名、成员变量、局部变量都统一使用lowerCamelCase，必须遵从驼峰形式"
           class="com.alibaba.p3c.pmd.lang.java.rule.naming.LowerCamelCaseVariableNamingRule">
-        <description>
-            <![CDATA[
-方法名、参数名、成员变量、局部变量都统一使用lowerCamelCase，必须遵从驼峰形式
-            ]]>
-        </description>
         <priority>2</priority>
-        <example>
-            <![CDATA[
-    方法名、参数名、成员变量、局部变量都统一使用lowerCamelCase，必须遵从驼峰形式
-            ]]>
-        </example>
     </rule>
 
     <rule name="AvoidStartWithDollarAndUnderLineNamingRule"
@@ -107,17 +72,7 @@
           since="1.6"
           message="所有编程相关的命名均不能以下划线或美元符号开始"
           class="com.alibaba.p3c.pmd.lang.java.rule.naming.AvoidStartWithDollarAndUnderLineNamingRule">
-        <description>
-            <![CDATA[
-所有编程相关的命名均不能以下划线或美元符号开始
-            ]]>
-        </description>
         <priority>2</priority>
-        <example>
-            <![CDATA[
-    所有编程相关的命名均不能以下划线或美元符号开始
-            ]]>
-        </example>
     </rule>
 
     <rule name="ConstantFieldShouldBeUpperCaseRule"
@@ -125,11 +80,6 @@
           since="1.6"
           message="常量命名应该全部大写，单词间用下划线隔开，力求语义表达完整清楚，不要嫌名字长"
           class="com.alibaba.p3c.pmd.lang.java.rule.naming.ConstantFieldShouldBeUpperCaseRule">
-        <description>
-            <![CDATA[
-常量命名应该全部大写，单词间用下划线隔开，力求语义表达完整清楚，不要嫌名字长
-            ]]>
-        </description>
         <priority>2</priority>
         <example>
             <![CDATA[
@@ -155,11 +105,6 @@
           since="1.6"
           message="对于Service和DAO类，基于SOA的理念，暴露出来的服务一定是接口，内部的实现类用Impl的后缀与接口区别"
           class="com.alibaba.p3c.pmd.lang.java.rule.naming.ServiceOrDaoClassShouldEndWithImplRule">
-        <description>
-            <![CDATA[
-对于Service和DAO类，基于SOA的理念，暴露出来的服务一定是接口，内部的实现类用Impl的后缀与接口区别
-            ]]>
-        </description>
         <priority>2</priority>
         <example>
             <![CDATA[
@@ -182,11 +127,6 @@
           since="1.6"
           message="包名统一使用小写，点分隔符之间有且仅有一个自然语义的英语单词。包名统一使用单数形式，但是类名如果有复数含义，类名可以使用复数形式"
           class="com.alibaba.p3c.pmd.lang.java.rule.naming.PackageNamingRule">
-        <description>
-            <![CDATA[
-包名统一使用小写，点分隔符之间有且仅有一个自然语义的英语单词。包名统一使用单数形式，但是类名如果有复数含义，类名可以使用复数形式
-            ]]>
-        </description>
         <priority>3</priority>
         <example>
             <![CDATA[
@@ -200,11 +140,6 @@
           since="1.6"
           message="POJO类中的任何布尔类型的变量，都不要加is，否则部分框架解析会引起序列化错误"
           class="com.alibaba.p3c.pmd.lang.java.rule.naming.BooleanPropertyShouldNotStartWithIsRule">
-        <description>
-            <![CDATA[
-POJO类中的任何布尔类型的变量，都不要加is，否则部分框架解析会引起序列化错误
-            ]]>
-        </description>
         <priority>2</priority>
         <example>
             <![CDATA[
@@ -221,11 +156,6 @@ POJO类中的任何布尔类型的变量，都不要加is，否则部分框架�
           since="1.6"
           message="中括号是数组类型的一部分，数组定义如下：String[] args"
           class="com.alibaba.p3c.pmd.lang.java.rule.naming.ArrayNamingShouldHaveBracketRule">
-        <description>
-            <![CDATA[
-中括号是数组类型的一部分，数组定义如下：String[] args
-            ]]>
-        </description>
         <priority>3</priority>
         <example>
             <![CDATA[
