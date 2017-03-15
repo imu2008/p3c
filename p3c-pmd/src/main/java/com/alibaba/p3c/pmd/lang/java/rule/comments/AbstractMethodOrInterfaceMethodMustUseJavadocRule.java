@@ -42,7 +42,7 @@ public class AbstractMethodOrInterfaceMethodMustUseJavadocRule extends AbstractC
                 if (method.isAbstract()) {
                     Comment comment = method.comment();
                     if (null == comment || !(comment instanceof FormalComment)) {
-                        ViolationUtils.addViolationWithPrecisePosition(this, method, data, "所有的抽象方法必须要用javadoc注释");
+                        ViolationUtils.addViolationWithPrecisePosition(this, method, data, "所有的抽象方法必须要用javadoc注释。");
                     } else {
                         this.checkMethodCommentFormat(method, data);
                     }
@@ -63,7 +63,7 @@ public class AbstractMethodOrInterfaceMethodMustUseJavadocRule extends AbstractC
                 ASTMethodDeclaration method = (ASTMethodDeclaration)node;
                 Comment comment = method.comment();
                 if (null == comment || !(comment instanceof FormalComment)) {
-                    ViolationUtils.addViolationWithPrecisePosition(this, method, data, "所有的接口方法必须要用javadoc注释");
+                    ViolationUtils.addViolationWithPrecisePosition(this, method, data, "所有的接口方法必须要用javadoc注释。");
                 } else {
                     this.checkMethodCommentFormat(method, data);
                 }
@@ -78,7 +78,7 @@ public class AbstractMethodOrInterfaceMethodMustUseJavadocRule extends AbstractC
 
         // 指出该方法做什么事情，实现什么功能
         if (EMPTY_CONTENT_PATTERN.matcher(commentContent).matches()) {
-            ViolationUtils.addViolationWithPrecisePosition(this, method, data, "需要指出该方法做什么事情，实现什么功能");
+            ViolationUtils.addViolationWithPrecisePosition(this, method, data, "需要指出该方法做什么事情，实现什么功能。");
         }
 
         // 参数必须要有javadoc注释
@@ -97,14 +97,14 @@ public class AbstractMethodOrInterfaceMethodMustUseJavadocRule extends AbstractC
 
             if (!paramNamePattern.matcher(commentContent).matches()) {
                 ViolationUtils.addViolationWithPrecisePosition(this, method, data,
-                    "参数\"" + paramName + "\"缺少javadoc注释");
+                    "参数\"" + paramName + "\"缺少javadoc注释。");
             }
         }
 
         // 返回值必须要有javadoc注释
         if (!method.isVoid() && !RETURN_PATTERN.matcher(commentContent).matches()) {
 
-            ViolationUtils.addViolationWithPrecisePosition(this, method, data, "返回值缺少javadoc注释");
+            ViolationUtils.addViolationWithPrecisePosition(this, method, data, "返回值缺少javadoc注释。");
         }
 
         // 异常必须要有javadoc注释
@@ -117,7 +117,7 @@ public class AbstractMethodOrInterfaceMethodMustUseJavadocRule extends AbstractC
 
                 if (!exceptionPattern.matcher(commentContent).matches()) {
                     ViolationUtils.addViolationWithPrecisePosition(this, method, data,
-                        "异常\"" + exceptionName + "\"缺少javadoc注释");
+                        "异常\"" + exceptionName + "\"缺少javadoc注释。");
                 }
             }
         }

@@ -179,7 +179,7 @@
 	</rule>
 
 	<rule key="AbstractMethodOrInterfaceMethodMustUseJavadocRule">
-		<priority>CRITICAL</priority>
+		<priority>MAJOR</priority>
 		<configKey>rulesets/java/ali-comments.xml/AbstractMethodOrInterfaceMethodMustUseJavadocRule
 		</configKey>
 	</rule>
