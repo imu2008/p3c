@@ -3,6 +3,7 @@
            xsi:schemaLocation="http://pmd.sourceforge.net/rule-tests https://pmd.sourceforge.io/rule-tests_1_0_0.xsd">
     <code-fragment id="TestClassNameEndWithTest">
         <![CDATA[
+        import org.junit.Test;
 public class TestClassNameRuleTest {
     @Test
     public void testCase() {
@@ -20,6 +21,7 @@ public class TestClassNameRuleTest {
 
     <code-fragment id="TestClassNameNotEndWithTest">
         <![CDATA[
+        import org.junit.Test;
 public class TestClassNameRuleErrorExample {
     @Test
     public void testCase() {
@@ -31,7 +33,7 @@ public class TestClassNameRuleErrorExample {
     <test-code>
         <description>Test Class Name Should End With Test</description>
         <expected-problems>1</expected-problems>
-        <expected-linenumbers>1</expected-linenumbers>
+        <expected-linenumbers>2</expected-linenumbers>
         <code-ref id="TestClassNameNotEndWithTest" />
     </test-code>
 </test-data>
