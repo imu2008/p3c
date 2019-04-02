@@ -28,7 +28,6 @@ import net.sourceforge.pmd.lang.java.ast.ASTIfStatement;
 import net.sourceforge.pmd.lang.java.ast.ASTLiteral;
 import net.sourceforge.pmd.lang.java.ast.ASTWhileStatement;
 import net.sourceforge.pmd.util.StringUtil;
-
 import org.jaxen.JaxenException;
 
 /**

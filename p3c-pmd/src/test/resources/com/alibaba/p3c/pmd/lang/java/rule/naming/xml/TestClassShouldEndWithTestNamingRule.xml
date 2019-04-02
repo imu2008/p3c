@@ -1,4 +1,6 @@
-<test-data>
+<test-data xmlns="http://pmd.sourceforge.net/rule-tests"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://pmd.sourceforge.net/rule-tests https://pmd.sourceforge.io/rule-tests_1_0_0.xsd">
     <code-fragment id="TestClassNameEndWithTest">
         <![CDATA[
 public class TestClassNameRuleTest {
@@ -11,8 +13,8 @@ public class TestClassNameRuleTest {
     </code-fragment>
     <test-code>
         <description>Test Class Name Should End With Test</description>
-        <code-ref id="TestClassNameEndWithTest" />
         <expected-problems>0</expected-problems>
+        <code-ref id="TestClassNameEndWithTest" />
     </test-code>
 
 
@@ -29,7 +31,7 @@ public class TestClassNameRuleErrorExample {
     <test-code>
         <description>Test Class Name Should End With Test</description>
         <expected-problems>1</expected-problems>
-        <code-ref id="TestClassNameNotEndWithTest" />
         <expected-linenumbers>1</expected-linenumbers>
+        <code-ref id="TestClassNameNotEndWithTest" />
     </test-code>
 </test-data>

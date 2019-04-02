@@ -58,6 +58,9 @@ public class I18nResources {
     }
 
     public static String getMessage(String key) {
+        if(key == null){
+            return "";//TODO
+        }
         return resourceBundle.getString(key).trim();
     }
 
@@ -70,6 +73,9 @@ public class I18nResources {
     }
 
     public static String getMessageWithExceptionHandled(String key) {
+        if(key == null){
+            return "";//TODO
+        }
         try {
             return resourceBundle.getString(key).trim();
         } catch (MissingResourceException e) {
